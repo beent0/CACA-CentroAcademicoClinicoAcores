@@ -8,12 +8,13 @@
     <title>CACA - Centro Académico Clínico dos Açores</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 
 <body>
 
     <header class="header">
-        <div class="container header-flex">
+        <div class="header-flex">
             <div class="logo">
                 <a href="#hero"><img src="media/logo.png" alt="Logótipo CACA"></a>
                 <span>CACA - Centro Académico Clínico dos Açores</span>
@@ -62,6 +63,19 @@
             </div>
         </section>
 
+
+
+        <section id="dados" class="section">
+            <div class="container ">
+                <div class="section-header">
+                    <span class="subtitle">Investigações</span>
+                    <h2>As nossas Investigações</h3>
+                </div>
+                <div id="grafico">
+
+                </div>
+            </div>
+        </section>
         <section class="section partners-section">
             <div class="container">
                 <h3>Os nossos parceiros</h3>
@@ -217,9 +231,9 @@
                     
                     <label for="email" class="sr-only">Email</label>
                     <input id="email" name="email" placeholder="exemplo@email.com" novalidate>
-                    
+                     <div id="mensagem-feedback" class='pop-up'></div>
                     <button type="submit" class="btn btn-submit">Submeter</button>
-                    <div id="mensagem-feedback" class='pop-up'></div>
+                   
                 </form>
             </div>
         </div>
@@ -230,5 +244,6 @@
     <button id="to-top" class='btn btn-primary' title="Para o Topo">Voltar ao Topo</button>
     
     <script src="script.js"></script>
+    <script src="graficos.js"></script>
 </body>
 </html>
