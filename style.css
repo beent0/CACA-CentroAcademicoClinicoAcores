@@ -657,6 +657,12 @@ html[data-theme="dark"] .btn-text {
     background: var(--bg-color);
 }
 
+html[data-theme="dark"] .btn-text:hover {
+    background-color: var(--accent-color);
+    color: var(--white);
+}
+
+
 html[data-theme="dark"] .date-badge {
     background: var(--dark-bg);
     color: var(--white);
