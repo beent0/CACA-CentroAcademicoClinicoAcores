@@ -56,7 +56,7 @@ function scrollPos(){
          toTopbtn.style.transition= '0.3s ease'
         }
         else{
-         toTopbtn.style.backgroundColor = "#0B2545"
+         toTopbtn.style.backgroundColor = "var(--accent-color)"
          toTopbtn.style.transition= '0.3s ease'
         }
       }
@@ -89,33 +89,6 @@ document.getElementById("prev").addEventListener("click", () => mudarImagem('pre
 toTopbtn.addEventListener("click", voltarAoTopo)
 window.addEventListener("scroll", scrollPos)
 form.addEventListener("submit", validadeForm)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
