@@ -4,10 +4,12 @@ html {
 }
 
 :root {
+    color-scheme: light dark;
     --primary-color: #0B2545;
     --accent-color: #1B8572;
     --accent-color1: #2C6BF2;
     --bg-light: #EEF4ED;
+    --bg-color: var(--white);
     --text-color: #000000;
     --white: #ffffff;
     --grey: #3B3B3B;
@@ -23,6 +25,7 @@ html {
 body {
     font-family: var(--font-main);
     color: var(--text-color);
+    background-color: var(--bg-color);
     line-height: 1.6;
 }
 
@@ -113,6 +116,7 @@ ul {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+    gap: 20px;
 }
 
 .logo {
@@ -132,13 +136,18 @@ ul {
 
 .nav {
     margin-left: auto;
-    margin-right: 30px;
 }
 
 .nav ul {
     display: flex;
     gap: 30px;
     flex-wrap: wrap;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .nav a {
@@ -151,12 +160,21 @@ ul {
     color: var(--accent-color);
 }
 
+.theme-toggle-btn {
+    background: none;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 8px;
+    width: 42px;
+    height: 42px;
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+
 /* --- Hero --- */
 .hero {
     background: url('media/hero.png') no-repeat center center/cover;
-    background-size: cover;
-    transition: background-image 0.5s ease; 
-    background-position: center;
     height: 80vh;
     position: relative;
     display: flex;
@@ -185,44 +203,6 @@ ul {
 .hero p {
     font-size: 1rem;
     margin-bottom: 30px;
-}
-
-/* --- Carrossel --- */
-
-.hero-controls {
-    position: absolute;
-    width: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    justify-content: space-between;
-    padding: 0 20px;
-    z-index: 10;
-    pointer-events: none; 
-}
-
-.carrousel-btn {
-    pointer-events: auto;
-    background: rgba(0, 0, 0, 0.4);
-    color: white;
-    border: none;
-    padding: 15px 20px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: ease 0.3s;
-}
-
-.carrousel-btn:hover { 
-    background: rgba(0, 0, 0, 0.8); 
-}
-
-/* --- Botão Voltar ao Topo --- */
-#to-top{
-    position:fixed;
-    bottom:20px;
-    right:20px;
-    display:none
 }
 
 /* --- Sobre Nós --- */
@@ -550,4 +530,75 @@ ul {
         flex-direction: column;
         align-items: flex-start;
     }
+}
+
+/* --- Dark Mode --- */
+html[data-theme="dark"] {
+    --accent-color: #29B89E;
+    --accent-color1: #3371F2;
+    --bg-light: var(--primary-color);
+    --bg-color: #08192B;
+    --text-color: #cdd5e0;
+    --grey: #9ab;
+}
+
+html[data-theme="dark"] .header {
+    background-color: var(--primary-color);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+html[data-theme="dark"] .logo,
+html[data-theme="dark"] .nav a {
+    color: var(--white);
+}
+
+html[data-theme="dark"] .nav a:hover {
+    color: var(--accent-color);
+}
+
+html[data-theme="dark"] .theme-toggle-btn {
+    border-color: var(--white);
+    color: var(--white);
+}
+ 
+html[data-theme="dark"] .btn-primary {
+    background-color: var(--accent-color1);
+}
+
+html[data-theme="dark"] h2,
+html[data-theme="dark"] .partners-section h3,
+html[data-theme="dark"] .card-content h4,
+html[data-theme="dark"] .news-card h4 {
+    color: var(--white);
+}
+
+html[data-theme="dark"] .card-icon {
+    background: var(--accent-color1);
+}
+
+html[data-theme="dark"] .btn-text {
+    color: var(--white);
+    background: var(--bg-color);
+}
+
+html[data-theme="dark"] .date-badge {
+    background: var(--dark-bg);
+    color: var(--white);
+}
+
+html[data-theme="dark"] .footer {
+    background-color: var(--primary-color);
+}
+
+html[data-theme="dark"] .event-card {
+    background: var(--primary-color);
+    border-color: var(--grey);
+}
+
+html[data-theme="dark"] .footer-form input {
+    background: var(--grey);
+}
+
+html[data-theme="dark"] .footer-bottom {
+    border-top-color: var(--grey);
 }

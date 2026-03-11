@@ -26,16 +26,15 @@
                     <li><a href="#noticias">Notícias</a></li>
                 </ul>
             </nav>
-            <a href="#contactos" class="btn btn-primary">Contacte-nos</a>
+            <div class="header-actions">
+                <a href="#contactos" class="btn btn-primary">Contacte-nos</a>
+                <button id="theme-toggle" class="btn theme-toggle-btn" title="Alternar modo escuro">🌙</button>
+            </div>
         </div>
     </header>
 
     <main>
         <section id="hero" class="hero">
-            <div class="hero-controls">
-                    <button id="prev" class="carrousel-btn"><</button>
-                    <button id="forward" class="carrousel-btn">></button>
-            </div>
             <div class="hero-overlay">
                 <div class="container hero-content">
                     <h1>Centro Académico Clínico dos Açores</h1>
@@ -202,7 +201,7 @@
                 <p>9500-321 Ponta Delgada</p>
             </div>
 
-             <div class="footer-col">
+            <div class="footer-col">
                 <h5>Newsletter</h5>
                 <form action="#" method="post" class="footer-form" id="form-newsletter">
                     <label for="nome" class="sr-only">Nome</label>
@@ -223,9 +222,8 @@
             <p>&copy; 2026 Centro Académico Clínico dos Açores. Todos os direitos reservados.</p>
         </div>
     </footer>
-     <button id="to-top" class='btn btn-primary' title="Para o Topo">
-        Voltar ao Topo
-    </button>
+
+    
     <script src="script.js"></script>
 </body>
 </html>
