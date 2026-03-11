@@ -8,6 +8,7 @@
     <title>CACA - Centro Académico Clínico dos Açores</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 
 <body>
@@ -140,6 +141,31 @@
                             <p class="meta">📍 Auditório Norte</p>
                         </div>
                     </article>
+                <div class="wrapper">
+                    <video controls>
+                        <source src="media/video_landing.mp4" type="video/mp4" muted loop playsinline />
+                    </video>
+                </div>
+                <script>
+                    const video = document.querySelector('video');
+                    const observer = new IntersectionObserver((entries) =>{
+                        entries.forEach(entry=>{
+                            if(entry.isInterscenting){
+                                video.muted = true;
+                                const playPromise = video.play();
+                                
+                                if(playPromise !== undefined){
+                                    playPromise.catch(error=>{
+                                        console.log("Autoplay bloquedo pelo navegador:", error);
+                                    });
+                                }
+                            } else {
+                                video.pause();
+                            }
+                        });
+                    }, {threshold: 0.5});
+                    observer.observe(video);
+                </script>
                 </div>
             </div>
         </section>
@@ -219,5 +245,7 @@
             <p>&copy; 2026 Centro Académico Clínico dos Açores. Todos os direitos reservados.</p>
         </div>
     </footer>
+
+    <script src="logo-animation.js"></script>
 </body>
 </html>
