@@ -43,7 +43,7 @@ function validadeForm(event) {
     }
 }
 
-
+//Changes scroll to top button, as user scrolls down
 function scrollPos(){
    const alturaTotal = document.documentElement.scrollHeight - window.innerHeight
    const percentagemScroll = (window.scrollY / alturaTotal) * 100
