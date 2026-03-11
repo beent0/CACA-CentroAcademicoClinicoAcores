@@ -4,7 +4,6 @@ PEI 1
  Yuri Moreira 2023118908
 
 
-
 Cores:
 
 Azul marinho #0B2545, utilizado como cor principal. Transmite seriedade, cria um bom contraste com o restante das cores escolhidas e enquadra-se no tema de saúde do site
@@ -36,6 +35,89 @@ CCAB (Centro clínico académico das beiras) - baseamo-nos apenas na estrutura d
 CAC-CL (Centro clínico académico católica luz) - baseamo-nos principalmente na secção de eventos pela sua criatividade e no footer com a adição de uma newsletter, a forma como a informação foi distribuída
 ao longo de todo o site também foi utilizada por nós, pois transmite a informação de uma forma clara e objetiva e de modo a chamar a atenção do utilizador.
 
+#----------------------------------------------------------------------------------------------------------------------------------------#
 
+PEI 2
+João Bento 2023110753
+Rafael Medeiros 2024109280
+Yuri Moreira 2023118908
+
+Acessibilidade Visual:
+    Cores:
+        Background: 
+            --white #ffffff
+                Cor utilizada para o background da página, promove um excelente contraste, passando em todos os testes WCAG AAA com práticamente todas as outras cores utilizadas.
+            
+            --bg-light: #EEF4ED
+                Esta cor é utilizada para backgrounds de cards e outras situações similares, sendo emparelhada com preto #000000 ou a cor primária #0B2545. Passa em todos os testes WCAG AAA.
+
+        Comparações:
+            --primary color: #0B2545
+                Apresenta um contraste de 15.38:1, passando os testes WCAG AAA para texto normal, trexto grande e elementos gráficos.
+
+            --accent-color: #29B89E
+                Apresenta um contraste de 2.48:1, não passando os testes. Esta cor será alterada para #1B8572. 
+            Nova --accent-color: #1B8572
+                Apresenta um contraste de 4.52:1, falhando apenas o teste WCAG AAA para texto normal, como é utilizado apenas em textos maiores isto não terá muito impacto.
+
+            --accent-color1: #3371F2
+                Apresenta um contraste de 4.38:1, não passando os testes WCAG AAA necessários à sua utilidade. Esta cor será alterada para #2C6BF2.
+            Nova --accent-color1: #2C6BF2
+                Apresenta um contraste de 4.67:1, falhando apenas o teste WCAG AAA para texto normal, passando nos restantes necesseários à sua utilidade.
+
+            --text-color: #000000
+                Cor utilizada para texto, cumpre com todos os testes WCAG AAA com os backgrounds utilizados.
+
+        A utilização destas cores permitem acessibilidade a pessoas com deficiências visuais, como por exemplo, Visão Desfocada, Contraste Reduzido e Daltonismo.
+
+    Fonte:
+        Montserrat
+            Esta fonte foi escolhida pela sua boa legibilidade e minimalismo, possui um espaçamento uniforme entre cada letra e foi criada utilizando formas geométricas perfeitas, isto promove acessibilidade para pessoas com deficiências visuais, por exemplo, Dislexia.
+    
+
+    Possível DARK MODE
+    Ver se funfa com HIGH contrast
+
+    Label nos forms - utilizamos o placeholder
+
+    @rafa nos forms tens que colocar um atribito "aria-live="polite"" no data-container
+
+
+
+    alt= nas images 
+
+    HTML semântico (tags) body, nav, aside, headers, articles, buttons  
+    <h1>... são muito utilizados por screenreaders então h1 devera ser utilizado so 1x e posteriormente os restos de acordo
+    links com TAB
+    
+Acessibilidade do Teclado:
+    TAB indexs - deve ser deixado para o browser, apenas 0 ou -1 devem ser utilizados
+    Pode ser utilizado o style="overflow para scrolling"
+    Deixar o outline
+
+Acessibilidade de Áudio:
+    Captions em videos
+
+Acessibilidade Motora:
+    Espaço entre clicáveis para bad aim
+    Resizing correct
+
+Outras Acessibilidades (Preferancias):
+    light/dark mode
+    media querries reduced motion
+    
+    dislexia
+
+    FOCUS principal autofocus
+
+    funcionando nice para mobile webdev tools
+    Lighthouse tool
+    eslint-plugin-jsx-a11y
+
+
+    em/rem para respeitar tamanho de fonte do browser
+    Toggle para light/dark theme
+    color-scheme css property
+    
 
 
