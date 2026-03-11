@@ -154,6 +154,9 @@ ul {
 /* --- Hero --- */
 .hero {
     background: url('media/hero.png') no-repeat center center/cover;
+    background-size: cover;
+    transition: background-image 0.5s ease; 
+    background-position: center;
     height: 80vh;
     position: relative;
     display: flex;
@@ -182,6 +185,44 @@ ul {
 .hero p {
     font-size: 1rem;
     margin-bottom: 30px;
+}
+
+/* --- Carrossel --- */
+
+.hero-controls {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 10;
+    pointer-events: none; 
+}
+
+.carrousel-btn {
+    pointer-events: auto;
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: ease 0.3s;
+}
+
+.carrousel-btn:hover { 
+    background: rgba(0, 0, 0, 0.8); 
+}
+
+/* --- Botão Voltar ao Topo --- */
+#to-top{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    display:none
 }
 
 /* --- Sobre Nós --- */
