@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Carrosel ---
+    // Initializes the main carousel by cloning the first and last slides for infinite looping.
     function initCarousel() {
         // Clone Last Image (Prepended)
         const cloneLast = document.createElement("div")
@@ -117,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         track.style.transform = `translateX(-${indiceAtual * 100}%)`
     }
 
+    // Handles the slide navigation (next/prev), updates the index, and applies the CSS transform.
     function mudarImagem(direcao) {
         if (isTransitioning) return
         track.style.transition = 'transform 0.5s ease-in-out'
@@ -130,6 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         track.style.transform = `translateX(-${indiceAtual * 100}%)`
     } 
 
+    // Resets the position without transition when reaching cloned slides to maintain the infinite loop illusion.
     function handleCarouselTransition() {
         isTransitioning = false
         const slides = document.querySelectorAll('.carousel-slide')
@@ -176,17 +179,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Theme ---
+    // Sets the visual theme, updates the toggle button icon, and saves the preference to localStorage.
     function setTheme(theme) {
         htmlEl.setAttribute('data-theme', theme)
         themeToggleBtn.textContent = theme === 'dark' ? sunIcon : moonIcon
         localStorage.setItem('theme', theme)
     }
 
+    // Toggles between 'light' and 'dark' modes based on the current state.
     function toggleTheme() {
         const newTheme = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
         setTheme(newTheme)
     }
 
+    // Initializes the theme on page load, checking localStorage or system preference.
     function initTheme() {
         const savedTheme = localStorage.getItem('theme')
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -195,6 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Eventos Carousel ---
+    // Initializes the specific logic for the Events carousel (sliding cards based on width).
     function initEventCarousel() {
         if (!eventTrack || eventCards.length === 0) return
 
