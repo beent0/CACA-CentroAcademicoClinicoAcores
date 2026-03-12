@@ -15,15 +15,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnPrev = document.getElementById("prev")
     const imagens = ["media/hero.png", "media/evento1.png", "media/sobre_nos.png"]
 
-    const headerBtn = document.getElementById('header-menu');
-    const menuLinks = document.getElementById('nav-links');
+    const headerBtn = document.getElementById('header-menu')
+    const menuLinks = document.getElementById('nav-links')
 
-    const text = document.querySelector('.text p');
-    text.innerHTML = text.innerText.split("").map(
-        (char, i) =>
-            `<span style ="transform:rotate(${i * 11}deg)">${char}</span>`
+    const textElement = document.querySelector('.text p')
+    const textContent = textElement.innerText
+    const angle = 360 / textContent.length
+
+    textElement.innerHTML = textContent.split("").map(
+        (char, i) => {
+            return `<span style="transform: translate(-50%, -50%) rotate(${i * angle}deg) translateY(-52px)">${char}</span>`
+        }
     ).join("")
-    
 
     const themeToggleBtn = document.getElementById('theme-toggle')
     const htmlEl = document.documentElement

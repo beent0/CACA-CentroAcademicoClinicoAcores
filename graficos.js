@@ -202,7 +202,7 @@ function mostrarGrafico(entries) {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             criarGrafico("Investigações Concluídas", dados, '#grafico')
-            criarDonutChart("Distribuição de Investigações", dados, '#grafico')
+            criarDonutChart("Investigações com Parceiros", dados, '#grafico')
         }
     })
 }
