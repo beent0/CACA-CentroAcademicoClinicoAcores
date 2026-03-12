@@ -117,15 +117,14 @@ ul {
 
 .header-flex {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 20px;
     margin:10px
 }
 
-*
-{
+*{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -180,29 +179,31 @@ ul {
     font-size: 0.8rem;
     transform-origin: center 57.5px;
 }
-.nav {
+.nav-links {
     margin-left: auto;
 }
+.contacts{
+    background-color: var(--primary-color);
+    color: var(--white) !important;
+    border-radius:10px;
+    padding:10px;
+}
 
-.nav ul {
+.nav-links ul {
     display: flex;
+    align-items:center;
     gap: 30px;
     flex-wrap: wrap;
 }
 
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
 
-.nav a {
+.nav-links a {
     color: var(--primary-color);
     font-weight: 500;
     transition: color 0.3s;
 }
 
-.nav a:hover {
+.nav-links a:hover {
     color: var(--accent-color);
 }
 
@@ -216,6 +217,7 @@ ul {
     font-size: 1.2rem;
     line-height: 1;
     cursor: pointer;
+    margin:0px 0px 0px 0px
 }
 
 /* --- Carrossel --- */
@@ -614,24 +616,62 @@ ul {
     transition: 0.3s ease
 
 }
+/* Botao do menu do telemovel*/
+.header-menu{
+    display:none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+}
 
-
-
+.header-menu span {
+    display: block;
+    width: 30px;
+    height: 3px;
+    background-color: var(--primary-color);
+    border-radius: 3px;
+    transition: all 0.3s ease; 
+}
 /* --- Media Queries (Mobile/Tablets) --- */
 @media (max-width: 768px) {
-    .header-flex {
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .nav {
-        margin: 0;
-        width: 100%;
+
+    .header-menu {
+        display: flex;
     }
 
-    .nav ul {
-        justify-content: center;
+    .nav-links ul {
+        display: none;
+        flex-direction: column;
         gap: 15px;
+        position: absolute;
+        top: 65px;
+        right: 0;
+        width: 200px;
+        background-color: var(--bg-color); 
+        border: 1px solid;
+        padding: 20px;
+        border-radius: 8px;
+        z-index: 9999;
+    }
+
+    .nav-links.active ul {
+        display: flex;
+    }
+
+    .nav-links ul li a {
+        color: var(--text-color);
+    }
+
+    .nav-links ul li a.contacts {
+        background-color: var(--primary-color);
+        color: var(--white);
+        text-align: center;
+    }
+
+
+    .header {
+        overflow: visible; 
     }
 
     .hero h1 {
@@ -647,6 +687,7 @@ ul {
         align-items: flex-start;
     }
 }
+
 
 
 /* --- Dark Mode --- */
@@ -665,12 +706,15 @@ html[data-theme="dark"] .header {
 }
 
 html[data-theme="dark"] .logo,
-html[data-theme="dark"] .nav a {
+html[data-theme="dark"] .nav-links a {
     color: var(--white);
 }
 
-html[data-theme="dark"] .nav a:hover {
+html[data-theme="dark"] .nav-links a:hover {
     color: var(--accent-color);
+}
+html[data-theme="dark"] .header-menu span {
+    background-color: var(--white);
 }
 
 html[data-theme="dark"] .theme-toggle-btn {
@@ -678,8 +722,11 @@ html[data-theme="dark"] .theme-toggle-btn {
     color: var(--white);
     transition: ease 0.3s;
 }
- 
-html[data-theme="dark"] .btn-primary {
+ html[data-theme="dark"] .contacts{
+    background-color: var(--accent-color1);
+    
+ }
+html[data-theme="dark"] .btn-primary  {
     background-color: var(--accent-color1);
 }
 

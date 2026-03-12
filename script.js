@@ -14,7 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnNext = document.getElementById("forward")
     const btnPrev = document.getElementById("prev")
     const imagens = ["media/hero.png", "media/evento1.png", "media/sobre_nos.png"]
-    
+
+    const headerBtn = document.getElementById('header-menu');
+    const menuLinks = document.getElementById('nav-links');
+
     const text = document.querySelector('.text p');
     text.innerHTML = text.innerText.split("").map(
         (char, i) =>
@@ -36,7 +39,14 @@ document.addEventListener('DOMContentLoaded', () => {
     /* 
       FUNCTIONS
      */
+
     
+    function toggleMenu() {
+    menuLinks.classList.toggle('active')
+    headerBtn.classList.toggle('open')
+}
+
+
     //Checks if each user input is correct, if not correct, makes the border of the incorrect input red
     function validadeForm(event) {
         event.preventDefault()
@@ -180,6 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener("scroll", scrollPos)
     toTopbtn.addEventListener("click", voltarAoTopo)
     themeToggleBtn.addEventListener('click', toggleTheme)
+    headerBtn.addEventListener('click', toggleMenu);
 
     track.addEventListener('transitionend', () => {
         isTransitioning = false
