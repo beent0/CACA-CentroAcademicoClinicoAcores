@@ -85,9 +85,8 @@ Acessibilidade Visual:
 
 
 TO-DO:
-    - Slide up Serviços
-    - Carousel prox Eventos
-    - Background Data Eventos
+    - Adicionar mais eventos ao carroussel
+    - Comentar detalhadamente o código
     - Imagens Parceiros Formatação
     - Acessibilidade
 

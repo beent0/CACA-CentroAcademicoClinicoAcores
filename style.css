@@ -191,7 +191,7 @@ ul {
 
 .carrousel-btn {
     pointer-events: auto;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.6);
     color: white;
     border: none;
     padding: 15px 20px;
@@ -202,7 +202,7 @@ ul {
 }
 
 .carrousel-btn:hover { 
-    background: rgba(0, 0, 0, 0.8); 
+    background: var(--text-color); 
 }
 
 /* --- Hero --- */
@@ -338,7 +338,7 @@ ul {
     padding: 20px;
     transform: translateY(100%);
     transition: transform 0.4s ease-in-out;
-    height: 100%; /*Changes how much the details fill the card*/
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -386,6 +386,46 @@ ul {
 }
 
 /* --- Eventos --- */
+.events-carousel-container {
+    position: relative;
+    padding: 10px 80px;
+    width: 100%;
+}
+
+.events-mask {
+    overflow: hidden;
+    width: 100%;
+}
+
+.events-track {
+    display: flex;
+    gap: 30px;
+    transition: transform 0.5s ease-in-out;
+    width: max-content; /* Ensures track is wide enough for all items */
+}
+
+.event-nav-btn {
+    position: absolute;
+    top: 50%;
+    background: var(--primary-color);
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.event-nav-btn:hover {
+    transform: scale(1.05);
+    background: var(--accent-color);
+}
+
+.event-nav-btn.prev-btn { left: 10px; }
+.event-nav-btn.next-btn { right: 10px; }
+
 .event-card {
     background: var(--white);
     border: 1px solid var(--bg-light);
@@ -393,6 +433,8 @@ ul {
     transition: transform 0.3s;
     overflow: hidden;
     display: flex;
+    flex: 0 0 360px; /* Fixed width for carousel list effect */
+    max-width: 360px;
     flex-direction: column;
 }
 
@@ -604,6 +646,10 @@ ul {
         flex-direction: column;
         align-items: flex-start;
     }
+
+    .events-track .event-card {
+        flex: 0 0 100%; /* Full width cards on mobile */
+    }
 }
 
 
@@ -664,7 +710,7 @@ html[data-theme="dark"] .btn-text:hover {
 
 
 html[data-theme="dark"] .date-badge {
-    background: var(--dark-bg);
+    background: var(--bg-light);
     color: var(--white);
 }
 
@@ -675,6 +721,15 @@ html[data-theme="dark"] .footer {
 html[data-theme="dark"] .event-card {
     background: var(--primary-color);
     border-color: var(--grey);
+}
+
+html[data-theme="dark"] .event-nav-btn {
+    background: var(--accent-color1);
+    color: var(--white);
+}
+
+html[data-theme="dark"] .event-nav-btn:hover {
+    background: var(--accent-color);
 }
 
 html[data-theme="dark"] .footer-form input {

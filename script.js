@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-   /*
-      DOM ELEMENTS & CONSTANTS
-   */
+    /*
+    DOM ELEMENTS & CONSTANTS
+    */
     const form = document.getElementById("form-newsletter")
     const nomeF = document.getElementById("nome")
     const telemovelF = document.getElementById("telemovel")
@@ -20,15 +20,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const sunIcon = '☀️'
     const moonIcon = '🌙'
 
+    const eventTrack = document.querySelector('.events-track')
+    const eventCards = document.querySelectorAll('.event-card')
+    const eventPrevBtn = document.getElementById('event-prev')
+    const eventNextBtn = document.getElementById('event-next')
+
     /*
-     STATE VARIABLES
-     */
+    STATE VARIABLES
+    */
     let indiceAtual = 1
     let isTransitioning = false
 
     /* 
-      FUNCTIONS
-     */
+    FUNCTIONS
+    */
     
     //Checks if each user input is correct, if not correct, makes the border of the incorrect input red
     function validadeForm(event) {
@@ -157,14 +162,65 @@ document.addEventListener('DOMContentLoaded', () => {
         setTheme(currentTheme)
     }
 
+    // --- Eventos Carousel ---
+    function initEventCarousel() {
+        if (!eventTrack || eventCards.length === 0) return
+
+        const eventWrapper = document.querySelector('.events-mask')
+        let eventIndex = 0
+
+        function updateEventCarousel() {
+            const cardWidth = eventCards[0].offsetWidth
+            const style = window.getComputedStyle(eventTrack)
+            const gap = parseFloat(style.gap) || 0
+            const slideWidth = cardWidth + gap
+
+            const trackWidth = eventTrack.scrollWidth
+            const containerWidth = eventWrapper.offsetWidth
+            const maxTranslate = Math.max(0, trackWidth - containerWidth)
+            
+            let translateX = eventIndex * slideWidth
+            
+            // Clamp translation to avoid dead space at the end
+            if (translateX > maxTranslate) {
+                translateX = maxTranslate
+            }
+            
+            eventTrack.style.transform = `translateX(-${translateX}px)`
+        }
+
+        eventNextBtn.addEventListener('click', () => {
+            const cardWidth = eventCards[0].offsetWidth
+            const style = window.getComputedStyle(eventTrack)
+            const gap = parseFloat(style.gap) || 0
+            const slideWidth = cardWidth + gap
+            
+            const trackWidth = eventTrack.scrollWidth
+            const containerWidth = eventWrapper.offsetWidth
+            const maxTranslate = Math.max(0, trackWidth - containerWidth)
+
+            if (eventIndex * slideWidth < maxTranslate) {
+                eventIndex++
+                updateEventCarousel()
+            }
+        })
+
+        eventPrevBtn.addEventListener('click', () => {
+            if (eventIndex > 0) eventIndex--
+            updateEventCarousel()
+        })
+
+        window.addEventListener('resize', updateEventCarousel)
+    }
 
     /* 
-     INITIALIZATION & EVENT LISTENERS
-     */
+    INITIALIZATION & EVENT LISTENERS
+    */
     
     // Initialize Logic
     initCarousel()
     initTheme()
+    initEventCarousel()
 
     // Add Listeners
     form.addEventListener("submit", validadeForm)
