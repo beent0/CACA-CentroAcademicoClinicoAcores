@@ -15,6 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnPrev = document.getElementById("prev")
     const imagens = ["media/hero.png", "media/evento1.png", "media/sobre_nos.png"]
     
+    const text = document.querySelector('.text p');
+    text.innerHTML = text.innerText.split("").map(
+        (char, i) =>
+            `<span style ="transform:rotate(${i * 11}deg)">${char}</span>`
+    ).join("")
+    
+
     const themeToggleBtn = document.getElementById('theme-toggle')
     const htmlEl = document.documentElement
     const sunIcon = '☀️'
@@ -106,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             indiceAtual--
         }
         track.style.transform = `translateX(-${indiceAtual * 100}%)`
-    }
+    } 
 
     
  //Changes scroll to top button, as user scrolls down
@@ -189,6 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
             track.style.transform = `translateX(-${indiceAtual * 100}%)`
         }
     })
+    
     
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
         if (!localStorage.getItem('theme')) { 
