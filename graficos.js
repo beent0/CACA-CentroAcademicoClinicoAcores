@@ -16,12 +16,14 @@ function criarGrafico(title, data, target){
     const larguraBarra = 50;
     const espacoEntreBarras = 10;
     //seleciona elemento do html e cria o elemento do svg
+
     const svg = d3.select(target)
         .append("svg")
         .attr("width", largura)
         .attr("height", altura + 25) 
         .style("background", "transparent");
     //Cria retangulos dentro do svg criado antes
+    
     svg.selectAll("rect")
         .data(data)//conecta os dados ao d3
         .enter()
