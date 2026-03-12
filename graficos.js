@@ -12,6 +12,7 @@ const dados = [
 
 //Grafico de barras com o D3
 function criarGrafico(title, data, target){
+    //tamanhos da janela do svg
     const largura = 500;
     const altura = 300;
     const larguraBarra = 50;
