@@ -364,9 +364,10 @@ ul {
 }
 
 /* Bar Chart Styles */
-#grafico{
+#graficos-holder{
     display:flex;
     justify-content: space-between;
+    align-items:center;
     padding:10px
 }
 
@@ -742,7 +743,17 @@ ul {
         text-align: center;
     }
 
+    #graficos-holder{
+        display:flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
 
+    #grafico-barras{
+    padding-bottom:50px
+
+    }
     .header {
         overflow: visible; 
     }
@@ -767,14 +778,6 @@ ul {
     .event-card {
         max-width: 250px;
     }
-
-    #grafico {
-        display:flex;
-        flex-direction: column;
-        align-items: wrap;
-        padding:10px
-    }
-
     .partners-flex {
         flex-direction: column;
     }
