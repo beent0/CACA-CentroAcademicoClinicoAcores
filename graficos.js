@@ -11,13 +11,13 @@ const dados = [
 
 
 //Grafico de barras com o D3
-function criarGrafico(title, data){
+function criarGrafico(title, data, target){
     const largura = 500;
     const altura = 300;
     const larguraBarra = 50;
     const espacoEntreBarras = 10;
 
-    const svg = d3.select("#grafico")
+    const svg = d3.select(target)
         .append("svg")
         .attr("width", largura)
         .attr("height", altura + 25) 
@@ -80,7 +80,7 @@ function criarGrafico(title, data){
 
 const titulo1="Investigações Concluidas"
 const titulo2="Investigações com Parcerias"
-
-criarGrafico(titulo1, dados);
-criarGrafico(titulo2 , dados);
-criarGrafico("ola" , dados);
+const div= '#grafico'
+criarGrafico(titulo1, dados, div);
+criarGrafico(titulo2 , dados, div);
+criarGrafico("ola" , dados, div);
