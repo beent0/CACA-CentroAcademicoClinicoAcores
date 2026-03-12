@@ -208,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const eventWrapper = document.querySelector('.events-mask')
         let eventIndex = 0
 
+        // Updates the visual position of the carousel based on the current index and card width
         function updateEventCarousel() {
             const cardWidth = eventCards[0].offsetWidth
             const style = window.getComputedStyle(eventTrack)
@@ -228,6 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
             eventTrack.style.transform = `translateX(-${translateX}px)`
         }
 
+        // Event listener for the "Next" button: calculates boundaries and advances if possible
         eventNextBtn.addEventListener('click', () => {
             const cardWidth = eventCards[0].offsetWidth
             const style = window.getComputedStyle(eventTrack)
@@ -244,6 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
 
+        // Event listener for the "Previous" button: decreases index if not at the start
         eventPrevBtn.addEventListener('click', () => {
             if (eventIndex > 0) eventIndex--
             updateEventCarousel()
