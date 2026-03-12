@@ -500,6 +500,8 @@ ul {
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
+    border-radius: 50%;
+    line-height: 1;
 }
 
 .event-nav-btn:hover {
