@@ -119,21 +119,62 @@ ul {
     gap: 20px;
 }
 
-.logo {
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-main);
+}
+.circle {
+    position: relative;
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    background: var(--primary-color);
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 10px;
-    font-weight: 700;
-    color: var(--primary-color);
-    font-size: 1rem;
+}
+.logo {
+    position:absolute;
+    width: 50px;
+    height: 50px;
+    background: url(media/logo.png);
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    filter:brightness(1.5) contrast(1.5);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
 }
 
-.logo img {
-    max-height: 75px;
-    width: auto;
-    display: block;
+.text {
+    position:absolute;
+    width: 100%;
+    height: 100%;
+    animation: rotateText 10s linear infinite;
+}
+@keyframes rotateText {
+    0% {
+        transform: rotate(360deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
 }
 
+.text span {
+    position:absolute;
+    left: 50%;
+    top: -15px;
+    transform:translateX(-50%);
+    display: inline-block;
+    font-size: 0.8rem;
+    transform-origin: center 57.5px;
+}
 .nav {
     margin-left: auto;
 }
