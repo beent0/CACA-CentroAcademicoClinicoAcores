@@ -85,5 +85,124 @@ const titulo1="Investigações Concluidas"
 const titulo2="Investigações com Parcerias"
 const div= '#grafico'
 criarGrafico(titulo1, dados, div);
-criarGrafico(titulo2 , dados, div);
-criarGrafico("ola" , dados, div);
+
+// Gráfico(Donut Chart) com o D3
+function criarDonutChart(title, data, target) {
+    const largura = 500;
+    const altura = 350;
+    const margem = 40;
+    
+
+    const raioExterno = Math.min(largura, altura) / 2 - margem;
+    const raioInterno = raioExterno * 0.65; 
+    
+    const svg = d3.select(target)
+        .append("svg")
+        .attr("width", largura)
+        .attr("height", altura + 30)
+        .style("background", "transparent")
+        .append("g")
+        .attr("transform", `translate(${largura / 2}, ${(altura / 2) + 20})`);
+    
+    const coresModernas = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4", "#FFEEAD", "#D4A5A5"];
+    const cores = d3.scaleOrdinal()
+        .domain(data.map(d => d.ano))
+        .range(coresModernas);
+
+    // Configurar o Pie com espaçamento entre as fatias (padAngle)
+    const pie = d3.pie()
+        .value(d => d.total)
+        .sort(null)
+        .padAngle(0.05); // Espaçamento elegante entre as fatias
+
+
+    // Gerador de arcos para as labels (texto) mais para fora
+    const arcLabels = d3.arc()
+        .innerRadius(raioExterno * 1.2)
+        .outerRadius(raioExterno * 1.2);
+    
+    const arc = d3.arc()
+        .innerRadius(raioInterno)
+        .outerRadius(raioExterno)
+        .cornerRadius(10);
+
+
+    // Adicionar as fatias
+    const fatias = svg.selectAll("fatias")
+        .data(pie(data))
+        .enter()
+        .append("g");
+
+    // Desenhar os caminhos (fatias) com animação suave
+    fatias.append("path")
+        .attr("fill", d => cores(d.data.ano))
+        // Sombra leve para dar profundidade
+        .style("filter", "drop-shadow(2px 4px 6px rgba(0,0,0,0.1))") 
+        .transition()
+        .duration(1200)
+        .attrTween("d", function(d) {
+            const i = d3.interpolate({ startAngle: 0, endAngle: 0 }, d);
+            return function(t) {
+                return arc(i(t));
+            };
+        });
+
+    // Adicionar os valores/anos por fora do gráfico ligando com as fatias
+    fatias.append("text")
+        .html(d => `<tspan font-weight="bold">${d.data.ano}</tspan>: ${d.data.total}`)
+        .attr("transform", d => `translate(${arcLabels.centroid(d)})`)
+        .attr("text-anchor", "middle")
+        .attr("fill", 'var(--text-color, #555)')
+        .style("font-size", "13px")
+        .style("opacity", 0)
+        .transition()
+        .delay(1200)
+        .duration(600)
+        .style("opacity", 1);
+
+    // Calcular o total para colocar no centro do Donut
+    const valorTotal = d3.sum(data, d => d.total);
+
+    // Texto no Centro do Donut (Valor Total)
+    svg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("y", -5)
+        .attr("fill", "var(--text-color, #333)")
+        .style("font-size", "32px")
+        .style("font-weight", "bold")
+        .style("opacity", 0)
+        .text(valorTotal)
+        .transition()
+        .delay(1000)
+        .duration(800)
+        .style("opacity", 1);
+
+    // Texto no Centro do Donut
+    svg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("y", 20)
+        .attr("fill", "var(--text-color, #777)")
+        .style("font-size", "14px")
+        .style("text-transform", "uppercase")
+        .style("letter-spacing", "2px")
+        .style("opacity", 0)
+        .text("Total")
+        .transition()
+        .delay(1200)
+        .duration(800)
+        .style("opacity", 1);
+
+    // Título do Gráfico
+    svg.append("text")
+        .attr("class", "h2")
+        .attr("x", 0)               
+        .attr("y", - (altura / 2) + 5)                        
+        .attr("text-anchor", "middle")       
+        .attr("fill", "var(--text-color, #333)")                
+        .style("font-size", "22px")           
+        .style("font-weight", "bold")
+        .text(title);
+}
+
+const titulo3="Distribuição de Investigações"
+criarDonutChart(titulo3, dados, div);
