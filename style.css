@@ -1,3 +1,6 @@
+/*
+    GENERAL SETTINGS & VARIABLES
+*/
 html {
     scroll-behavior: smooth;
     scroll-padding-top: 100px;
@@ -16,10 +19,14 @@ html {
     --font-main: 'Montserrat', sans-serif;
 }
 
+/*
+    RESETS & BASE STYLES
+*/
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: var(--font-main);
 }
 
 body {
@@ -43,12 +50,56 @@ ul {
     list-style: none;
 }
 
+/*
+    UTILITIES & LAYOUT
+*/
 .container {
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
 }
 
+.section {
+    padding: 60px 0;
+}
+
+.bg-light {
+    background-color: var(--bg-light);
+}
+
+/* Flex Layout Helper for Cards */
+.cards-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 30px;
+    justify-content: center;
+}
+
+.cards-flex > article {
+    flex: 1 1 300px;
+    max-width: 360px;
+}
+
+/* General Pop-up/Alert Style */
+.pop-up {
+    margin: -12px 0px 15px 0px;
+}
+
+/* SR Only (Screen Reader Only) - Utility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+}
+
+/*
+    COMPONENTS: BUTTONS & TYPOGRAPHY
+*/
 .btn {
     display: inline-block;
     padding: 10px 20px;
@@ -79,30 +130,9 @@ ul {
     margin-bottom: 10px;
 }
 
-.section {
-    padding: 60px 0;
-
-}
-
-.bg-light {
-    background-color: var(--bg-light);
-}
-
-/* --- Layout Flexbox --- */
-.cards-flex {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    margin-top: 30px;
-    justify-content: center;
-}
-
-.cards-flex > article {
-    flex: 1 1 300px;
-    max-width: 360px;
-}
-
-/* --- Cabeçalho --- */
+/*
+    HEADER & NAVIGATION
+*/
 .header {
     background-color: var(--white);
     padding: 20px 0;
@@ -110,9 +140,7 @@ ul {
     top: 0;
     z-index: 100;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    display:block
-
-    
+    display: block;
 }
 
 .header-flex {
@@ -124,13 +152,7 @@ ul {
     margin:10px
 }
 
-*
-{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: var(--font-main);
-}
+/* Logo Animation */
 .circle {
     position: relative;
     width: 75px;
@@ -141,6 +163,7 @@ ul {
     justify-content: center;
     align-items: center;
 }
+
 .logo {
     position:absolute;
     width: 50px;
@@ -162,6 +185,7 @@ ul {
     height: 100%;
     animation: rotateText 10s linear infinite;
 }
+
 @keyframes rotateText {
     0% {
         transform: rotate(360deg);
@@ -180,6 +204,8 @@ ul {
     font-size: 0.8rem;
     transform-origin: center 57.5px;
 }
+
+/* Navigation */
 .nav {
     margin-left: auto;
 }
@@ -218,7 +244,9 @@ ul {
     cursor: pointer;
 }
 
-/* --- Carrossel --- */
+/*
+    HERO SECTION & MAIN CAROUSEL
+*/
 .hero-controls {
     position: absolute;
     width: 100%;
@@ -240,14 +268,12 @@ ul {
     font-size: 1.5rem;
     cursor: pointer;
     border-radius: 5px;
-    
 }
 
 .carrousel-btn:hover { 
     background: var(--text-color); 
 }
 
-/* --- Hero --- */
 .hero {
     background: url('media/hero.png') no-repeat center center/cover;
     background-size: cover;
@@ -280,7 +306,12 @@ ul {
     line-height: 1.2;
 }
 
-/*Carousel track and slide for ease in/out transition*/
+ .hero p {
+    font-size: 1rem;
+    margin-bottom: 30px;
+}
+
+/* Carousel Track & Slide */
 .carousel-track {
     position: absolute;
     top: 0;
@@ -298,12 +329,9 @@ ul {
     background-position: center;
 }
 
-.hero p {
-    font-size: 1rem;
-    margin-bottom: 30px;
-}
-
-/* --- Sobre Nós --- */
+/* 
+    SECTION: ABOUT US
+*/
 .about-flex {
     display: flex;
     align-items: center;
@@ -326,15 +354,16 @@ ul {
     object-fit: cover;
 }
 
-/*   Gráfico de barras */
+/* Bar Chart Styles */
 #grafico{
     display:flex;
     justify-content: space-between;
     padding:10px
 }
 
-
-/* --- Parceiros --- */
+/*
+    SECTION: PARTNERS
+*/
 .partners-section h3 {
     color: var(--primary-color);
     margin-bottom: 20px;
@@ -347,7 +376,9 @@ ul {
     flex-wrap: wrap;
 }
 
-/* --- Serviços --- */
+/* 
+    SECTION: SERVICES
+*/
 .section-header {
     text-align: center;
     margin-bottom: 40px;
@@ -427,7 +458,9 @@ ul {
     color: var(--white);
 }
 
-/* --- Eventos --- */
+/* 
+    SECTION: EVENTS
+*/
 .events-carousel-container {
     position: relative;
     padding: 10px 80px;
@@ -530,7 +563,9 @@ ul {
     margin-bottom: 5px;
 }
 
-/* --- Notícias --- */
+/*
+    SECTION: NEWS
+*/
 .header-between {
     display: flex;
     justify-content: space-between;
@@ -570,7 +605,9 @@ ul {
     margin-top: auto;
 }
 
-/* --- Footer --- */
+/*
+    FOOTER
+*/
 .footer {
     background-color: var(--primary-color);
     color: var(--white);
@@ -624,17 +661,6 @@ ul {
     color: var(--white);
 }
 
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0,0,0,0);
-}
-
-
 .footer-bottom {
     border-top: 1px solid var(--grey);
     padding-top: 20px;
@@ -643,19 +669,18 @@ ul {
     opacity: 0.6;
 }
 
-/* --- Botão Voltar ao Topo --- */
+/* Scroll to Top Button */
 #to-top{
     position:fixed;
     bottom:20px;
     right:20px;
     display:none;
     transition: 0.3s ease
-
 }
 
-
-
-/* --- Media Queries (Mobile/Tablets) --- */
+/* 
+    MEDIA QUERIES (Mobile)
+*/
 @media (max-width: 768px) {
     .header-flex {
         flex-direction: column;
@@ -694,10 +719,10 @@ ul {
     }
 
     #grafico {
-    display:flex;
-    flex-direction: column;
-    align-items: wrap;
-    padding:10px
+        display:flex;
+        flex-direction: column;
+        align-items: wrap;
+        padding:10px
     }
 
     .partners-flex {
@@ -705,8 +730,9 @@ ul {
     }
 }
 
-
-/* --- Dark Mode --- */
+/*
+    THEMES (DARK MODE)
+*/
 html[data-theme="dark"] {
     --accent-color: #29B89E;
     --accent-color1: #3371F2;
@@ -761,7 +787,6 @@ html[data-theme="dark"] .btn-text:hover {
     color: var(--white);
 }
 
-
 html[data-theme="dark"] .date-badge {
     background: var(--bg-light);
     color: var(--white);
@@ -793,6 +818,16 @@ html[data-theme="dark"] .footer-bottom {
     border-top-color: var(--grey);
 }
 
-.pop-up{
-    margin:-12px 0px 15px 0px
+/*
+    ACCESSIBILITY (REDUCED MOTION)
+*/
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }
