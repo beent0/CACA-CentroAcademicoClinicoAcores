@@ -72,7 +72,7 @@ function criarGrafico(title, data, target){
     //Titulo do grafico
     svg.append("text")
     .attr("class", "h2")
-    .attr("x", 180)               
+    .attr("x", "50%")               
     .attr("y", 30)                        
     .attr("text-anchor", "middle")       
     .attr("fill", "var(--text-color)")                
