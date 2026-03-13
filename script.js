@@ -59,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
     //Função switch do menu para telemovel
     function toggleMenu() {
     menuLinks.classList.toggle('active')
-    headerBtn.classList.toggle('open')
 }
 
 
