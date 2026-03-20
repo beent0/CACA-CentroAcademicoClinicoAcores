@@ -10,6 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const emailF = document.getElementById("email")
     const mensagemFeedback = document.getElementById("mensagem-feedback")
 
+    const dropdownContainer = document.getElementById('dropdown-indicativo')
+    const dropdownSelected = dropdownContainer.querySelector('.dropdown-selected')
+    const dropdownOptions = dropdownContainer.querySelector('.dropdown-options')
+    const inputIndicativoHidden = document.getElementById('indicativo')
+
     //Back to Top Button
     const toTopbtn = document.getElementById("to-top")
     
@@ -78,12 +83,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const regexpEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
         const indicativo = document.getElementById("indicativo").value
-        const numeroInserido = telemovelF.value.trim()
+        const numeroInserido = telemovelF.value.trim().replace(/\s/g, '')
         const país = {
-            "+351": /^9[1236]\d{9}$/, // Portugal
+            "+351": /^9[1236]\d{7}$/, // Portugal
+            "+49": /^1[5-7]\d{8,9}$/, // Alemanha
+            "+61": /^4\d{8}$/, // Austrália
+            "+55": /^[1-9]{2}9\d{8}$/, // Brasil
+            "+1": /^[2-9]\d{9}$/, // EUA 
+            "+33": /^[67]\d{8}$/, // França
+            "+39": /^3\d{8,9}$/, // Itália
+            "+81": /^[789]0\d{8}$/, // Japão
             "+44": /^7\d{9}$/, // Reino Unido
-            "+1": /^\d{10}$/, // EUA
-            "+55": /^\d{10,11}$/ // Brasil 
+            "+41": /^7[5-9]\d{7}$/ // Suíça  
         }
         const regexpTelemovel = país[indicativo] 
         //If value inserted by user is blank, changes border to red and makes error var true
@@ -93,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         //If value inserted by user is not 9 in lenght, makes border red and error set to true
         if (regexpTelemovel !== undefined) {
-            if (!regexpTelemovel.test(numeroInserido) === false) {
+            if (regexpTelemovel.test(numeroInserido) === false) {
                 error = true
                 telemovelF.style.border = "2px solid red"
             }
@@ -114,6 +125,24 @@ document.addEventListener('DOMContentLoaded', () => {
             form.reset()
         }
     }
+    //--- Dropdown do indicativo ---
+    dropdownSelected.addEventListener('click', function(event) {
+    dropdownOptions.classList.toggle('open')
+    event.stopPropagation() 
+    })
+    const todasOpcoes = dropdownOptions.querySelectorAll('li')
+    todasOpcoes.forEach(function(opcao) {
+        opcao.addEventListener('click', function() {
+            dropdownSelected.textContent = this.getAttribute('short-data')
+            inputIndicativoHidden.value = this.getAttribute('data-value')
+            dropdownOptions.classList.remove('open')
+        })
+    })
+    document.addEventListener('click', function(event) {
+        if (!dropdownContainer.contains(event.target)) {
+            dropdownOptions.classList.remove('open')
+        }
+    })
 
     // --- Carrosel ---
     // Initializes the main carousel by cloning the first and last slides for infinite looping.
