@@ -103,11 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
             nomeF.style.border = "2px solid red"
         }
         //If value inserted by user is not 9 in lenght, makes border red and error set to true
-        if (regexpTelemovel !== undefined) {
-            if (regexpTelemovel.test(numeroInserido) === false) {
-                error = true
-                telemovelF.style.border = "2px solid red"
-            }
+        if (regexpTelemovel.test(numeroInserido) === false) {
+            error = true
+            telemovelF.style.border = "2px solid red"
         }
         //If value inserted by user doesnt contain an @ makes border red and sets error to true
         if (!regexpEmail.test(emailF.value.trim())) {
