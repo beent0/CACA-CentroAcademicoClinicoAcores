@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //Constantes do Botao do telemovel
     const headerBtn = document.getElementById('header-menu')
     const menuLinks = document.getElementById('nav-links')
+    const navItems = document.querySelectorAll('#nav-links a')
 
     //Constantes logotipo
     const textElement = document.querySelector('.text p')
@@ -297,6 +298,12 @@ document.addEventListener('DOMContentLoaded', () => {
     toTopbtn.addEventListener("click", voltarAoTopo)
     themeToggleBtn.addEventListener('click', toggleTheme)
     headerBtn.addEventListener('click', toggleMenu);
+    
+    navItems.forEach(link => {
+        link.addEventListener('click', () => {
+            menuLinks.classList.remove('active');
+        });
+    });
     form.addEventListener("submit", validadeForm)
 
     
