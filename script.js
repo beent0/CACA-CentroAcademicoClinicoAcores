@@ -10,6 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const emailF = document.getElementById("email")
     const mensagemFeedback = document.getElementById("mensagem-feedback")
 
+    const dropdownContainer = document.getElementById('dropdown-indicativo')
+    const dropdownSelected = dropdownContainer.querySelector('.dropdown-selected')
+    const dropdownOptions = dropdownContainer.querySelector('.dropdown-options')
+    const inputIndicativoHidden = document.getElementById('indicativo')
+
     //Butao de voltar ao topo
     const toTopbtn = document.getElementById("to-top")
     
@@ -79,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const indicativo = document.getElementById("indicativo").value
         const numeroInserido = telemovelF.value.trim().replace(/\s/g, '')
         const país = {
-            "+351": /^9[1236]\d{8}$/, // Portugal
+            "+351": /^9[1236]\d{7}$/, // Portugal
             "+49": /^1[5-7]\d{8,9}$/, // Alemanha
             "+61": /^4\d{8}$/, // Austrália
             "+55": /^[2-9]\d{9}$/, // Brasil
@@ -98,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         //If value inserted by user is not 9 in lenght, makes border red and error set to true
         if (regexpTelemovel !== undefined) {
-            if (!regexpTelemovel.test(numeroInserido) === false) {
+            if (regexpTelemovel.test(numeroInserido) === false) {
                 error = true
                 telemovelF.style.border = "2px solid red"
             }
@@ -120,6 +125,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    //--- Dropdown do indicativo ---
+    dropdownSelected.addEventListener('click', function(event) {
+    dropdownOptions.classList.toggle('open')
+    event.stopPropagation() 
+    })
+    const todasOpcoes = dropdownOptions.querySelectorAll('li')
+    todasOpcoes.forEach(function(opcao) {
+        opcao.addEventListener('click', function() {
+            dropdownSelected.textContent = this.getAttribute('short-data')
+            inputIndicativoHidden.value = this.getAttribute('data-value')
+            dropdownOptions.classList.remove('open')
+        })
+    })
+    document.addEventListener('click', function(event) {
+        if (!dropdownContainer.contains(event.target)) {
+            dropdownOptions.classList.remove('open');
+        }
+    });
     // --- Carrosel ---
     // Initializes the main carousel by cloning the first and last slides for infinite looping.
     function initCarousel() {
@@ -304,6 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
     themeToggleBtn.addEventListener('click', toggleTheme)
     headerBtn.addEventListener('click', toggleMenu);
     form.addEventListener("submit", validadeForm)
+
 
     
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {

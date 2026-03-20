@@ -299,18 +299,22 @@
 
                     <label for="telemovel" class="sr-only">Telemovel</label>
                     <div class ="telemovel-container">
-                        <select id="indicativo" name="indicativo">
-                            <option value="+351">Portugal</option>
-                            <option value="+49">Alemanha</option>
-                            <option value="+61">Austrália</option>
-                            <option value="+55">Brasil</option>
-                            <option value="+1">EUA</option>
-                            <option value="+33">França</option>
-                            <option value="+39">Itália</option>
-                            <option value="+81">Japão</option>
-                            <option value="+44">Reino Unido</option>
-                            <option value="+41">Suíça</option>     
-                        </select>
+                        <div class="dropdown-indicativo" id="dropdown-indicativo">
+                            <div class="dropdown-selected">Portugal</div>
+                            <ul class="dropdown-options">
+                                <li data-value="+351" short-data="+351">Portugal</li>
+                                <li data-value="+49" short-data="+49">Alemanha</li>
+                                <li data-value="+61" short-data="+61">Austrália</li>
+                                <li data-value="+55" short-data="+55">Brasil</li>
+                                <li data-value="+1" short-data="+1">EUA</li>
+                                <li data-value="+33" short-data="+33">França</li>
+                                <li data-value="+39" short-data="+39">Itália</li>
+                                <li data-value="+81" short-data="+81">Japão</li>
+                                <li data-value="+44" short-data="+44">Reino Unido</li>
+                                <li data-value="+41" short-data="+41">Suíça</li>     
+                            </ul>
+                            <input type="hidden" id="indicativo" name="indicativo" value="+351">
+                        </div>
                     <input id="telemovel" name="telemovel" placeholder="Telemóvel" novalidate>
                     </div>
                     

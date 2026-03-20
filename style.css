@@ -663,6 +663,7 @@ ul {
     background: var(--grey);
     color: var(--white);
 }
+
 .telemovel-container{
     display:flex;
     margin-bottom:100%;
@@ -670,16 +671,6 @@ ul {
     border-radius: 5px;
     background: var(--grey);
     color: var(--white);
-}
-#indicativo{
-    min-width: 130px;
-    padding: 12px; 
-    background: var(--grey); 
-    color: var(--white); 
-    border: none; 
-    border-right: 1px solid var(--bg-light); 
-    border-radius: 5px 0 0 5px; 
-    outline: none;
 }
 
 .footer-form #telemovel {
@@ -694,6 +685,70 @@ ul {
 }
 .footer-form input::placeholder {
     color: var(--bg-light);
+}
+
+.dropdown-indicativo {
+    position: relative;
+    min-width: 110px;
+    max-width: 180px;  
+    flex-shrink:0;
+    border-right: 1px solid var(--bg-light);
+    cursor:pointer;  
+}
+
+.dropdown-selected {
+    padding: 12px;
+    padding-right: 35px; 
+    color: var(--white);
+    height: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    line-height: 1.2;
+
+    /* Dropdown arrow */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 18px;
+    background-position: right 10px center;
+}
+
+.dropdown-options {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--grey);
+    border: 1px solid var(--bg-light);
+    border-radius: 5px;
+    margin-top: 5px;
+    padding:0;
+    list-style:none;
+    z-index: 10;
+    max-height: 150px;
+    overflow-y: auto;
+}
+.dropdown-options.open{
+    display: block;
+}
+.dropdown-options li {
+    padding: 10px 12px;
+    color: var(--white);
+    border-bottom: 1px solid var(--grey);
+    transition: background 0.2s;
+}
+.dropdown-options li:hover {
+    background: var(--accent-color);
+}
+
+.dropdown-options::-webkit-scrollbar {
+    width: 6px;
+}
+.dropdown-options::-webkit-scrollbar-thumb {
+    background: var(--bg-light);
+    border-radius: 3px;
 }
 
 .btn-submit {
