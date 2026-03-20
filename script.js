@@ -77,12 +77,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const regexpEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
         const indicativo = document.getElementById("indicativo").value
-        const numeroInserido = telemovelF.value.trim()
+        const numeroInserido = telemovelF.value.trim().replace(/\s/g, '')
         const país = {
-            "+351": /^9[1236]\d{9}$/, // Portugal
+            "+351": /^9[1236]\d{8}$/, // Portugal
+            "+49": /^1[5-7]\d{8,9}$/, // Alemanha
+            "+61": /^4\d{8}$/, // Austrália
+            "+55": /^[2-9]\d{9}$/, // Brasil
+            "+1": /^[2-9]\d{9}$/, // EUA 
+            "+33": /^[67]\d{8}$/, // França
+            "+39": /^3\d{8,9}$/, // Itália
+            "+81": /^[789]0\d{8}$/, // Japão   
             "+44": /^7\d{9}$/, // Reino Unido
-            "+1": /^\d{10}$/, // EUA
-            "+55": /^\d{10,11}$/ // Brasil 
+            "+41": /^7[5-9]\d{7}$/ // Suíça            
         }
         const regexpTelemovel = país[indicativo] 
         //If value inserted by user is blank, changes border to red and makes error var true
