@@ -38,8 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
     //Constantes do dark mode
     const themeToggleBtn = document.getElementById('theme-toggle')
     const htmlEl = document.documentElement
-    const sunIcon = '☀️'
-    const moonIcon = '🌙'
+    const sunIcon = themeToggleBtn.getAttribute('icon-sun')
+    const moonIcon = themeToggleBtn.getAttribute('icon-moon')
 
     //Constantes do carrossel dos eventos
     const eventTrack = document.querySelector('.events-track')
