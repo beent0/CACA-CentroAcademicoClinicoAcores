@@ -290,39 +290,64 @@
                 <p>R. Mãe de Deus</p>
                 <p>9500-321 Ponta Delgada</p>
             </div>
-
-            <div class="footer-col">
-                <h5>Newsletter</h5>
+            <div class="newsletter">
                 <form action="#" method="post" class="footer-form" id="form-newsletter">
-                    <label for="nome" class="sr-only">Nome</label>
-                    <input id="nome" name="nome" placeholder="Nome e Apelido" novalidate>
+                    <div class="footer-col newsletter-info">
+                        <h5>Newsletter</h5>
+                        <label for="nome" class="sr-only">Nome</label>
+                        <input id="nome" name="nome" placeholder="Nome e Apelido" novalidate>
 
-                    <label for="telemovel" class="sr-only">Telemovel</label>
-                    <div class ="telemovel-container">
-                        <div class="dropdown-indicativo" id="dropdown-indicativo">
-                            <div class="dropdown-selected">Portugal</div>
-                            <ul class="dropdown-options">
-                                <li data-value="+351" short-data="+351">Portugal</li>
-                                <li data-value="+49" short-data="+49">Alemanha</li>
-                                <li data-value="+61" short-data="+61">Austrália</li>
-                                <li data-value="+55" short-data="+55">Brasil</li>
-                                <li data-value="+1" short-data="+1">EUA</li>
-                                <li data-value="+33" short-data="+33">França</li>
-                                <li data-value="+39" short-data="+39">Itália</li>
-                                <li data-value="+81" short-data="+81">Japão</li>
-                                <li data-value="+44" short-data="+44">Reino Unido</li>
-                                <li data-value="+41" short-data="+41">Suíça</li>     
-                            </ul>
-                            <input type="hidden" id="indicativo" name="indicativo" value="+351">
+                        <label for="telemovel" class="sr-only">Telemovel</label>
+                        <div class="telemovel-container">
+                            <div class="dropdown-indicativo" id="dropdown-indicativo">
+                                <div class="dropdown-selected">Portugal</div>
+                                <ul class="dropdown-options">
+                                    <li data-value="+351" short-data="+351">Portugal</li>
+                                    <li data-value="+49" short-data="+49">Alemanha</li>
+                                    <li data-value="+61" short-data="+61">Austrália</li>
+                                    <li data-value="+55" short-data="+55">Brasil</li>
+                                    <li data-value="+1" short-data="+1">EUA</li>
+                                    <li data-value="+33" short-data="+33">França</li>
+                                    <li data-value="+39" short-data="+39">Itália</li>
+                                    <li data-value="+81" short-data="+81">Japão</li>
+                                    <li data-value="+44" short-data="+44">Reino Unido</li>
+                                    <li data-value="+41" short-data="+41">Suíça</li>
+                                </ul>
+                                <input type="hidden" id="indicativo" name="indicativo" value="+351">
+                            </div>
+                            <input id="telemovel" name="telemovel" placeholder="Telemóvel" novalidate>
                         </div>
-                    <input id="telemovel" name="telemovel" placeholder="Telemóvel" novalidate>
+
+                        <label for="email" class="sr-only">Email</label>
+                        <input id="email" name="email" placeholder="exemplo@email.com" novalidate>
                     </div>
-                    
-                    <label for="email" class="sr-only">Email</label>
-                    <input id="email" name="email" placeholder="exemplo@email.com" novalidate>
-                     <div id="mensagem-feedback" class='pop-up' aria-live="polite"></div>
-                    <button type="submit" class="btn btn-submit">Submeter</button>
-                   
+
+                    <div class="footer-col newsletter-msg">
+                        <h5>Enviar Mensagem</h5>
+                        <label for="assunto" class="sr-only">Assunto</label>
+                        <div class="dropdown-assunto" id="dropdown-assunto">
+                            <div class="dropdown-selected" id="assunto-selected">Seleciona um assunto...</div>
+                            <ul class="dropdown-options" id="assunto-options">
+                                <li data-value="ajuda">Ajuda</li>
+                                <li data-value="evento">Nossos Eventos</li>
+                                <li data-value="marcacao">Marcação</li>
+                                <li data-value="ensino">Duvida sobre Ensino</li>
+                            </ul>
+                            <input type="hidden" id="assunto" name="assunto" value="">
+                        </div>
+
+                        <label for="mensagem" class="sr-only">Mensagem</label>
+                        <textarea id="mensagem" name="mensagem" rows="4" placeholder="A sua mensagem"></textarea>
+                    </div>
+
+                    <div class="newsletter-actions">
+                        <div id="mensagem-feedback" class="pop-up" aria-live="polite">
+
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-submit">Submeter</button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>

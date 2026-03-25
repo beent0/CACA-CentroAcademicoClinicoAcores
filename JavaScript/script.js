@@ -10,10 +10,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const emailF = document.getElementById("email")
     const mensagemFeedback = document.getElementById("mensagem-feedback")
 
-    const dropdownContainer = document.getElementById('dropdown-indicativo')
-    const dropdownSelected = dropdownContainer.querySelector('.dropdown-selected')
-    const dropdownOptions = dropdownContainer.querySelector('.dropdown-options')
+    //Dropdown Indicativo
+    const dropdownContainerIndicativo = document.getElementById('dropdown-indicativo')
+    const dropdownSelectedIndicativo = dropdownContainerIndicativo.querySelector('.dropdown-selected')
+    const dropdownOptionsIndicativo = dropdownContainerIndicativo.querySelector('.dropdown-options')
     const inputIndicativoHidden = document.getElementById('indicativo')
+
+    //Dropdown Mensagem
+    const mensagemEscrita = document.getElementById("mensagem")
+    const dropdownAssuntoContainer = document.getElementById('dropdown-assunto')
+    const dropdownAssuntoSelected = document.getElementById('assunto-selected')
+    const dropdownAssuntoOptions = document.getElementById('assunto-options')
+    const inputAssuntoHidden = document.getElementById('assunto')
+    const mensagemPreDefinida = {
+        ajuda: 'Boa tarde, gostava de pedir ajuda com...',
+        evento: 'Boas, tenho interesse em saber mais informações sobre o evento...',
+        marcacao: 'Ola, quero marcar uma consulta no dia...',
+        ensino: 'Ola, gostaria de saber mais sobre o vosso programa de ensino'
+    }
 
     //Back to Top Button
     const toTopbtn = document.getElementById("to-top")
@@ -75,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nomeF.style.border = ''
         telemovelF.style.border = ''
         emailF.style.border = ''
+        mensagemEscrita.style.border= ''
         mensagemFeedback.textContent = ''
 
         let error = false //Created an boolean to check if any error is detected
@@ -97,6 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
             "+41": /^7[5-9]\d{7}$/ // Suíça  
         }
         const regexpTelemovel = país[indicativo] 
+        if (mensagemEscrita.value ===""){
+            error = true
+            mensagemEscrita.style.border = "2px solid red"
+        }
         //If value inserted by user is blank, changes border to red and makes error var true
         if (!regexpNome.test(nomeF.value.trim())) {
             error = true
@@ -124,21 +143,44 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     //--- Dropdown do indicativo ---
-    dropdownSelected.addEventListener('click', function(event) {
-    dropdownOptions.classList.toggle('open')
+    dropdownSelectedIndicativo.addEventListener('click', function(event) {
+    dropdownOptionsIndicativo.classList.toggle('open')
     event.stopPropagation() 
     })
-    const todasOpcoes = dropdownOptions.querySelectorAll('li')
+    const todasOpcoes = dropdownOptionsIndicativo.querySelectorAll('li')
     todasOpcoes.forEach(function(opcao) {
         opcao.addEventListener('click', function() {
-            dropdownSelected.textContent = this.getAttribute('short-data')
+            dropdownSelectedIndicativo.textContent = this.getAttribute('short-data')
             inputIndicativoHidden.value = this.getAttribute('data-value')
-            dropdownOptions.classList.remove('open')
+            dropdownOptionsIndicativo.classList.remove('open')
         })
     })
     document.addEventListener('click', function(event) {
-        if (!dropdownContainer.contains(event.target)) {
-            dropdownOptions.classList.remove('open')
+        if (!dropdownContainerIndicativo.contains(event.target)) {
+            dropdownOptionsIndicativo.classList.remove('open')
+        }
+    })
+
+    //--- Dropdown do assunto ---
+    dropdownAssuntoSelected.addEventListener('click', function(event) {
+        dropdownAssuntoOptions.classList.toggle('open')
+        event.stopPropagation()
+    })
+
+    const opcoesAssunto = dropdownAssuntoOptions.querySelectorAll('li')
+    opcoesAssunto.forEach(function(opcao) {
+        opcao.addEventListener('click', function() {
+            const assunto = this.getAttribute('data-value')
+            dropdownAssuntoSelected.textContent = this.textContent
+            inputAssuntoHidden.value = assunto
+            mensagemEscrita.value = mensagemPreDefinida[assunto] || ''
+            dropdownAssuntoOptions.classList.remove('open')
+        })
+    })
+
+    document.addEventListener('click', function(event) {
+        if (!dropdownAssuntoContainer.contains(event.target)) {
+            dropdownAssuntoOptions.classList.remove('open')
         }
     })
 
