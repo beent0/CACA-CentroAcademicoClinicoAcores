@@ -1037,3 +1037,36 @@ html[data-theme="dark"] .footer-bottom {
     display:none
     }
 }
+
+.lang-switcher {
+    display: flex;
+    gap: 5px;
+    margin-left: 10px;
+}
+.lang-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0; /* Esconde qualquer texto residual */
+    padding: 5px;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+.lang-btn:hover {
+    background: var(--accent-color);
+}
+/* Ajusta o tamanho da bandeira */
+.fi {
+    font-size: 1.6rem; /* Aumenta ou diminui conforme preferires */
+    border-radius: 4px;
+}
+.header-text {
+    white-space: nowrap;
+    overflow-x: auto;
+    max-width: 100%;
+}
+@media (max-width: 1200px) {
+    .header-text {
+        display: none;
+    }
+}
