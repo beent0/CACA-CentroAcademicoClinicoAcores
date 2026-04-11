@@ -143,7 +143,7 @@ Foi implementado um sistema completo de internacionalização no site do **Centr
 3. Verificar que todo o conteúdo (incluindo gráficos, formulário e mensagens de feedback) muda para o idioma selecionado.
 4. Recarregar a página – o idioma escolhido mantém‑se graças ao `localStorage`.
 
- 📁 Ficheiros alterados / adicionados
+  Ficheiros alterados / adicionados
 
 - `index.html` – atributos `data-i18n` e seletor de bandeiras.
 - `style.css` – estilos para o seletor e responsividade.
