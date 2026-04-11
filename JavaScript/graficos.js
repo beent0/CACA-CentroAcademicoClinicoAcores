@@ -200,19 +200,39 @@ function criarDonutChart(title, data, target) {
         .style("font-weight", "bold")
         .text(title);
 }
-//Funçao que vai executar as funçoes de criaçao dos graficos 
+// Função que vai executar as funções de criação dos gráficos
 function mostrarGrafico(entries) {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            criarGrafico("Investigações Concluídas", dados, '#grafico-barras')
-            criarDonutChart("Investigações com Parceiros", dados, '#grafico-donut')
+            const tituloBarras = (typeof translations !== 'undefined' && translations.grafico_barras_titulo) 
+                ? translations.grafico_barras_titulo 
+                : "Investigações Concluídas";
+            const tituloDonut = (typeof translations !== 'undefined' && translations.grafico_donut_titulo) 
+                ? translations.grafico_donut_titulo 
+                : "Investigações com Parceiros";
+            criarGrafico(tituloBarras, dados, '#grafico-barras');
+            criarDonutChart(tituloDonut, dados, '#grafico-donut');
         }
-    })
+    });
 }
-//Cria um objeto de observer que vai executar a função mostrarGrafico
-const observer = new IntersectionObserver(mostrarGrafico);
-//Seleciona o elemento do html que o observer vai ficar a espera que apareça na tela
-const elementoAlvo = document.querySelector('#graficos-holder');
 
-observer.observe(elementoAlvo)
+// Recriar gráficos quando o idioma muda (se a secção estiver visível)
+window.addEventListener('languageChanged', () => {
+    const elementoAlvo = document.querySelector('#graficos-holder');
+    if (elementoAlvo) {
+        const rect = elementoAlvo.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+        if (isVisible) {
+            const tituloBarras = translations.grafico_barras_titulo || "Investigações Concluídas";
+            const tituloDonut = translations.grafico_donut_titulo || "Investigações com Parceiros";
+            criarGrafico(tituloBarras, dados, '#grafico-barras');
+            criarDonutChart(tituloDonut, dados, '#grafico-donut');
+        }
+    }
+});
+
+// Cria um objeto observer que vai executar a função mostrarGrafico
+const observer = new IntersectionObserver(mostrarGrafico);
+const elementoAlvo = document.querySelector('#graficos-holder');
+if (elementoAlvo) observer.observe(elementoAlvo);
 
