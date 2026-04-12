@@ -31,15 +31,22 @@
                 <li><a href="#eventos" data-i18n="nav_eventos">Eventos</a></li>
                 <li><a href="#noticias" data-i18n="nav_noticias">Notícias</a></li>
                 <li><a class="contacts" href="#contactos"><strong data-i18n="nav_contactos">Contacte-nos</strong></a></li>
-                <!-- Language switcher (bandeiras) -->
-                <li class="lang-switcher">
-                    <button class="lang-btn" data-lang="pt" aria-label="Português"><span class="fi fi-pt"></span></button>
-                    <button class="lang-btn" data-lang="en" aria-label="English"><span class="fi fi-gb"></span></button>
-                    <button class="lang-btn" data-lang="es" aria-label="Español"><span class="fi fi-es"></span></button>
-                    <button class="lang-btn" data-lang="fr" aria-label="Français"><span class="fi fi-fr"></span></button>
-                    <button class="lang-btn" data-lang="de" aria-label="Deutsch"><span class="fi fi-de"></span></button>
+                
+                <!-- DROPDOWN DE IDIOMAS (apenas a bandeira atual visível) -->
+                <li class="lang-dropdown-container">
+                    <div class="lang-dropdown-selected">
+                        <span class="fi fi-pt"></span> <span class="lang-code">PT</span>
+                    </div>
+                    <ul class="lang-dropdown-options">
+                        <li data-lang="pt"><span class="fi fi-pt"></span> PT</li>
+                        <li data-lang="en"><span class="fi fi-gb"></span> EN</li>
+                        <li data-lang="es"><span class="fi fi-es"></span> ES</li>
+                        <li data-lang="fr"><span class="fi fi-fr"></span> FR</li>
+                        <li data-lang="de"><span class="fi fi-de"></span> DE</li>
+                    </ul>
                 </li>
-                <!-- Theme toggle button (agora depois das bandeiras) -->
+                
+                <!-- Botão de tema escuro -->
                 <li><button id="theme-toggle" class="btn theme-toggle-btn" title="Alternar modo escuro" icon-sun="☀️" icon-moon="🌙">🌙</button></li>
             </ul>
             <div class="header-menu" id="header-menu">
@@ -190,7 +197,7 @@
                                 <p class="meta">📍 <span data-i18n="evento3_local">Auditório Norte</span></p>
                             </div>
                         </article>
-                        <!-- Duplicados para efeito de carrossel (mantém os mesmos textos) -->
+                        <!-- Duplicados para carrossel (mesmo conteúdo, necessário para o efeito infinito) -->
                         <article class="card event-card">
                             <div class="card-image">
                                 <img src="media/evento1.png" alt="Evento 1">
@@ -325,7 +332,8 @@
 
                 <div class="footer-col newsletter-msg">
                     <h5 data-i18n="form_enviar_mensagem">Enviar Mensagem</h5>
-                    <label for="assunto" class="sr-only">Assunto</label>
+                    <!-- CORREÇÃO: label for="assunto" substituída por span para evitar aviso de acessibilidade -->
+                    <span class="sr-only">Assunto</span>
                     <div class="dropdown-assunto" id="dropdown-assunto">
                         <div class="dropdown-selected" id="assunto-selected" data-i18n="form_assunto_default">Seleciona um assunto...</div>
                         <ul class="dropdown-options" id="assunto-options">
