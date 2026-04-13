@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     let db;
-    const request = indexedDB.open("EventosDB", 1);
+    const request = indexedDB.open("EventosDB", 2);
 
     const eventForm = document.getElementById('event-form');
     const adminEventsList = document.getElementById('admin-events-list');
@@ -15,13 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
         db = event.target.result;
         
         if (!db.objectStoreNames.contains('eventos')) {
-            const store = db.createObjectStore('eventos', { keyPath: 'id'});
+            const store = db.createObjectStore('eventos', { keyPath: 'id', autoIncrement: true });
             store.createIndex('titulo', 'titulo', { unique: false });
             store.createIndex('descricao', 'descricao', { unique: false });
             store.createIndex('data', 'data', { unique: false });
             store.createIndex('hora', 'hora', { unique: false });
             store.createIndex('local', 'local', { unique: false });
-        }
+        }    
     };
 
     request.onsuccess = function() {
@@ -40,12 +40,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         countRequest.onsuccess = function() {
             if (countRequest.result === 0) {
-                // Seed initial data if DB is empty
-                store.put({ id: 1, titulo: "Comemorações do 7º aniversário da ESS na UAc", descricao: "Celebração do aniversário com diversas atividades.", data: "2026-05-06", hora: "14:00 - 16:00", local: "Auditório Norte", imagem: "media/evento1.png" });
-                store.put({ id: 2, titulo: "Open day 2026 | Enfermagem", descricao: "Dia aberto para apresentar o curso de Enfermagem.", data: "2026-05-30", hora: "09:00 - 12:00", local: "Campus de Angra do Heroísmo", imagem: "media/evento2.jpg" });
-                store.put({ id: 3, titulo: "V Congresso Internacional Enfermagem", descricao: "Congresso internacional com a presença de especialistas.", data: "2026-10-28", hora: "10:00 - 13:00", local: "Auditório Norte", imagem: "media/evento3.jpg" });
+                const writeTransaction = db.transaction('eventos', 'readwrite');
+                const writeStore = writeTransaction.objectStore('eventos');
                 
-                transaction.oncomplete = function() {
+                const initialData = [
+                    { titulo: "Comemorações do 7º aniversário da ESS na UAc", descricao: "Celebração do aniversário com diversas atividades.", data: "2026-05-06", hora: "14:00 - 16:00", local: "Auditório Norte", imagem: "media/evento1.png" },
+                    { titulo: "Open day 2026 | Enfermagem", descricao: "Dia aberto para apresentar o curso de Enfermagem.", data: "2026-05-30", hora: "09:00 - 12:00", local: "Campus de Angra do Heroísmo", imagem: "media/evento2.jpg" },
+                    { titulo: "V Congresso Internacional Enfermagem", descricao: "Congresso internacional com a presença de especialistas.", data: "2026-10-28", hora: "10:00 - 13:00", local: "Auditório Norte", imagem: "media/evento3.jpg" }
+                ];
+
+                initialData.forEach(item => writeStore.put(item));
+                
+                writeTransaction.oncomplete = function() {
                     carregarEventos(db);
                 };
             } else {
@@ -124,7 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isValid) return;
 
         const evento = {
-            id: id ? parseInt(id) : Date.now(),
             titulo: titulo.value,
             descricao: desc.value,
             data: data.value,
@@ -132,6 +137,11 @@ document.addEventListener('DOMContentLoaded', () => {
             local: local.value,
             imagem: imagem.value
         };
+
+        // If editing, include the original ID.
+        if (idValue) {
+            evento.id = parseInt(idValue);
+        }
 
         const transaction = db.transaction('eventos', 'readwrite');
         const store = transaction.objectStore('eventos');

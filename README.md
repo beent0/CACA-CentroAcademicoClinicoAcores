@@ -153,38 +153,26 @@ Foi implementado um sistema completo de internacionalização no site do **Centr
 
 ---
 
-### To-Do: Gestão de Eventos (CRUD com IndexedDB)
+#### feature-eventos-crud 
+**Como Criar, Editar ou Remover Eventos**
+- **Criar**: Ir ao footer -> Clicar em "Admin" -> Preencher o formulário com os dados do Evento -> Clicar em "Guardar Evento"
+- **Editar**: Ir ao footer -> Clicar em "Admin" -> Clicar em "Editar" no Evento pretendido -> Realizar as mudanças -> Clicar em "Guardar Evento"
+- **Remover**: Ir ao footer -> Clicar em "Admin" -> Clicar em "Eliminar" no Evento pretendido -> Confirmar em "OK"
 
-- [x] Criar ficheiro eventos.js e inicializar base de dados IndexedDB.
-- [x] Criar simulador de admin.
-- [x] Interface admin no `index.html`.
-- [x] Criar estilos CSS (Dark Mode) para a nova secção em `style.css`.
-- [x] Sincronizar o carrossel de eventos com a base de dados local.
-- [ ] Documentar o README no final.
+**Gestão de Eventos (CRUD e IndexedDB)**
+- **Adicionar/Editar**: Formulário único que altera entre criação e edição (baseado no ID do evento). Validação com mensagens de erro.
+- **Visualizar**: Exibição dos eventos na IndexedDB no carrossel dos eventos na lista de gestão do admin.
+- **Remover**: Remoção de eventos com confirmação ao utilizador.
+- **Persistência**: Base de dados `EventosDB` com ObjectStore `eventos` (autoIncrement) e diferentes Index's (título, descrição, data, hora, local).
 
-Para Guia:
-Gestão de Eventos (CRUD com IndexedDB)
-- [x] Adicionar Evento: Formulário na interface para que os utilizadores possam adicionar novos eventos (título, descrição, data, hora, local).
-- [x] Visualizar Eventos: Exibição dinâmica de todos os eventos armazenados na IndexedDB.
-- [x] Editar Evento: Capacidade de modificar os detalhes de um evento existente.
-- [x] Remover Evento: Funcionalidade para apagar eventos.
-- [x] Persistência: Todos os dados dos eventos devem ser armazenados e recuperados da IndexedDB, garantindo que a informação persiste entre sessões do navegador.
+**Experiência do Utilizador e Acessibilidade**
+- **Acessibilidade**: Imagens com `alt` descritivo baseado no título, `aria-label` no acesso admin e auto-focus ao abrir o painel de admin.
+- **Dark Mode**: Integração com o Dark Mode do site.
+- **Feedback**: Sistema de Toasts para confirmar operações.
+- **Interface**: Secção do admin oculta por padrão, acessível através do link no footer do site.
 
-Estrutura do Código e Boas Práticas
-- [ ] O código JavaScript deve ser bem organizado, modular e colocado num (ou mais) ficheiro(s) externo(s).
-- [ ] Utilizar variáveis e funções de forma clara e legível, com comentários quando necessário.
-- [ ] Garantir a acessibilidade das novas funcionalidades (p. ex., navegação por teclado nos formulários, descrição alternativa para elementos visuais dinâmicos)
+**Estrutura de Dados (IndexedDB)**
+- **Store**: `eventos`
+- **Campos**: `id` (KeyPath), `titulo`, `descricao`, `data`, `hora`, `local`, `imagem`.
+- **Índices**: Criados para todos os campos principais.
 
-Critérios de avaliação
-- [ ] Funcionalidade e Correção (30%): Implementação robusta de funcionalidades de CRUD com IndexedDB e integração com pelo menos uma Web API externa.
-- [ ] Qualidade do Código JavaScript (10%): Organização, legibilidade, modularidade, eficiência e uso de boas práticas.
-- [ ] Uso da IndexedDB (20%): Correta implementação de armazenamento, recuperação, atualização e remoção de dados, bem como de gestão de versões da base de dados.
-- [ ] Integração com Web APIs (20%): Eficácia na comunicação com serviços externos e tratamento dos dados recebidos.
-- [ ] Experiência do Utilizador e Design (10%): Consistência com o design original, usabilidade das novas funcionalidades e responsividade.
-- [ ] Documentação (10%): no ficheiro README.md
-        o Descrição detalhada do projeto;
-        o Instruções para configurar e executar a aplicação localmente;
-        o Explicação da arquitetura de dados da IndexedDB;
-        o Descrição das APIs externas utilizadas e como foram integradas;
-        o Quaisquer decisões de design ou implementação relevantes;
-        o Clareza e detalhe do ficheiro README.md.
