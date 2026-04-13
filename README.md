@@ -151,4 +151,14 @@ Foi implementado um sistema completo de internacionalização no site do **Centr
 - `graficos.js` – recriação de gráficos ao mudar idioma.
 - `lang/pt.json`, `lang/en.json`, `lang/es.json`, `lang/fr.json`, `lang/de.json` – ficheiros de tradução.
 
+---
 
+### To-Do: Gestão de Eventos (CRUD com IndexedDB)
+
+- [x] Criar ficheiro eventos.js e inicializar base de dados IndexedDB.
+- [ ] Criar simulador de Admin.
+- [ ] Implementar tradução para a nova secção em todos os idiomas.
+- [ ] Desenvolver a interface administrativa no `index.html`.
+- [ ] Criar estilos CSS (Dark Mode) para a nova secção em `style.css`.
+- [ ] Sincronizar o carrossel de eventos com a base de dados local.
+- [ ] Documentar o README no final.
