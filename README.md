@@ -158,6 +158,30 @@ Foi implementado um sistema completo de internacionalização no site do **Centr
 - `graficos.js` – recriação de gráficos ao mudar idioma.
 - `lang/pt.json`, `lang/en.json`, `lang/es.json`, `lang/fr.json`, `lang/de.json` – ficheiros de tradução.
 
+---
+
+#### feature-eventos-crud 
+**Como Criar, Editar ou Remover Eventos**
+- **Criar**: Ir ao footer -> Clicar em "Admin" -> Preencher o formulário com os dados do Evento -> Clicar em "Guardar Evento"
+- **Editar**: Ir ao footer -> Clicar em "Admin" -> Clicar em "Editar" no Evento pretendido -> Realizar as mudanças -> Clicar em "Guardar Evento"
+- **Remover**: Ir ao footer -> Clicar em "Admin" -> Clicar em "Eliminar" no Evento pretendido -> Confirmar em "OK"
+
+**Gestão de Eventos (CRUD e IndexedDB)**
+- **Adicionar/Editar**: Formulário único que altera entre criação e edição (baseado no ID do evento). Validação com mensagens de erro.
+- **Visualizar**: Exibição dos eventos na IndexedDB no carrossel dos eventos na lista de gestão do admin.
+- **Remover**: Remoção de eventos com confirmação ao utilizador.
+- **Persistência**: Base de dados `EventosDB` com ObjectStore `eventos` (autoIncrement) e diferentes Index's (título, descrição, data, hora, local).
+
+**Experiência do Utilizador e Acessibilidade**
+- **Acessibilidade**: Imagens com `alt` descritivo baseado no título, `aria-label` no acesso admin e auto-focus ao abrir o painel de admin.
+- **Dark Mode**: Integração com o Dark Mode do site.
+- **Feedback**: Sistema de Toasts para confirmar operações.
+- **Interface**: Secção do admin oculta por padrão, acessível através do link no footer do site.
+
+**Estrutura de Dados (IndexedDB)**
+- **Store**: `eventos`
+- **Campos**: `id` (KeyPath), `titulo`, `descricao`, `data`, `hora`, `local`, `imagem`.
+- **Índices**: Criados para todos os campos principais.
 
 Updates Tomás Couto PEI3
 

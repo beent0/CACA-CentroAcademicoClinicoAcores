@@ -133,13 +133,29 @@ document.addEventListener('DOMContentLoaded', () => {
         (char, i) => `<span style="transform: translate(-50%, -50%) rotate(${i * angle}deg) translateY(-52px)">${char}</span>`
     ).join("");
     const themeToggleBtn = document.getElementById('theme-toggle');
+
+
+
+    // Toggle Admin Mode
+    const toggleAdminBtn = document.getElementById('toggle-admin');
+    const adminSection = document.getElementById('admin-section');
+
+    if (toggleAdminBtn && adminSection) {
+        toggleAdminBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const wasShown = adminSection.classList.contains('show');
+            adminSection.classList.toggle('show');
+            if (!wasShown) {
+                adminSection.scrollIntoView();
+                const firstInput = adminSection.querySelector('input:not([type="hidden"])');
+                if (firstInput) firstInput.focus();
+            }
+        });
+    }
+
     const htmlEl = document.documentElement;
     const sunIcon = themeToggleBtn.getAttribute('icon-sun');
     const moonIcon = themeToggleBtn.getAttribute('icon-moon');
-    const eventTrack = document.querySelector('.events-track');
-    const eventCards = document.querySelectorAll('.event-card');
-    const eventPrevBtn = document.getElementById('event-prev');
-    const eventNextBtn = document.getElementById('event-next');
 
     let indiceAtual = 1;
     let isTransitioning = false;
@@ -462,10 +478,19 @@ if (contactoForm) {
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         setTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
     }
+
+
     function initEventCarousel() {
+        const eventTrack = document.querySelector('.events-track');
+        const eventCards = document.querySelectorAll('.event-card');
+        const eventPrevBtn = document.getElementById('event-prev');
+        const eventNextBtn = document.getElementById('event-next');
+
         if (!eventTrack || eventCards.length === 0) return;
+
         const eventWrapper = document.querySelector('.events-mask');
         let eventIndex = 0;
+
         function updateEventCarousel() {
             const cardWidth = eventCards[0].offsetWidth;
             const gap = parseFloat(window.getComputedStyle(eventTrack).gap) || 0;
@@ -475,21 +500,28 @@ if (contactoForm) {
             if (translateX > maxTranslate) translateX = maxTranslate;
             eventTrack.style.transform = `translateX(-${translateX}px)`;
         }
-        eventNextBtn.addEventListener('click', () => {
+
+        eventNextBtn.onclick = () => {
             const cardWidth = eventCards[0].offsetWidth;
             const gap = parseFloat(window.getComputedStyle(eventTrack).gap) || 0;
             const slideWidth = cardWidth + gap;
-            const maxTranslate = Math.max(0, eventTrack.scrollWidth - document.querySelector('.events-mask').offsetWidth);
+            const maxTranslate = Math.max(0, eventTrack.scrollWidth - eventWrapper.offsetWidth);
             if (eventIndex * slideWidth < maxTranslate) { eventIndex++; updateEventCarousel(); }
-        });
-        eventPrevBtn.addEventListener('click', () => { if (eventIndex > 0) eventIndex--; updateEventCarousel(); });
+        };
+
+        eventPrevBtn.onclick = () => { 
+            if (eventIndex > 0) { eventIndex--; updateEventCarousel(); } 
+        };
+
         window.addEventListener('resize', updateEventCarousel);
         updateEventCarousel();
     }
 
     initCarousel();
     initTheme();
-    initEventCarousel();
+
+    window.addEventListener('loadedEvents', initEventCarousel);
+
     track.addEventListener('transitionend', handleCarouselTransition);
     btnNext.addEventListener("click", () => mudarImagem('next'));
     btnPrev.addEventListener("click", () => mudarImagem('prev'));
@@ -505,6 +537,9 @@ if (contactoForm) {
 
     
 });
+
+
+
 
 //  VALIDAÇÃO de FORMULÁRIO e TOASTS
 function mostrarErro(campo, mensagem, isContainer = false) {
@@ -544,14 +579,9 @@ function limparErros() {
         el.textContent = '';
         el.style.visibility = 'hidden';
     });
-    const campos = [nomeF, emailF, telemovelF, mensagemEscrita];
-    campos.forEach(campo => {
-        if (campo) campo.style.border = '';
+    document.querySelectorAll('input, textarea, .dropdown-assunto, .dropdown-indicativo').forEach(el => {
+        el.style.border = '';
     });
-    const assuntoContainer = document.getElementById('dropdown-assunto');
-    if (assuntoContainer) assuntoContainer.style.border = '';
-    const indicativoContainer = document.getElementById('dropdown-indicativo');
-    if (indicativoContainer) indicativoContainer.style.border = '';
 }
 
 function mostrarToast(mensagem, tipo) {
