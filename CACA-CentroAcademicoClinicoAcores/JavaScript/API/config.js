@@ -1,4 +1,0 @@
-const CONFIG = {
-    GOOGLE_MAPS_API_KEY: "AIzaSyBbf9sK5hFBhp5n71k-ieAzfd92WH55rwY",
-    GNEWS_API_KEY: "be8432ac10f0e1718adfe477d9455a73"
-}
