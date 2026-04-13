@@ -30,6 +30,7 @@
                 <li><a href="#servicos" data-i18n="nav_servicos">Serviços</a></li>
                 <li><a href="#eventos" data-i18n="nav_eventos">Eventos</a></li>
                 <li><a href="#noticias" data-i18n="nav_noticias">Notícias</a></li>
+                <li><a href="#Localizacao">Localização</a></li>
                 <li><a class="contacts" href="#contactos"><strong data-i18n="nav_contactos">Contacte-nos</strong></a></li>
                 
                 <!-- DROPDOWN DE IDIOMAS (apenas a bandeira atual visível) -->
@@ -249,32 +250,28 @@
     </section>
 
     <section id="noticias" class="section">
-        <div class="container">
-            <div class="section-header header-between">
-                <div>
-                    <span class="subtitle" data-i18n="noticias_subtitle">NOTÍCIAS</span>
-                    <h2 data-i18n="noticias_title">Novidades e Artigos</h2>
+            <div class="container">
+                <div class="section-header">
+                    <div>
+                        <span class="subtitle">NOTÍCIAS</span>
+                        <h2>Novidades e Artigos</h2>
+                    </div>
                 </div>
-                <a href="#" class="btn btn-primary" data-i18n="noticias_btn">Ver todos</a>
+                <div id="apinoticias-container" class="cards-flex">
+                    
+                </div>
             </div>
-            <div class="cards-flex">
-                <article class="news-card">
-                    <img src="media/noticia1.jpg" alt="Notícia 1">
-                    <h4 data-i18n="noticia1_titulo">“A intervenção profissional no processo de cuidar”</h4>
-                    <a href="#" class="link-blue" data-i18n="noticia1_link">Saiba mais</a>
-                </article>
-                <article class="news-card">
-                    <img src="media/noticia2.jpg" alt="Notícia 2">
-                    <h4 data-i18n="noticia2_titulo">Escola Superior de Saúde promove I Encontro de Cuidados Continuados</h4>
-                    <a href="#" class="link-blue" data-i18n="noticia2_link">Saiba mais</a>
-                </article>
-                <article class="news-card">
-                    <img src="media/noticia3.jpg" alt="Notícia 3">
-                    <h4 data-i18n="noticia3_titulo">Presidente da ESS toma posse</h4>
-                    <a href="#" class="link-blue" data-i18n="noticia3_link">Saiba mais</a>
-                </article>
+        </section>
+        <section id = "Localizacao" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="subtitle">LOCALIZAÇÃO</span>
+                    <h2>Onde estamos?</h2>
+                </div>
+                <div class="map-container">
+                    <div id="googlemap" class ="map"></div>
+                </div>
             </div>
-        </div>
     </section>
 </main>
 
@@ -366,5 +363,8 @@
 
 <script src="JavaScript/script.js"></script>
 <script src="JavaScript/graficos.js"></script>
+<script src="JavaScript/API/config.js"></script>
+<script src="JavaScript/API/mapa.js"></script>
+<script src="JavaScript/API/noticias.js"></script>
 </body>
 </html>
