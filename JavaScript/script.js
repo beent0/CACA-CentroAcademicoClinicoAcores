@@ -136,10 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const htmlEl = document.documentElement;
     const sunIcon = themeToggleBtn.getAttribute('icon-sun');
     const moonIcon = themeToggleBtn.getAttribute('icon-moon');
-    const eventTrack = document.querySelector('.events-track');
-    const eventCards = document.querySelectorAll('.event-card');
-    const eventPrevBtn = document.getElementById('event-prev');
-    const eventNextBtn = document.getElementById('event-next');
 
     let indiceAtual = 1;
     let isTransitioning = false;
@@ -465,41 +461,41 @@ if (contactoForm) {
 
 
     function initEventCarousel() {
-            const track = document.querySelector('.events-track');
-            const cards = document.querySelectorAll('.event-card');
-            const prevBtn = document.getElementById('event-prev');
-            const nextBtn = document.getElementById('event-next');
+        const eventTrack = document.querySelector('.events-track');
+        const eventCards = document.querySelectorAll('.event-card');
+        const eventPrevBtn = document.getElementById('event-prev');
+        const eventNextBtn = document.getElementById('event-next');
 
-            if (!track || cards.length === 0) return;
+        if (!eventTrack || eventCards.length === 0) return;
 
-            const eventWrapper = document.querySelector('.events-mask');
-            let eventIndex = 0;
+        const eventWrapper = document.querySelector('.events-mask');
+        let eventIndex = 0;
 
-            function updateEventCarousel() {
-                const cardWidth = cards[0].offsetWidth;
-                const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
-                const slideWidth = cardWidth + gap;
-                const maxTranslate = Math.max(0, track.scrollWidth - eventWrapper.offsetWidth);
-                let translateX = eventIndex * slideWidth;
-                if (translateX > maxTranslate) translateX = maxTranslate;
-                track.style.transform = `translateX(-${translateX}px)`;
-            }
-
-            nextBtn.onclick = () => {
-                const cardWidth = cards[0].offsetWidth;
-                const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
-                const slideWidth = cardWidth + gap;
-                const maxTranslate = Math.max(0, track.scrollWidth - eventWrapper.offsetWidth);
-                if (eventIndex * slideWidth < maxTranslate) { eventIndex++; updateEventCarousel(); }
-            };
-
-            prevBtn.onclick = () => { 
-                if (eventIndex > 0) { eventIndex--; updateEventCarousel(); } 
-            };
-
-            window.addEventListener('resize', updateEventCarousel);
-            updateEventCarousel();
+        function updateEventCarousel() {
+            const cardWidth = eventCards[0].offsetWidth;
+            const gap = parseFloat(window.getComputedStyle(eventTrack).gap) || 0;
+            const slideWidth = cardWidth + gap;
+            const maxTranslate = Math.max(0, eventTrack.scrollWidth - eventWrapper.offsetWidth);
+            let translateX = eventIndex * slideWidth;
+            if (translateX > maxTranslate) translateX = maxTranslate;
+            eventTrack.style.transform = `translateX(-${translateX}px)`;
         }
+
+        eventNextBtn.onclick = () => {
+            const cardWidth = eventCards[0].offsetWidth;
+            const gap = parseFloat(window.getComputedStyle(eventTrack).gap) || 0;
+            const slideWidth = cardWidth + gap;
+            const maxTranslate = Math.max(0, eventTrack.scrollWidth - eventWrapper.offsetWidth);
+            if (eventIndex * slideWidth < maxTranslate) { eventIndex++; updateEventCarousel(); }
+        };
+
+        eventPrevBtn.onclick = () => { 
+            if (eventIndex > 0) { eventIndex--; updateEventCarousel(); } 
+        };
+
+        window.addEventListener('resize', updateEventCarousel);
+        updateEventCarousel();
+    }
 
     initCarousel();
     initTheme();
