@@ -575,14 +575,9 @@ function limparErros() {
         el.textContent = '';
         el.style.visibility = 'hidden';
     });
-    const campos = [nomeF, emailF, telemovelF, mensagemEscrita];
-    campos.forEach(campo => {
-        if (campo) campo.style.border = '';
+    document.querySelectorAll('input, textarea, .dropdown-assunto, .dropdown-indicativo').forEach(el => {
+        el.style.border = '';
     });
-    const assuntoContainer = document.getElementById('dropdown-assunto');
-    if (assuntoContainer) assuntoContainer.style.border = '';
-    const indicativoContainer = document.getElementById('dropdown-indicativo');
-    if (indicativoContainer) indicativoContainer.style.border = '';
 }
 
 function mostrarToast(mensagem, tipo) {

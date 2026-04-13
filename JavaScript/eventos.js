@@ -75,17 +75,62 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function salvarEvento(e) {
         e.preventDefault();
+        
+        if (typeof limparErros === 'function') {
+            limparErros();
+        }
+        
+        const titulo = document.getElementById('event-titulo');
+        const desc = document.getElementById('event-desc');
+        const data = document.getElementById('event-data');
+        const hora = document.getElementById('event-hora');
+        const local = document.getElementById('event-local');
+        const imagem = document.getElementById('event-imagem');
         const idInput = document.getElementById('event-id');
         const id = idInput.value;
         
+        let isValid = true;
+
+        if (!titulo.value.trim()) {
+            mostrarErro(titulo, 'Título é obrigatório');
+            isValid = false;
+        }
+
+        if (!desc.value.trim()) {
+            mostrarErro(desc, 'Descrição é obrigatória');
+            isValid = false;
+        }
+
+        if (!data.value) {
+            mostrarErro(data, 'Data é obrigatória');
+            isValid = false;
+        }
+
+        if (!hora.value.trim()) {
+            mostrarErro(hora, 'Hora é obrigatória');
+            isValid = false;
+        }
+
+        if (!local.value.trim()) {
+            mostrarErro(local, 'Local é obrigatório');
+            isValid = false;
+        }
+
+        if (!imagem.value.trim()) {
+            mostrarErro(imagem, 'URL da Imagem é obrigatória');
+            isValid = false;
+        }
+
+        if (!isValid) return;
+
         const evento = {
             id: id ? parseInt(id) : Date.now(),
-            titulo: document.getElementById('event-titulo').value,
-            descricao: document.getElementById('event-desc').value,
-            data: document.getElementById('event-data').value,
-            hora: document.getElementById('event-hora').value,
-            local: document.getElementById('event-local').value,
-            imagem: document.getElementById('event-imagem').value
+            titulo: titulo.value,
+            descricao: desc.value,
+            data: data.value,
+            hora: hora.value,
+            local: local.value,
+            imagem: imagem.value
         };
 
         const transaction = db.transaction('eventos', 'readwrite');
@@ -125,6 +170,9 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {Object} evento - The event object to be edited.
      */
     function editarEvento(evento) {
+        if (typeof limparErros === 'function') {
+            limparErros();
+        }
         document.getElementById('event-id').value = evento.id;
         document.getElementById('event-titulo').value = evento.titulo;
         document.getElementById('event-desc').value = evento.descricao;
@@ -147,6 +195,9 @@ document.addEventListener('DOMContentLoaded', () => {
      * Resets the admin form fields and UI state to "Add Event" mode.
      */
     function resetForm() {
+        if (typeof limparErros === 'function') {
+            limparErros();
+        }
         if (eventForm) eventForm.reset();
         document.getElementById('event-id').value = '';
         if (adminFormTitle) {
