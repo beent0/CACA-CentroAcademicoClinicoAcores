@@ -2,11 +2,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let db;
     const request = indexedDB.open("EventosDB", 1);
 
+    const eventForm = document.getElementById('event-form');
+    const adminEventsList = document.getElementById('admin-events-list');
+    const btnCancelEdit = document.getElementById('btn-cancel-edit');
+    const adminFormTitle = document.getElementById('admin-form-title');
+
     request.onerror = function (event) {
         console.error('Erro ao abrir a IndexedDB', event);
     };
 
-request.onupgradeneeded = function(event) {
+    request.onupgradeneeded = function(event) {
         db = event.target.result;
         
         if (!db.objectStoreNames.contains('eventos')) {
@@ -21,6 +26,14 @@ request.onupgradeneeded = function(event) {
 
     request.onsuccess = function() {
         db = request.result;
+        
+        if (eventForm) {
+            eventForm.addEventListener('submit', salvarEvento);
+        }
+        if (btnCancelEdit) {
+            btnCancelEdit.addEventListener('click', resetForm);
+        }
+
         const transaction = db.transaction('eventos', 'readwrite');
         const store = transaction.objectStore('eventos');
         const countRequest = store.count();
@@ -41,6 +54,10 @@ request.onupgradeneeded = function(event) {
         };
     };
 
+    /**
+     * Fetches all events from IndexedDB and triggers re-rendering of both the user-facing carousel and the admin management list.
+     * @param {IDBDatabase} db - The opened IndexedDB instance.
+     */
     function carregarEventos(db) {
         const transaction = db.transaction('eventos', 'readonly');
         const store = transaction.objectStore('eventos');
@@ -48,9 +65,131 @@ request.onupgradeneeded = function(event) {
 
         getAllRequest.onsuccess = function() {
             renderizarEventosNoCarrossel(getAllRequest.result);
+            renderizarListaAdmin(getAllRequest.result);
         };
     }
 
+    /**
+     * Handles the event form submission to add a new event or update an existing one.
+     * @param {Event} e - The form submission event.
+     */
+    function salvarEvento(e) {
+        e.preventDefault();
+        const idInput = document.getElementById('event-id');
+        const id = idInput.value;
+        
+        const evento = {
+            id: id ? parseInt(id) : Date.now(),
+            titulo: document.getElementById('event-titulo').value,
+            descricao: document.getElementById('event-desc').value,
+            data: document.getElementById('event-data').value,
+            hora: document.getElementById('event-hora').value,
+            local: document.getElementById('event-local').value,
+            imagem: document.getElementById('event-imagem').value
+        };
+
+        const transaction = db.transaction('eventos', 'readwrite');
+        const store = transaction.objectStore('eventos');
+        store.put(evento);
+
+        transaction.oncomplete = function() {
+            resetForm();
+            carregarEventos(db);
+            if (typeof mostrarToast === 'function') {
+                mostrarToast('Evento guardado com sucesso!', 'success');
+            }
+        };
+    }
+
+    /**
+     * Removes an event from IndexedDB by its ID after user confirmation.
+     * @param {number} id - The ID of the event to be deleted.
+     */
+    function removerEvento(id) {
+        if (!confirm('Tem a certeza que deseja eliminar este evento?')) return;
+
+        const transaction = db.transaction('eventos', 'readwrite');
+        const store = transaction.objectStore('eventos');
+        store.delete(id);
+
+        transaction.oncomplete = function() {
+            carregarEventos(db);
+            if (typeof mostrarToast === 'function') {
+                mostrarToast('Evento eliminado com sucesso!', 'success');
+            }
+        };
+    }
+
+    /**
+     * populates the admin form with event data to allow editing an existing event.
+     * @param {Object} evento - The event object to be edited.
+     */
+    function editarEvento(evento) {
+        document.getElementById('event-id').value = evento.id;
+        document.getElementById('event-titulo').value = evento.titulo;
+        document.getElementById('event-desc').value = evento.descricao;
+        document.getElementById('event-data').value = evento.data;
+        document.getElementById('event-hora').value = evento.hora;
+        document.getElementById('event-local').value = evento.local;
+        document.getElementById('event-imagem').value = evento.imagem;
+
+        if (adminFormTitle) {
+            adminFormTitle.textContent = 'Editar Evento';
+        }
+        
+        if (btnCancelEdit) btnCancelEdit.classList.remove('hidden');
+        
+        const adminSection = document.getElementById('admin-section');
+        if (adminSection) adminSection.scrollIntoView();
+    }
+
+    /**
+     * Resets the admin form fields and UI state to "Add Event" mode.
+     */
+    function resetForm() {
+        if (eventForm) eventForm.reset();
+        document.getElementById('event-id').value = '';
+        if (adminFormTitle) {
+            adminFormTitle.textContent = 'Adicionar Evento';
+        }
+        if (btnCancelEdit) btnCancelEdit.classList.add('hidden');
+    }
+
+    /**
+     * Renders the list of events in the admin panel with edit and delete buttons.
+     * @param {Array} eventos - Array of event objects from IndexedDB.
+     */
+    function renderizarListaAdmin(eventos) {
+        if (!adminEventsList) return;
+        
+        let html = '';
+        eventos.forEach(evento => {
+            html += `
+            <div class="admin-event-item">
+                <div class="admin-event-info">
+                    <h4>${evento.titulo}</h4>
+                    <p>${evento.data} | ${evento.local}</p>
+                </div>
+                <div class="admin-item-actions">
+                    <button class="btn-sm btn-edit" onclick="window.editarEventoById(${evento.id})">Editar</button>
+                    <button class="btn-sm btn-delete" onclick="window.removerEventoById(${evento.id})">Eliminar</button>
+                </div>
+            </div>`;
+        });
+        adminEventsList.innerHTML = html;
+
+        // expose global helpers for onclick
+        window.removerEventoById = (id) => removerEvento(id);
+        window.editarEventoById = (id) => {
+            const ev = eventos.find(e => e.id === id);
+            if (ev) editarEvento(ev);
+        };
+    }
+
+    /**
+     * Renders the event cards inside the user-facing carousel.
+     * @param {Array} eventos - Array of event objects from IndexedDB.
+     */
     function renderizarEventosNoCarrossel(eventos) {
         const track = document.getElementById('dynamic-events-track');
         if (!track) return;
@@ -73,15 +212,15 @@ request.onupgradeneeded = function(event) {
                     </div>
                 </div>
                 <div class="card-content">
-                    <h4 data-i18n="evento${evento.id}_titulo">${evento.titulo}</h4>
-                    <p class="meta">🕒 <span data-i18n="evento${evento.id}_hora">${evento.hora}</span></p>
-                    <p class="meta">📍 <span data-i18n="evento${evento.id}_local">${evento.local}</span></p>
+                    <h4>${evento.titulo}</h4>
+                    <p class="meta">🕒 <span>${evento.hora}</span></p>
+                    <p class="meta">📍 <span>${evento.local}</span></p>
                 </div>
             </article>`;
         });
 
-        // Duplicate HTML for infinite scroll effect
-        track.innerHTML = html + html;
+        // Apply HTML to track
+        track.innerHTML = html;
 
         // Re-apply translations
         if (typeof applyTranslations === 'function') {

@@ -156,9 +156,9 @@ Foi implementado um sistema completo de internacionalização no site do **Centr
 ### To-Do: Gestão de Eventos (CRUD com IndexedDB)
 
 - [x] Criar ficheiro eventos.js e inicializar base de dados IndexedDB.
-- [ ] Criar simulador de Admin.
-- [ ] Implementar tradução para a nova secção em todos os idiomas.
-- [ ] Desenvolver a interface administrativa no `index.html`.
+- [x] Criar simulador de admin.
+- [ ] Implementar tradução para a nova secção admin e eventos.
+- [x] Interface admin no `index.html`.
 - [ ] Criar estilos CSS (Dark Mode) para a nova secção em `style.css`.
-- [ ] Sincronizar o carrossel de eventos com a base de dados local.
+- [x] Sincronizar o carrossel de eventos com a base de dados local.
 - [ ] Documentar o README no final.

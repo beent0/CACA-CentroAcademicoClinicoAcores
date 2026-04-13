@@ -667,6 +667,135 @@ html[data-theme="dark"] .lang-dropdown-options {
 }
 
 /*
+    ADMIN SECTION
+*/
+.admin-only {
+    display: none;
+    background-color: var(--bg-light);
+    border-top: 2px solid var(--primary-color);
+    padding: 60px 0;
+}
+
+.admin-only.show {
+    display: block;
+}
+
+#toggle-admin {
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+}
+
+#toggle-admin:hover {
+    opacity: 1;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.admin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 30px;
+}
+
+@media (max-width: 992px) {
+    .admin-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.admin-form-container, .admin-list-container {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: inherit;
+}
+
+.admin-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.admin-events-list {
+    margin-top: 20px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.admin-event-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.admin-event-info h4 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.admin-event-info p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.admin-item-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-edit {
+    background: #ffc107;
+    color: black !important;
+}
+
+.btn-delete {
+    background: #dc3545;
+    color: white !important;
+}
+
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    font-weight: 600;
+}
+
+/*
     FOOTER
 */
 .footer {

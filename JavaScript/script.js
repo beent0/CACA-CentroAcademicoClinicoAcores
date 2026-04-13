@@ -133,6 +133,22 @@ document.addEventListener('DOMContentLoaded', () => {
         (char, i) => `<span style="transform: translate(-50%, -50%) rotate(${i * angle}deg) translateY(-52px)">${char}</span>`
     ).join("");
     const themeToggleBtn = document.getElementById('theme-toggle');
+
+
+
+    // Toggle Admin Mode
+    const toggleAdminBtn = document.getElementById('toggle-admin');
+    const adminSection = document.getElementById('admin-section');
+
+    if (toggleAdminBtn && adminSection) {
+        toggleAdminBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const wasShown = adminSection.classList.contains('show');
+            adminSection.classList.toggle('show');
+            if (!wasShown) adminSection.scrollIntoView();
+        });
+    }
+
     const htmlEl = document.documentElement;
     const sunIcon = themeToggleBtn.getAttribute('icon-sun');
     const moonIcon = themeToggleBtn.getAttribute('icon-moon');
