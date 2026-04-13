@@ -676,6 +676,11 @@ html[data-theme="dark"] .lang-dropdown-options {
     padding: 60px 0;
 }
 
+[data-theme='dark'] .admin-only {
+    background-color: var(--bg-color);
+    border-top-color: var(--accent-color1);
+}
+
 .admin-only.show {
     display: block;
 }
@@ -715,6 +720,12 @@ html[data-theme="dark"] .lang-dropdown-options {
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
+[data-theme='dark'] .admin-form-container, 
+[data-theme='dark'] .admin-list-container {
+    background: var(--primary-color);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
 .form-group {
     margin-bottom: 15px;
 }
@@ -726,12 +737,23 @@ html[data-theme="dark"] .lang-dropdown-options {
     color: var(--primary-color);
 }
 
+[data-theme='dark'] .form-group label {
+    color: var(--white);
+}
+
 .form-group input, .form-group textarea {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 6px;
     font-family: inherit;
+}
+
+[data-theme='dark'] .form-group input, 
+[data-theme='dark'] .form-group textarea {
+    background: var(--grey);
+    border-color: var(--grey);
+    color: var(--white);
 }
 
 .admin-form-row {
@@ -760,6 +782,10 @@ html[data-theme="dark"] .lang-dropdown-options {
     border-bottom: 1px solid #eee;
 }
 
+[data-theme='dark'] .admin-event-item {
+    border-bottom-color: var(--grey);
+}
+
 .admin-event-info h4 {
     margin: 0;
     font-size: 1rem;
@@ -769,6 +795,10 @@ html[data-theme="dark"] .lang-dropdown-options {
     margin: 0;
     font-size: 0.85rem;
     color: #666;
+}
+
+[data-theme='dark'] .admin-event-info p {
+    color: var(--text-color);
 }
 
 .admin-item-actions {

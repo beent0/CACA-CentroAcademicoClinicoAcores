@@ -157,8 +157,34 @@ Foi implementado um sistema completo de internacionalização no site do **Centr
 
 - [x] Criar ficheiro eventos.js e inicializar base de dados IndexedDB.
 - [x] Criar simulador de admin.
-- [ ] Implementar tradução para a nova secção admin e eventos.
 - [x] Interface admin no `index.html`.
 - [ ] Criar estilos CSS (Dark Mode) para a nova secção em `style.css`.
 - [x] Sincronizar o carrossel de eventos com a base de dados local.
 - [ ] Documentar o README no final.
+
+Para Guia:
+Gestão de Eventos (CRUD com IndexedDB)
+- [x] Adicionar Evento: Formulário na interface para que os utilizadores possam adicionar novos eventos (título, descrição, data, hora, local).
+- [x] Visualizar Eventos: Exibição dinâmica de todos os eventos armazenados na IndexedDB.
+- [x] Editar Evento: Capacidade de modificar os detalhes de um evento existente.
+- [x] Remover Evento: Funcionalidade para apagar eventos.
+- [x] Persistência: Todos os dados dos eventos devem ser armazenados e recuperados da IndexedDB, garantindo que a informação persiste entre sessões do navegador.
+
+Estrutura do Código e Boas Práticas
+- [ ] O código JavaScript deve ser bem organizado, modular e colocado num (ou mais) ficheiro(s) externo(s).
+- [ ] Utilizar variáveis e funções de forma clara e legível, com comentários quando necessário.
+- [ ] Garantir a acessibilidade das novas funcionalidades (p. ex., navegação por teclado nos formulários, descrição alternativa para elementos visuais dinâmicos)
+
+Critérios de avaliação
+- [ ] Funcionalidade e Correção (30%): Implementação robusta de funcionalidades de CRUD com IndexedDB e integração com pelo menos uma Web API externa.
+- [ ] Qualidade do Código JavaScript (10%): Organização, legibilidade, modularidade, eficiência e uso de boas práticas.
+- [ ] Uso da IndexedDB (20%): Correta implementação de armazenamento, recuperação, atualização e remoção de dados, bem como de gestão de versões da base de dados.
+- [ ] Integração com Web APIs (20%): Eficácia na comunicação com serviços externos e tratamento dos dados recebidos.
+- [ ] Experiência do Utilizador e Design (10%): Consistência com o design original, usabilidade das novas funcionalidades e responsividade.
+- [ ] Documentação (10%): no ficheiro README.md
+        o Descrição detalhada do projeto;
+        o Instruções para configurar e executar a aplicação localmente;
+        o Explicação da arquitetura de dados da IndexedDB;
+        o Descrição das APIs externas utilizadas e como foram integradas;
+        o Quaisquer decisões de design ou implementação relevantes;
+        o Clareza e detalhe do ficheiro README.md.
