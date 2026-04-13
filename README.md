@@ -85,6 +85,13 @@ Acessibilidade Motora:
 Outras Acessibilidades (Preferencias):
     media queries (reduced motion)
         Verifica se o utilizador tem reduced motion ativado e "desativa" as transições
+#----------------------------------------------------------------------------------------------------------------------------------------#
+PEI 3
+
+João Bento 2023110753
+Tomás Couto 2024111781
+Newton Pereira 2022122784
+
 
 Updates- Newton  PEI3
  Internacionalização (i18n) – Suporte a 5 idiomas
@@ -152,3 +159,31 @@ Foi implementado um sistema completo de internacionalização no site do **Centr
 - `lang/pt.json`, `lang/en.json`, `lang/es.json`, `lang/fr.json`, `lang/de.json` – ficheiros de tradução.
 
 
+Updates Tomás Couto PEI3
+
+Novas funcionalidades implementadas:
+
+ Google Maps:
+  Foi adicionado um mapa interativo que aponta para a Universidade dos Açores. O carregamento é feito de forma assíncrona para garantir a performance do site.
+
+  - Como configurar:
+    1. Conseguir a sua API Key: Ir à Google Cloud Console (https://console.cloud.google.com/) e ativar a *Maps JavaScript API*
+    2. Criar o ficheiro de configuração:
+       -Na pasta "API", que está dentro da pasta "JavaScript", existe um ficheiro com o nome de "config.example.js".
+       -Fazer uma cópia desse mesmo ficheiro e mudar o nome para apenas "config.js".
+    3. Colocar a API Key no ficheiro
+       - Abrir o novo ficheiro "config.js" e substituir o texto "API_KEY_HERE" pela API Key gerada:
+         const CONFIG = {
+             GOOGLE_MAPS_API_KEY: "API_KEY_HERE"
+         };
+   Em caso de dúvida para conseguir a sua chave API, ver o vídeo *How to generate and restrict API key for Google Maps Platform* (https://www.youtube.com/watch?v=2_HZObVbe-g)
+
+ Noticias:
+ Foi adicionado 3 cartões de notícias interativas. O carregamento é feito de forma assíncrona de forma a garantir a performance do site.
+
+ - Como configurar:
+   1. Conseguir a sua API Key: Ir à Gnews (https://gnews.io) e conseguir uma API Key.
+   2. Na mesma pasta "API", no ficheiro com o novo nome "config.js", substituir o texto "API_KEY_HERE" pela API Key gerada:
+   const CONFIG = {
+        GNEWS_API_KEY: "API_KEY_HERE"
+}
