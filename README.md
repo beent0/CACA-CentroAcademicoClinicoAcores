@@ -86,5 +86,69 @@ Outras Acessibilidades (Preferencias):
     media queries (reduced motion)
         Verifica se o utilizador tem reduced motion ativado e "desativa" as transições
 
+Updates- Newton  PEI3
+ Internacionalização (i18n) – Suporte a 5 idiomas
+
+Foi implementado um sistema completo de internacionalização no site do **Centro Académico Clínico dos Açores**. Agora o conteúdo pode ser visualizado em **Português, Inglês, Espanhol, Francês e Alemão**, com mudança dinâmica de idioma sem recarregar a página.
+
+ Principais alterações
+
+ Estrutura de tradução (JSON)
+- Criada a pasta `/lang` com 5 ficheiros:
+  - `pt.json` (português)
+  - `en.json` (inglês)
+  - `es.json` (espanhol)
+  - `fr.json` (francês)
+  - `de.json` (alemão)
+- Cada ficheiro contém um objeto chave → valor com todos os textos do site (títulos, parágrafos, botões, placeholders, mensagens de validação, etc.).
+
+ HTML adaptado com atributos `data-i18n`
+- Todos os elementos com texto estático receberam o atributo `data-i18n="chave"`.
+- Placeholders de formulário usam `data-i18n-attr="placeholder:chave"`.
+- O título da página (`<title>`) também é traduzível.
+
+ Seletor de idiomas com bandeiras
+- Adicionado um seletor visual junto ao menu de navegação.
+- Utilizado o CDN **flag-icons** para bandeiras em SVG de alta qualidade.
+- Botões de bandeira (`PT`, `EN`, `ES`, `FR`, `DE`) com efeito hover e responsivo.
+
+ JavaScript – Sistema de tradução dinâmica
+- Funções principais:
+  - `loadLanguage(lang)`: carrega o JSON correspondente e aplica as traduções.
+  - `applyTranslations()`: percorre o DOM e substitui textos/atributos.
+  - `getInitialLanguage()`: deteta idioma do navegador ou usa `localStorage`.
+  - `initLanguageSelector()`: associa eventos de clique às bandeiras.
+- As preferências de idioma são guardadas no `localStorage`.
+- Evento personalizado `languageChanged` permite que outros módulos (ex: gráficos) reajam à mudança de idioma.
+
+ Adaptação de componentes específicos
+- **Formulário de newsletter**: mensagens de erro/sucesso traduzidas dinamicamente.
+- **Dropdown de assunto**: as mensagens pré‑definidas (ajuda, evento, marcação, ensino) são buscadas a partir das traduções.
+- **Gráficos (D3.js)**: os títulos dos gráficos recarregam automaticamente com o idioma selecionado, mantendo os dados estáticos.
+
+ Ajustes de layout e CSS
+- Estilos para o seletor de idiomas (`.lang-switcher` e `.lang-btn`).
+- Reposicionamento do botão de modo escuro (agora **depois** das bandeiras).
+- Tratamento responsivo para títulos longos (ex: alemão) que poderiam quebrar o header – uso de `clamp()` e `white-space: nowrap` com overflow controlado.
+- Em ecrãs pequenos, o título textual do header é ocultado para evitar sobreposição.
+
+. Validação e consistência
+- As mensagens de validação (`form_error`, `form_success`) estão traduzidas em todos os idiomas.
+- As mensagens pré‑definidas do dropdown foram adaptadas para formas mais neutras (ex: "Boas" → "Olá") para facilitar traduções perfeitas.
+
+ Como testar
+
+1. Abrir o site num servidor local (Live Server ou similar).
+2. Clicar nas bandeiras no canto superior direito.
+3. Verificar que todo o conteúdo (incluindo gráficos, formulário e mensagens de feedback) muda para o idioma selecionado.
+4. Recarregar a página – o idioma escolhido mantém‑se graças ao `localStorage`.
+
+ Ficheiros alterados / adicionados
+
+- `index.html` – atributos `data-i18n` e seletor de bandeiras.
+- `style.css` – estilos para o seletor e responsividade.
+- `script.js` – sistema i18n completo e integração com formulário/dropdowns.
+- `graficos.js` – recriação de gráficos ao mudar idioma.
+- `lang/pt.json`, `lang/en.json`, `lang/es.json`, `lang/fr.json`, `lang/de.json` – ficheiros de tradução.
 
 
