@@ -145,7 +145,11 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const wasShown = adminSection.classList.contains('show');
             adminSection.classList.toggle('show');
-            if (!wasShown) adminSection.scrollIntoView();
+            if (!wasShown) {
+                adminSection.scrollIntoView();
+                const firstInput = adminSection.querySelector('input:not([type="hidden"])');
+                if (firstInput) firstInput.focus();
+            }
         });
     }
 

@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
             html += `
             <article class="card event-card">
                 <div class="card-image">
-                    <img src="${evento.imagem}" alt="Evento">
+                    <img src="${evento.imagem}" alt="Cartaz do evento: ${evento.titulo}">
                     <div class="date-badge">
                         <span class="day">${dia}</span>
                         <span class="month">${mes}</span>
