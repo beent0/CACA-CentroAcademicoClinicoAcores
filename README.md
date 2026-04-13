@@ -158,7 +158,7 @@ Foi implementado um sistema completo de internacionalização no site do **Centr
 - [x] Criar ficheiro eventos.js e inicializar base de dados IndexedDB.
 - [x] Criar simulador de admin.
 - [x] Interface admin no `index.html`.
-- [ ] Criar estilos CSS (Dark Mode) para a nova secção em `style.css`.
+- [x] Criar estilos CSS (Dark Mode) para a nova secção em `style.css`.
 - [x] Sincronizar o carrossel de eventos com a base de dados local.
 - [ ] Documentar o README no final.
 
