@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
     /*
     EventListener inicial para configurar a IndexedDB e armazenar os eventos iniciais (estáticos do PEI2) do carrossel.
     */
-    let db;
 
     // Abrir (ou criar) a base de dados
     const request = indexedDB.open("EventosDB", 1);
@@ -28,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const transaction = db.transaction('eventos', 'readwrite');
 
         const store = transaction.objectStore('eventos');
+        const getAllRequest = store.getAll();
+
         const tituloIndex = store.index('titulo');
         const dataIndex = store.index('data');
 
@@ -61,7 +62,46 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         );
         console.log('IndexedDB pronta para uso.');
+
+        getAllRequest.onsuccess = function() {
+            renderEvents(getAllRequest.result);
+        }
     };
+
+    function renderEvents(eventos) {
+        const track = document.getElementById('dynamic-events-track');
+        
+        let html = '';
+        const meses = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
+
+        eventos.forEach(evento => {
+            const dateObj = new Date(evento.data);
+            const dia = dateObj.getDate();
+            const mes = meses[dateObj.getMonth()];
+
+            html += `
+            <article class="card event-card">
+                <div class="card-image">
+                    <img src="${evento.imagem}" alt="Evento">
+                    <div class="date-badge">
+                        <span class="day">${dia}</span>
+                        <span class="month">${mes}</span>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h4>${evento.titulo}</h4>
+                    <p class="meta">🕒 <span>${evento.hora}</span></p>
+                    <p class="meta">📍 <span>${evento.local}</span></p>
+                </div>
+            </article>`;
+        });
+
+        // Duplicating the HTML string is necessary for the infinite carousel effect you established
+        track.innerHTML = html + html;
+
+        // Signal that the DOM is ready for the carousel logic
+        window.dispatchEvent(new Event('loadedEvents'));
+    }
 
     const idQuery = store.get(1);
     const tituloQuery = tituloIndex.get("Comemorações do 7º aniversário da ESS na UAc");

@@ -462,34 +462,50 @@ if (contactoForm) {
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         setTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
     }
+
+
     function initEventCarousel() {
-        if (!eventTrack || eventCards.length === 0) return;
-        const eventWrapper = document.querySelector('.events-mask');
-        let eventIndex = 0;
-        function updateEventCarousel() {
-            const cardWidth = eventCards[0].offsetWidth;
-            const gap = parseFloat(window.getComputedStyle(eventTrack).gap) || 0;
-            const slideWidth = cardWidth + gap;
-            const maxTranslate = Math.max(0, eventTrack.scrollWidth - eventWrapper.offsetWidth);
-            let translateX = eventIndex * slideWidth;
-            if (translateX > maxTranslate) translateX = maxTranslate;
-            eventTrack.style.transform = `translateX(-${translateX}px)`;
+            const track = document.querySelector('.events-track');
+            const cards = document.querySelectorAll('.event-card');
+            const prevBtn = document.getElementById('event-prev');
+            const nextBtn = document.getElementById('event-next');
+
+            if (!track || cards.length === 0) return;
+
+            const eventWrapper = document.querySelector('.events-mask');
+            let eventIndex = 0;
+
+            function updateEventCarousel() {
+                const cardWidth = cards[0].offsetWidth;
+                const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+                const slideWidth = cardWidth + gap;
+                const maxTranslate = Math.max(0, track.scrollWidth - eventWrapper.offsetWidth);
+                let translateX = eventIndex * slideWidth;
+                if (translateX > maxTranslate) translateX = maxTranslate;
+                track.style.transform = `translateX(-${translateX}px)`;
+            }
+
+            nextBtn.onclick = () => {
+                const cardWidth = cards[0].offsetWidth;
+                const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+                const slideWidth = cardWidth + gap;
+                const maxTranslate = Math.max(0, track.scrollWidth - eventWrapper.offsetWidth);
+                if (eventIndex * slideWidth < maxTranslate) { eventIndex++; updateEventCarousel(); }
+            };
+
+            prevBtn.onclick = () => { 
+                if (eventIndex > 0) { eventIndex--; updateEventCarousel(); } 
+            };
+
+            window.addEventListener('resize', updateEventCarousel);
+            updateEventCarousel();
         }
-        eventNextBtn.addEventListener('click', () => {
-            const cardWidth = eventCards[0].offsetWidth;
-            const gap = parseFloat(window.getComputedStyle(eventTrack).gap) || 0;
-            const slideWidth = cardWidth + gap;
-            const maxTranslate = Math.max(0, eventTrack.scrollWidth - document.querySelector('.events-mask').offsetWidth);
-            if (eventIndex * slideWidth < maxTranslate) { eventIndex++; updateEventCarousel(); }
-        });
-        eventPrevBtn.addEventListener('click', () => { if (eventIndex > 0) eventIndex--; updateEventCarousel(); });
-        window.addEventListener('resize', updateEventCarousel);
-        updateEventCarousel();
-    }
 
     initCarousel();
     initTheme();
-    initEventCarousel();
+
+    window.addEventListener('loadedEvents', initEventCarousel);
+
     track.addEventListener('transitionend', handleCarouselTransition);
     btnNext.addEventListener("click", () => mudarImagem('next'));
     btnPrev.addEventListener("click", () => mudarImagem('prev'));
@@ -505,6 +521,9 @@ if (contactoForm) {
 
     
 });
+
+
+
 
 //  VALIDAÇÃO de FORMULÁRIO e TOASTS
 function mostrarErro(campo, mensagem, isContainer = false) {
