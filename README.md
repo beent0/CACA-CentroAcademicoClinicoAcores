@@ -160,7 +160,7 @@ Foi implementado um sistema completo de internacionalização no site do **Centr
 
 ---
 
-#### feature-eventos-crud 
+#### feature-eventos-crud (João Bento)
 **Como Criar, Editar ou Remover Eventos**
 - **Criar**: Ir ao footer -> Clicar em "Admin" -> Preencher o formulário com os dados do Evento -> Clicar em "Guardar Evento"
 - **Editar**: Ir ao footer -> Clicar em "Admin" -> Clicar em "Editar" no Evento pretendido -> Realizar as mudanças -> Clicar em "Guardar Evento"
@@ -182,6 +182,8 @@ Foi implementado um sistema completo de internacionalização no site do **Centr
 - **Store**: `eventos`
 - **Campos**: `id` (KeyPath), `titulo`, `descricao`, `data`, `hora`, `local`, `imagem`.
 - **Índices**: Criados para todos os campos principais.
+
+---
 
 Updates Tomás Couto PEI3
 
