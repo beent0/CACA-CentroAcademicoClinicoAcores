@@ -94,6 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const imagem = document.getElementById('event-imagem');
         const idInput = document.getElementById('event-id');
         const id = idInput.value;
+        const latValue = document.getElementById('event-lat').value;
+        const lngValue = document.getElementById('event-lng').value;
         
         let isValid = true;
 
@@ -135,7 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
             data: data.value,
             hora: hora.value,
             local: local.value,
-            imagem: imagem.value
+            imagem: imagem.value,
+            latitude: latValue ? parseFloat(latValue) : null,
+            longitude: lngValue ? parseFloat(lngValue) : null
         };
 
         // If editing, include the original ID.
