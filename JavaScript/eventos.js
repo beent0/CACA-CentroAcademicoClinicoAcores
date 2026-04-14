@@ -139,8 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         // If editing, include the original ID.
-        if (idValue) {
-            evento.id = parseInt(idValue);
+        if (id) {
+            evento.id = parseInt(id);
         }
 
         const transaction = db.transaction('eventos', 'readwrite');
