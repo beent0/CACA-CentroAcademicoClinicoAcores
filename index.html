@@ -30,6 +30,7 @@
                 <li><a href="#servicos" data-i18n="nav_servicos">Serviços</a></li>
                 <li><a href="#eventos" data-i18n="nav_eventos">Eventos</a></li>
                 <li><a href="#noticias" data-i18n="nav_noticias">Notícias</a></li>
+                <li><a href="#Localizacao">Localização</a></li>
                 <li><a class="contacts" href="#contactos"><strong data-i18n="nav_contactos">Contacte-nos</strong></a></li>
                 
                 <!-- DROPDOWN DE IDIOMAS (apenas a bandeira atual visível) -->
@@ -154,92 +155,8 @@
             </div>
             <div class="events-carousel-container">
                 <div class="events-mask">
-                    <div class="events-track">
-                        <article class="card event-card">
-                            <div class="card-image">
-                                <img src="media/evento1.png" alt="Evento 1">
-                                <div class="date-badge">
-                                    <span class="day">6</span>
-                                    <span class="month">MAI</span>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <h4 data-i18n="evento1_titulo">Comemorações do 7º aniversário da ESS na UAc</h4>
-                                <p class="meta">🕒 <span data-i18n="evento1_hora">14:00 - 16:00</span></p>
-                                <p class="meta">📍 <span data-i18n="evento1_local">Auditório Norte</span></p>
-                            </div>
-                        </article>
-                        <article class="card event-card">
-                            <div class="card-image">
-                                <img src="media/evento2.jpg" alt="Evento 2">
-                                <div class="date-badge">
-                                    <span class="day">30</span>
-                                    <span class="month">MAI</span>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <h4 data-i18n="evento2_titulo">Open day 2026 | Enfermagem</h4>
-                                <p class="meta">🕒 <span data-i18n="evento2_hora">09:00 - 12:00</span></p>
-                                <p class="meta">📍 <span data-i18n="evento2_local">Campus de Angra do Heroísmo</span></p>
-                            </div>
-                        </article>
-                        <article class="card event-card">
-                            <div class="card-image">
-                                <img src="media/evento3.jpg" alt="Evento 3">
-                                <div class="date-badge">
-                                    <span class="day">28</span>
-                                    <span class="month">OUT</span>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <h4 data-i18n="evento3_titulo">V Congresso Internacional Enfermagem</h4>
-                                <p class="meta">🕒 <span data-i18n="evento3_hora">10:00 - 13:00</span></p>
-                                <p class="meta">📍 <span data-i18n="evento3_local">Auditório Norte</span></p>
-                            </div>
-                        </article>
-                        <!-- Duplicados para carrossel (mesmo conteúdo, necessário para o efeito infinito) -->
-                        <article class="card event-card">
-                            <div class="card-image">
-                                <img src="media/evento1.png" alt="Evento 1">
-                                <div class="date-badge">
-                                    <span class="day">6</span>
-                                    <span class="month">MAI</span>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <h4 data-i18n="evento1_titulo">Comemorações do 7º aniversário da ESS na UAc</h4>
-                                <p class="meta">🕒 <span data-i18n="evento1_hora">14:00 - 16:00</span></p>
-                                <p class="meta">📍 <span data-i18n="evento1_local">Auditório Norte</span></p>
-                            </div>
-                        </article>
-                        <article class="card event-card">
-                            <div class="card-image">
-                                <img src="media/evento2.jpg" alt="Evento 2">
-                                <div class="date-badge">
-                                    <span class="day">30</span>
-                                    <span class="month">MAI</span>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <h4 data-i18n="evento2_titulo">Open day 2026 | Enfermagem</h4>
-                                <p class="meta">🕒 <span data-i18n="evento2_hora">09:00 - 12:00</span></p>
-                                <p class="meta">📍 <span data-i18n="evento2_local">Campus de Angra do Heroísmo</span></p>
-                            </div>
-                        </article>
-                        <article class="card event-card">
-                            <div class="card-image">
-                                <img src="media/evento3.jpg" alt="Evento 3">
-                                <div class="date-badge">
-                                    <span class="day">28</span>
-                                    <span class="month">OUT</span>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <h4 data-i18n="evento3_titulo">V Congresso Internacional Enfermagem</h4>
-                                <p class="meta">🕒 <span data-i18n="evento3_hora">10:00 - 13:00</span></p>
-                                <p class="meta">📍 <span data-i18n="evento3_local">Auditório Norte</span></p>
-                            </div>
-                        </article>
+                    <div class="events-track" id="dynamic-events-track">
+                        
                     </div>
                 </div>
                 <button id="event-prev" class="carrousel-btn event-nav-btn prev-btn" aria-label="Evento Anterior">&#10094;</button>
@@ -249,36 +166,88 @@
     </section>
 
     <section id="noticias" class="section">
-        <div class="container">
-            <div class="section-header header-between">
-                <div>
-                    <span class="subtitle" data-i18n="noticias_subtitle">NOTÍCIAS</span>
-                    <h2 data-i18n="noticias_title">Novidades e Artigos</h2>
+            <div class="container">
+                <div class="section-header">
+                    <div>
+                        <span class="subtitle" data-i18n="noticias_subtitle">NOTÍCIAS</span>
+                        <h2 data-i18n="noticias_title">Novidades e Artigos</h2>
+                    </div>
                 </div>
-                <a href="#" class="btn btn-primary" data-i18n="noticias_btn">Ver todos</a>
+                <div id="apinoticias-container" class="cards-flex">
+                    
+                </div>
             </div>
-            <div class="cards-flex">
-                <article class="news-card">
-                    <img src="media/noticia1.jpg" alt="Notícia 1">
-                    <h4 data-i18n="noticia1_titulo">“A intervenção profissional no processo de cuidar”</h4>
-                    <a href="#" class="link-blue" data-i18n="noticia1_link">Saiba mais</a>
-                </article>
-                <article class="news-card">
-                    <img src="media/noticia2.jpg" alt="Notícia 2">
-                    <h4 data-i18n="noticia2_titulo">Escola Superior de Saúde promove I Encontro de Cuidados Continuados</h4>
-                    <a href="#" class="link-blue" data-i18n="noticia2_link">Saiba mais</a>
-                </article>
-                <article class="news-card">
-                    <img src="media/noticia3.jpg" alt="Notícia 3">
-                    <h4 data-i18n="noticia3_titulo">Presidente da ESS toma posse</h4>
-                    <a href="#" class="link-blue" data-i18n="noticia3_link">Saiba mais</a>
-                </article>
+        </section>
+        <section id = "Localizacao" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="subtitle" data-i18n="localizacao_subtitle">LOCALIZAÇÃO</span>
+                    <h2 data-i18n="localizacao_title">Onde estamos?</h2>
+                </div>
+                <div class="map-container">
+                    <div id="googlemap" class ="map"></div>
+                </div>
             </div>
-        </div>
     </section>
 </main>
 
+    <section id="admin-section" class="section admin-only">
+        <div class="container">
+            <div class="section-header">
+                <span class="subtitle" data-i18n="admin_subtitle">ADMINISTRAÇÃO</span>
+                <h2 id="admin-title-h2" data-i18n="admin_title">Gestão de Eventos</h2>
+            </div>
+            
+            <div class="admin-grid">
+                <div class="admin-form-container">
+                    <h3 id="admin-form-title" data-i18n="admin_form_title">Adicionar Evento</h3>
+                    <form id="event-form" novalidate>
+                        <input type="hidden" id="event-id">
+                        <div class="form-group">
+                            <label for="event-titulo" data-i18n="admin_titulo_label">Título</label>
+                            <input type="text" id="event-titulo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-desc" data-i18n="admin_desc_label">Descrição</label>
+                            <textarea id="event-desc" rows="3" required></textarea>
+                        </div>
+                        <div class="admin-form-row">
+                            <div class="form-group">
+                                <label for="event-data" data-i18n="admin_data_label">Data</label>
+                                <input type="date" id="event-data" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="event-hora" data-i18n="admin_hora_label">Hora</label>
+                                <input type="text" id="event-hora" placeholder="14:00 - 16:00" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-local" data-i18n="admin_local_label">Local</label>
+                            <input type="text" id="event-local" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-imagem" data-i18n="admin_imagem_label">URL da Imagem</label>
+                            <input type="text" id="event-imagem" placeholder="media/evento1.png" required>
+                        </div>
+                        <div class="admin-actions">
+                            <button type="submit" class="btn btn-primary" id="btn-save-event" data-i18n="admin_save_btn">Guardar Evento</button>
+                            <button type="button" class="btn btn-secondary hidden" id="btn-cancel-edit" data-i18n="admin_cancel_btn">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="admin-list-container">
+                    <h3>Eventos Atuais</h3>
+                    <div id="admin-events-list" class="admin-events-list">
+                        <!-- Eventos injetados via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 <footer id="contactos" class="footer">
+
     <div class="container footer-flex">
         <div class="footer-col">
             <h5 data-i18n="footer_contactos">Contactos</h5>
@@ -359,12 +328,16 @@
         </div>
     </div>
     <div class="container footer-bottom">
-        <p>&copy; 2026 Centro Académico Clínico dos Açores. Todos os direitos reservados.</p>
+        <p>&copy; 2026 Centro Académico Clínico dos Açores. Todos os direitos reservados. | <a href="javascript:void(0)" id="toggle-admin"  data-i18n="footer_admin_link " aria-label="Alternar para painel de administração de eventos">Admin</a></p>
     </div>
 </footer>
 <button id="to-top" class="btn btn-primary" title="Voltar ao Topo" data-i18n="to_top_title">Voltar ao Topo</button>
 
 <script src="JavaScript/script.js"></script>
 <script src="JavaScript/graficos.js"></script>
+<script src="JavaScript/eventos.js"></script>
+<script src="JavaScript/API/config.js"></script>
+<script src="JavaScript/API/mapa.js"></script>
+<script src="JavaScript/API/noticias.js"></script>
 </body>
 </html>
