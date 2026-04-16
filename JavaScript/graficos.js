@@ -217,7 +217,7 @@ function mostrarGrafico(entries) {
 }
 
 // Recriar gráficos quando o idioma muda (se a secção estiver visível)
-window.addEventListener('languageChanged', () => { 
+window.addEventListener('languageChanged', () => {
     const elementoAlvo = document.querySelector('#graficos-holder');
     if (elementoAlvo) {
         const rect = elementoAlvo.getBoundingClientRect();
