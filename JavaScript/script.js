@@ -1,4 +1,4 @@
-//  i18n - Internacionalização
+// ==================== i18n - Internacionalização ====================
 let currentLang = 'pt';
 let translations = {};
 
@@ -47,7 +47,7 @@ function updateLanguageDropdownUI(lang) {
     const container = document.querySelector('.lang-dropdown-container');
     if (!container) return;
     const selectedDiv = container.querySelector('.lang-dropdown-selected');
-This branch is not ahead of the upstrea    const options = container.querySelectorAll('.lang-dropdown-options li');
+    const options = container.querySelectorAll('.lang-dropdown-options li');
     options.forEach(opt => {
         if (opt.getAttribute('data-lang') === lang) {
             const newFlag = opt.querySelector('.fi').cloneNode(true);
@@ -97,13 +97,130 @@ function initLanguageSelector() {
     });
 }
 
+// ==================== INDEXEDDB PARA NEWSLETTER ====================
+let newsletterDB;
+const newsletterDBRequest = indexedDB.open("NewsletterDB", 1);
+
+newsletterDBRequest.onerror = function(event) {
+    console.error("Erro ao abrir NewsletterDB", event);
+};
+
+newsletterDBRequest.onupgradeneeded = function(event) {
+    const db = event.target.result;
+    if (!db.objectStoreNames.contains("subscribers")) {
+        const store = db.createObjectStore("subscribers", { keyPath: "email" });
+        store.createIndex("nome", "nome", { unique: false });
+        store.createIndex("telefone", "telefone", { unique: false });
+        console.log("Object store 'subscribers' criada");
+    }
+};
+
+newsletterDBRequest.onsuccess = function(event) {
+    newsletterDB = event.target.result;
+    console.log("NewsletterDB aberta com sucesso");
+    carregarSubscritores(); // carrega a lista quando a DB estiver pronta
+};
+
+function salvarSubscritor(nome, email, telefone) {
+    return new Promise((resolve, reject) => {
+        if (!newsletterDB) {
+            reject("Base de dados não inicializada");
+            return;
+        }
+        const transaction = newsletterDB.transaction(["subscribers"], "readwrite");
+        const store = transaction.objectStore("subscribers");
+        const request = store.put({ nome, email, telefone });
+        request.onsuccess = () => {
+            carregarSubscritores(); // atualiza a lista após guardar
+            resolve();
+        };
+        request.onerror = (err) => reject(err);
+    });
+}
+
+function verificarSubscritor(email) {
+    return new Promise((resolve) => {
+        if (!newsletterDB) {
+            resolve(false);
+            return;
+        }
+        const transaction = newsletterDB.transaction(["subscribers"], "readonly");
+        const store = transaction.objectStore("subscribers");
+        const request = store.get(email);
+        request.onsuccess = () => resolve(!!request.result);
+        request.onerror = () => resolve(false);
+    });
+}
+
+function carregarSubscritores() {
+    if (!newsletterDB) return;
+    const transaction = newsletterDB.transaction(["subscribers"], "readonly");
+    const store = transaction.objectStore("subscribers");
+    const request = store.getAll();
+    request.onsuccess = () => {
+        const lista = document.getElementById("admin-subscribers-list");
+        if (!lista) return;
+        if (request.result.length === 0) {
+            lista.innerHTML = `<p>${translations.admin_no_subscribers || "Nenhum subscritor ainda."}</p>`;
+            return;
+        }
+        let html = "";
+        request.result.forEach(sub => {
+            html += `
+                <div class="admin-event-item">
+                    <div class="admin-event-info">
+                        <strong>${escapeHtml(sub.nome)}</strong><br>
+                        ${escapeHtml(sub.email)}<br>
+                        ${escapeHtml(sub.telefone || translations.admin_no_phone || "sem telefone")}
+                    </div>
+                </div>
+            `;
+        });
+        lista.innerHTML = html;
+    };
+}
+
+// Função auxiliar para evitar XSS
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
+
+function exportarSubscritoresCSV() {
+    if (!newsletterDB) return;
+    const transaction = newsletterDB.transaction(["subscribers"], "readonly");
+    const store = transaction.objectStore("subscribers");
+    const request = store.getAll();
+    request.onsuccess = () => {
+        let csv = "Nome,Email,Telefone\n";
+        request.result.forEach(sub => {
+            csv += `"${sub.nome.replace(/"/g, '""')}","${sub.email}","${sub.telefone || ""}"\n`;
+        });
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.href = url;
+        link.setAttribute("download", "subscritores_newsletter.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    };
+}
+// ==================== FIM INDEXEDDB NEWSLETTER ====================
+
 document.addEventListener('DOMContentLoaded', () => {
     // Inicialização do i18n
     const initialLang = getInitialLanguage();
     loadLanguage(initialLang);
     initLanguageSelector();
 
-    // DOM ELEMENTS (todas as variáveis originais)
+    // DOM ELEMENTS
     const form = document.getElementById("form-newsletter");
     const nomeF = document.getElementById("nome");
     const telemovelF = document.getElementById("telemovel");
@@ -134,12 +251,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ).join("");
     const themeToggleBtn = document.getElementById('theme-toggle');
 
-
-
     // Toggle Admin Mode
     const toggleAdminBtn = document.getElementById('toggle-admin');
     const adminSection = document.getElementById('admin-section');
-
     if (toggleAdminBtn && adminSection) {
         toggleAdminBtn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -153,6 +267,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Botão exportar subscritores
+    const exportBtn = document.getElementById('export-subscribers');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', exportarSubscritoresCSV);
+    }
+
     const htmlEl = document.documentElement;
     const sunIcon = themeToggleBtn.getAttribute('icon-sun');
     const moonIcon = themeToggleBtn.getAttribute('icon-moon');
@@ -162,7 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function toggleMenu() { menuLinks.classList.toggle('active'); }
 
-        //  FUNÇÕES AUXILIARES PARA VALIDAÇÃO
+    // FUNÇÕES AUXILIARES PARA VALIDAÇÃO
     function mostrarErro(campo, mensagem, isContainer = false) {
         let erroDiv;
         if (isContainer) {
@@ -200,7 +320,6 @@ document.addEventListener('DOMContentLoaded', () => {
             el.textContent = '';
             el.style.visibility = 'hidden';
         });
-        // Usar as variáveis do escopo
         if (nomeF) nomeF.style.border = '';
         if (emailF) emailF.style.border = '';
         if (telemovelF) telemovelF.style.border = '';
@@ -229,8 +348,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(toast);
     }
 
-    // Validação do formulário com traduções
-     function validadeForm(event) {
+    // ==================== VALIDAÇÃO DA NEWSLETTER (COM INDEXEDDB) ====================
+    async function validadeForm(event) {
         event.preventDefault();
         limparErros();
 
@@ -288,93 +407,105 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (formValido) {
-            mostrarToast(translations.form_success || "Sucesso! A sua mensagem foi enviada.", 'success');
-            form.reset();
-            dropdownSelectedIndicativo.textContent = "+351";
-            inputIndicativoHidden.value = "+351";
-            dropdownAssuntoSelected.textContent = translations.form_assunto_default || "Seleciona um assunto...";
-            inputAssuntoHidden.value = "";
-            mensagemEscrita.value = "";
-            limparErros();
+            const existe = await verificarSubscritor(email);
+            if (existe) {
+                mostrarToast(translations.form_email_existente || "Este email já está subscrito!", 'error');
+                return;
+            }
+
+            const telefoneCompleto = indicativo + telemovelRaw;
+            try {
+                await salvarSubscritor(nome, email, telefoneCompleto);
+                mostrarToast(translations.form_success || "Sucesso! A sua inscrição foi enviada.", 'success');
+                form.reset();
+                dropdownSelectedIndicativo.textContent = "+351";
+                inputIndicativoHidden.value = "+351";
+                dropdownAssuntoSelected.textContent = translations.form_assunto_default || "Seleciona um assunto...";
+                inputAssuntoHidden.value = "";
+                mensagemEscrita.value = "";
+                limparErros();
+            } catch (err) {
+                console.error("Erro ao guardar subscritor:", err);
+                mostrarToast(translations.form_db_error || "Erro ao guardar os dados. Tente novamente.", 'error');
+            }
         } else {
             mostrarToast(translations.form_error || "Por favor, corrija os campos assinalados.", 'error');
         }
-
-        // Formulário de contacto
-const contactoForm = document.getElementById('form-contacto');
-const contactoNome = document.getElementById('contacto_nome');
-const contactoEmail = document.getElementById('contacto_email');
-const contactoAssunto = document.getElementById('contacto_assunto');
-const contactoMensagem = document.getElementById('contacto_mensagem');
-
-function validarContacto(event) {
-    event.preventDefault();
-    // Limpar erros anteriores
-    document.querySelectorAll('.mensagem-erro-contacto').forEach(el => el.style.visibility = 'hidden');
-    [contactoNome, contactoEmail, contactoAssunto, contactoMensagem].forEach(campo => campo.style.border = '');
-
-    let valido = true;
-    const nome = contactoNome.value.trim();
-    const email = contactoEmail.value.trim();
-    const assunto = contactoAssunto.value.trim();
-    const mensagem = contactoMensagem.value.trim();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const nomeRegex = /^[a-zA-ZÀ-ÿ\s]{2,}$/;
-
-    if (nome === '') {
-        mostrarErroContacto('nome', translations.contacto_nome_vazio || 'Nome é obrigatório');
-        contactoNome.style.border = '2px solid red';
-        valido = false;
-    } else if (!nomeRegex.test(nome)) {
-        mostrarErroContacto('nome', translations.contacto_nome_invalido || 'Nome deve ter pelo menos 2 letras');
-        contactoNome.style.border = '2px solid red';
-        valido = false;
     }
 
-    if (email === '') {
-        mostrarErroContacto('email', translations.contacto_email_vazio || 'Email é obrigatório');
-        contactoEmail.style.border = '2px solid red';
-        valido = false;
-    } else if (!emailRegex.test(email)) {
-        mostrarErroContacto('email', translations.contacto_email_invalido || 'Email inválido');
-        contactoEmail.style.border = '2px solid red';
-        valido = false;
+    // Formulário de contacto (mantido, apenas para compatibilidade)
+    const contactoForm = document.getElementById('form-contacto');
+    const contactoNome = document.getElementById('contacto_nome');
+    const contactoEmail = document.getElementById('contacto_email');
+    const contactoAssunto = document.getElementById('contacto_assunto');
+    const contactoMensagem = document.getElementById('contacto_mensagem');
+
+    function validarContacto(event) {
+        event.preventDefault();
+        document.querySelectorAll('.mensagem-erro-contacto').forEach(el => el.style.visibility = 'hidden');
+        [contactoNome, contactoEmail, contactoAssunto, contactoMensagem].forEach(campo => campo.style.border = '');
+
+        let valido = true;
+        const nome = contactoNome.value.trim();
+        const email = contactoEmail.value.trim();
+        const assunto = contactoAssunto.value.trim();
+        const mensagem = contactoMensagem.value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const nomeRegex = /^[a-zA-ZÀ-ÿ\s]{2,}$/;
+
+        if (nome === '') {
+            mostrarErroContacto('nome', translations.contacto_nome_vazio || 'Nome é obrigatório');
+            contactoNome.style.border = '2px solid red';
+            valido = false;
+        } else if (!nomeRegex.test(nome)) {
+            mostrarErroContacto('nome', translations.contacto_nome_invalido || 'Nome deve ter pelo menos 2 letras');
+            contactoNome.style.border = '2px solid red';
+            valido = false;
+        }
+
+        if (email === '') {
+            mostrarErroContacto('email', translations.contacto_email_vazio || 'Email é obrigatório');
+            contactoEmail.style.border = '2px solid red';
+            valido = false;
+        } else if (!emailRegex.test(email)) {
+            mostrarErroContacto('email', translations.contacto_email_invalido || 'Email inválido');
+            contactoEmail.style.border = '2px solid red';
+            valido = false;
+        }
+
+        if (assunto === '') {
+            mostrarErroContacto('assunto', translations.contacto_assunto_vazio || 'Assunto é obrigatório');
+            contactoAssunto.style.border = '2px solid red';
+            valido = false;
+        }
+
+        if (mensagem === '') {
+            mostrarErroContacto('mensagem', translations.contacto_mensagem_vazio || 'Mensagem é obrigatória');
+            contactoMensagem.style.border = '2px solid red';
+            valido = false;
+        }
+
+        if (valido) {
+            mostrarToast(translations.contacto_sucesso || 'Mensagem enviada com sucesso!', 'success');
+            contactoForm.reset();
+        } else {
+            mostrarToast(translations.contacto_erro || 'Por favor, corrija os campos assinalados.', 'error');
+        }
     }
 
-    if (assunto === '') {
-        mostrarErroContacto('assunto', translations.contacto_assunto_vazio || 'Assunto é obrigatório');
-        contactoAssunto.style.border = '2px solid red';
-        valido = false;
+    function mostrarErroContacto(campo, mensagem) {
+        const erroDiv = document.querySelector(`.mensagem-erro-contacto[data-field="${campo}"]`);
+        if (erroDiv) {
+            erroDiv.textContent = mensagem;
+            erroDiv.style.visibility = 'visible';
+        }
     }
 
-    if (mensagem === '') {
-        mostrarErroContacto('mensagem', translations.contacto_mensagem_vazio || 'Mensagem é obrigatória');
-        contactoMensagem.style.border = '2px solid red';
-        valido = false;
+    if (contactoForm) {
+        contactoForm.addEventListener('submit', validarContacto);
     }
 
-    if (valido) {
-        mostrarToast(translations.contacto_sucesso || 'Mensagem enviada com sucesso!', 'success');
-        contactoForm.reset();
-    } else {
-        mostrarToast(translations.contacto_erro || 'Por favor, corrija os campos assinalados.', 'error');
-    }
-}
-
-function mostrarErroContacto(campo, mensagem) {
-    const erroDiv = document.querySelector(`.mensagem-erro-contacto[data-field="${campo}"]`);
-    if (erroDiv) {
-        erroDiv.textContent = mensagem;
-        erroDiv.style.visibility = 'visible';
-    }
-}
-
-if (contactoForm) {
-    contactoForm.addEventListener('submit', validarContacto);
-}
-    }
-
-    // Dropdown indicativo
+    // ==================== DROPDOWNS E CARROSSÉIS (EXISTENTES) ====================
     dropdownSelectedIndicativo.addEventListener('click', function(e) {
         dropdownOptionsIndicativo.classList.toggle('open');
         e.stopPropagation();
@@ -390,7 +521,6 @@ if (contactoForm) {
         if (!dropdownContainerIndicativo.contains(e.target)) dropdownOptionsIndicativo.classList.remove('open');
     });
 
-    // Dropdown assunto com mensagens traduzidas
     dropdownAssuntoSelected.addEventListener('click', function(e) {
         dropdownAssuntoOptions.classList.toggle('open');
         e.stopPropagation();
@@ -415,7 +545,6 @@ if (contactoForm) {
         if (!dropdownAssuntoContainer.contains(e.target)) dropdownAssuntoOptions.classList.remove('open');
     });
 
-    // Carrossel principal
     function initCarousel() {
         const cloneLast = document.createElement("div");
         cloneLast.classList.add("carousel-slide");
@@ -479,18 +608,14 @@ if (contactoForm) {
         setTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
     }
 
-
     function initEventCarousel() {
         const eventTrack = document.querySelector('.events-track');
         const eventCards = document.querySelectorAll('.event-card');
         const eventPrevBtn = document.getElementById('event-prev');
         const eventNextBtn = document.getElementById('event-next');
-
         if (!eventTrack || eventCards.length === 0) return;
-
         const eventWrapper = document.querySelector('.events-mask');
         let eventIndex = 0;
-
         function updateEventCarousel() {
             const cardWidth = eventCards[0].offsetWidth;
             const gap = parseFloat(window.getComputedStyle(eventTrack).gap) || 0;
@@ -500,7 +625,6 @@ if (contactoForm) {
             if (translateX > maxTranslate) translateX = maxTranslate;
             eventTrack.style.transform = `translateX(-${translateX}px)`;
         }
-
         eventNextBtn.onclick = () => {
             const cardWidth = eventCards[0].offsetWidth;
             const gap = parseFloat(window.getComputedStyle(eventTrack).gap) || 0;
@@ -508,20 +632,16 @@ if (contactoForm) {
             const maxTranslate = Math.max(0, eventTrack.scrollWidth - eventWrapper.offsetWidth);
             if (eventIndex * slideWidth < maxTranslate) { eventIndex++; updateEventCarousel(); }
         };
-
         eventPrevBtn.onclick = () => { 
             if (eventIndex > 0) { eventIndex--; updateEventCarousel(); } 
         };
-
         window.addEventListener('resize', updateEventCarousel);
         updateEventCarousel();
     }
 
     initCarousel();
     initTheme();
-
     window.addEventListener('loadedEvents', initEventCarousel);
-
     track.addEventListener('transitionend', handleCarouselTransition);
     btnNext.addEventListener("click", () => mudarImagem('next'));
     btnPrev.addEventListener("click", () => mudarImagem('prev'));
@@ -534,70 +654,4 @@ if (contactoForm) {
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
         if (!localStorage.getItem('theme')) setTheme(e.matches ? 'dark' : 'light');
     });
-
-    
 });
-
-
-
-
-//  VALIDAÇÃO de FORMULÁRIO e TOASTS
-function mostrarErro(campo, mensagem, isContainer = false) {
-    let erroDiv;
-    if (isContainer) {
-        let existing = campo.parentNode.querySelector('.erro-custom');
-        if (!existing) {
-            erroDiv = document.createElement('div');
-            erroDiv.className = 'erro-custom';
-            erroDiv.style.color = 'red';
-            erroDiv.style.fontSize = '12px';
-            erroDiv.style.marginTop = '5px';
-            campo.parentNode.insertBefore(erroDiv, campo.nextSibling);
-        } else {
-            erroDiv = existing;
-        }
-    } else {
-        let next = campo.nextElementSibling;
-        if (next && next.classList && next.classList.contains('mensagem-erro')) {
-            erroDiv = next;
-        } else {
-            erroDiv = document.createElement('div');
-            erroDiv.className = 'mensagem-erro';
-            erroDiv.style.color = 'red';
-            erroDiv.style.fontSize = '12px';
-            erroDiv.style.marginTop = '5px';
-            campo.parentNode.insertBefore(erroDiv, campo.nextSibling);
-        }
-    }
-    erroDiv.textContent = mensagem;
-    erroDiv.style.visibility = 'visible';
-    campo.style.border = '2px solid red';
-}
-
-function limparErros() {
-    document.querySelectorAll('.mensagem-erro, .erro-custom').forEach(el => {
-        el.textContent = '';
-        el.style.visibility = 'hidden';
-    });
-    document.querySelectorAll('input, textarea, .dropdown-assunto, .dropdown-indicativo').forEach(el => {
-        el.style.border = '';
-    });
-}
-
-function mostrarToast(mensagem, tipo) {
-    document.querySelectorAll('.toast-custom').forEach(toast => toast.remove());
-    const toast = document.createElement('div');
-    toast.className = `toast-custom ${tipo}`;
-    toast.innerHTML = `<span>${mensagem}</span>`;
-    toast.style.position = 'fixed';
-    toast.style.top = '80px';
-    toast.style.right = '20px';
-    toast.style.padding = '12px 20px';
-    toast.style.borderRadius = '8px';
-    toast.style.fontFamily = 'var(--font-main, sans-serif)';
-    toast.style.zIndex = '2000';
-    toast.style.animation = 'slideInToast 0.3s ease, fadeOutToast 0.5s ease 2.5s forwards';
-    toast.style.backgroundColor = tipo === 'success' ? '#0f9d58' : '#dc3545';
-    toast.style.color = 'white';
-    document.body.appendChild(toast);
-}
