@@ -97,6 +97,123 @@ function initLanguageSelector() {
     });
 }
 
+// ==================== INDEXEDDB PARA NEWSLETTER ====================
+let newsletterDB;
+const newsletterDBRequest = indexedDB.open("NewsletterDB", 1);
+
+newsletterDBRequest.onerror = function(event) {
+    console.error("Erro ao abrir NewsletterDB", event);
+};
+
+newsletterDBRequest.onupgradeneeded = function(event) {
+    const db = event.target.result;
+    if (!db.objectStoreNames.contains("subscribers")) {
+        const store = db.createObjectStore("subscribers", { keyPath: "email" });
+        store.createIndex("nome", "nome", { unique: false });
+        store.createIndex("telefone", "telefone", { unique: false });
+        console.log("Object store 'subscribers' criada");
+    }
+};
+
+newsletterDBRequest.onsuccess = function(event) {
+    newsletterDB = event.target.result;
+    console.log("NewsletterDB aberta com sucesso");
+    carregarSubscritores(); // carrega a lista quando a DB estiver pronta
+};
+
+function salvarSubscritor(nome, email, telefone) {
+    return new Promise((resolve, reject) => {
+        if (!newsletterDB) {
+            reject("Base de dados não inicializada");
+            return;
+        }
+        const transaction = newsletterDB.transaction(["subscribers"], "readwrite");
+        const store = transaction.objectStore("subscribers");
+        const request = store.put({ nome, email, telefone });
+        request.onsuccess = () => {
+            carregarSubscritores(); // atualiza a lista após guardar
+            resolve();
+        };
+        request.onerror = (err) => reject(err);
+    });
+}
+
+function verificarSubscritor(email) {
+    return new Promise((resolve) => {
+        if (!newsletterDB) {
+            resolve(false);
+            return;
+        }
+        const transaction = newsletterDB.transaction(["subscribers"], "readonly");
+        const store = transaction.objectStore("subscribers");
+        const request = store.get(email);
+        request.onsuccess = () => resolve(!!request.result);
+        request.onerror = () => resolve(false);
+    });
+}
+
+function carregarSubscritores() {
+    if (!newsletterDB) return;
+    const transaction = newsletterDB.transaction(["subscribers"], "readonly");
+    const store = transaction.objectStore("subscribers");
+    const request = store.getAll();
+    request.onsuccess = () => {
+        const lista = document.getElementById("admin-subscribers-list");
+        if (!lista) return;
+        if (request.result.length === 0) {
+            lista.innerHTML = `<p>${translations.admin_no_subscribers || "Nenhum subscritor ainda."}</p>`;
+            return;
+        }
+        let html = "";
+        request.result.forEach(sub => {
+            html += `
+                <div class="admin-event-item">
+                    <div class="admin-event-info">
+                        <strong>${escapeHtml(sub.nome)}</strong><br>
+                        ${escapeHtml(sub.email)}<br>
+                        ${escapeHtml(sub.telefone || translations.admin_no_phone || "sem telefone")}
+                    </div>
+                </div>
+            `;
+        });
+        lista.innerHTML = html;
+    };
+}
+
+// Função auxiliar para evitar XSS
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
+
+function exportarSubscritoresCSV() {
+    if (!newsletterDB) return;
+    const transaction = newsletterDB.transaction(["subscribers"], "readonly");
+    const store = transaction.objectStore("subscribers");
+    const request = store.getAll();
+    request.onsuccess = () => {
+        let csv = "Nome,Email,Telefone\n";
+        request.result.forEach(sub => {
+            csv += `"${sub.nome.replace(/"/g, '""')}","${sub.email}","${sub.telefone || ""}"\n`;
+        });
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.href = url;
+        link.setAttribute("download", "subscritores_newsletter.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    };
+}
+// ==================== FIM INDEXEDDB NEWSLETTER ====================
+
 document.addEventListener('DOMContentLoaded', () => {
     // Inicialização do i18n
     const initialLang = getInitialLanguage();
@@ -151,6 +268,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (firstInput) firstInput.focus();
             }
         });
+    }
+
+    const exportBtn = document.getElementById('export-subscribers');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', exportarSubscritoresCSV);
     }
 
     const htmlEl = document.documentElement;
@@ -229,8 +351,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(toast);
     }
 
-    // Validação do formulário com traduções
-     function validadeForm(event) {
+    // ==================== VALIDAÇÃO DA NEWSLETTER (COM INDEXEDDB) ====================
+    async function validadeForm(event) {
         event.preventDefault();
         limparErros();
 
@@ -288,17 +410,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (formValido) {
-            mostrarToast(translations.form_success || "Sucesso! A sua mensagem foi enviada.", 'success');
-            form.reset();
-            dropdownSelectedIndicativo.textContent = "+351";
-            inputIndicativoHidden.value = "+351";
-            dropdownAssuntoSelected.textContent = translations.form_assunto_default || "Seleciona um assunto...";
-            inputAssuntoHidden.value = "";
-            mensagemEscrita.value = "";
-            limparErros();
+            const existe = await verificarSubscritor(email);
+            if (existe) {
+                mostrarToast(translations.form_email_existente || "Este email já está subscrito!", 'error');
+                return;
+            }
+
+            const telefoneCompleto = indicativo + telemovelRaw;
+            try {
+                await salvarSubscritor(nome, email, telefoneCompleto);
+                mostrarToast(translations.form_success || "Sucesso! A sua inscrição foi enviada.", 'success');
+                form.reset();
+                dropdownSelectedIndicativo.textContent = "+351";
+                inputIndicativoHidden.value = "+351";
+                dropdownAssuntoSelected.textContent = translations.form_assunto_default || "Seleciona um assunto...";
+                inputAssuntoHidden.value = "";
+                mensagemEscrita.value = "";
+                limparErros();
+            } catch (err) {
+                console.error("Erro ao guardar subscritor:", err);
+                mostrarToast(translations.form_db_error || "Erro ao guardar os dados. Tente novamente.", 'error');
+            }
         } else {
             mostrarToast(translations.form_error || "Por favor, corrija os campos assinalados.", 'error');
         }
+    }
 
         // Formulário de contacto
 const contactoForm = document.getElementById('form-contacto');
@@ -372,7 +508,7 @@ function mostrarErroContacto(campo, mensagem) {
 if (contactoForm) {
     contactoForm.addEventListener('submit', validarContacto);
 }
-    }
+
 
     // Dropdown indicativo
     dropdownSelectedIndicativo.addEventListener('click', function(e) {
@@ -537,67 +673,3 @@ if (contactoForm) {
 
     
 });
-
-
-
-
-//  VALIDAÇÃO de FORMULÁRIO e TOASTS
-function mostrarErro(campo, mensagem, isContainer = false) {
-    let erroDiv;
-    if (isContainer) {
-        let existing = campo.parentNode.querySelector('.erro-custom');
-        if (!existing) {
-            erroDiv = document.createElement('div');
-            erroDiv.className = 'erro-custom';
-            erroDiv.style.color = 'red';
-            erroDiv.style.fontSize = '12px';
-            erroDiv.style.marginTop = '5px';
-            campo.parentNode.insertBefore(erroDiv, campo.nextSibling);
-        } else {
-            erroDiv = existing;
-        }
-    } else {
-        let next = campo.nextElementSibling;
-        if (next && next.classList && next.classList.contains('mensagem-erro')) {
-            erroDiv = next;
-        } else {
-            erroDiv = document.createElement('div');
-            erroDiv.className = 'mensagem-erro';
-            erroDiv.style.color = 'red';
-            erroDiv.style.fontSize = '12px';
-            erroDiv.style.marginTop = '5px';
-            campo.parentNode.insertBefore(erroDiv, campo.nextSibling);
-        }
-    }
-    erroDiv.textContent = mensagem;
-    erroDiv.style.visibility = 'visible';
-    campo.style.border = '2px solid red';
-}
-
-function limparErros() {
-    document.querySelectorAll('.mensagem-erro, .erro-custom').forEach(el => {
-        el.textContent = '';
-        el.style.visibility = 'hidden';
-    });
-    document.querySelectorAll('input, textarea, .dropdown-assunto, .dropdown-indicativo').forEach(el => {
-        el.style.border = '';
-    });
-}
-
-function mostrarToast(mensagem, tipo) {
-    document.querySelectorAll('.toast-custom').forEach(toast => toast.remove());
-    const toast = document.createElement('div');
-    toast.className = `toast-custom ${tipo}`;
-    toast.innerHTML = `<span>${mensagem}</span>`;
-    toast.style.position = 'fixed';
-    toast.style.top = '80px';
-    toast.style.right = '20px';
-    toast.style.padding = '12px 20px';
-    toast.style.borderRadius = '8px';
-    toast.style.fontFamily = 'var(--font-main, sans-serif)';
-    toast.style.zIndex = '2000';
-    toast.style.animation = 'slideInToast 0.3s ease, fadeOutToast 0.5s ease 2.5s forwards';
-    toast.style.backgroundColor = tipo === 'success' ? '#0f9d58' : '#dc3545';
-    toast.style.color = 'white';
-    document.body.appendChild(toast);
-}
