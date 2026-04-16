@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let isValid = true;
 
         if (!titulo.value.trim()) {
-            mostrarErro(titulo, 'Título é obrigatório');
+            mostrarErro(titulo, translations.admin_validation_titulo || 'Título é obrigatório');
             isValid = false;
         }
 
@@ -108,22 +108,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (!data.value) {
-            mostrarErro(data, 'Data é obrigatória');
+            mostrarErro(data, translations.admin_validation_data || 'Data é obrigatória');
             isValid = false;
         }
 
         if (!hora.value.trim()) {
-            mostrarErro(hora, 'Hora é obrigatória');
+            mostrarErro(hora, translations.admin_validation_hora || 'Hora é obrigatória');
             isValid = false;
         }
 
         if (!local.value.trim()) {
-            mostrarErro(local, 'Local é obrigatório');
+            mostrarErro(local, translations.admin_validation_local || 'Local é obrigatório');
             isValid = false;
         }
 
         if (!imagem.value.trim()) {
-            mostrarErro(imagem, 'URL da Imagem é obrigatória');
+            mostrarErro(imagem, translations.admin_validation_imagem || 'URL da Imagem é obrigatória');
             isValid = false;
         }
 
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('event-imagem').value = evento.imagem;
 
         if (adminFormTitle) {
-            adminFormTitle.textContent = 'Editar Evento';
+            adminFormTitle.textContent =  translations.admin_form_edit_title ||'Editar Evento';
         }
         
         if (btnCancelEdit) btnCancelEdit.classList.remove('hidden');
@@ -211,10 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (eventForm) eventForm.reset();
         document.getElementById('event-id').value = '';
         if (adminFormTitle) {
-            adminFormTitle.textContent = 'Adicionar Evento';
+            adminFormTitle.textContent = translations_admin_form_title ||'Adicionar Evento';
         }
         if (btnCancelEdit) btnCancelEdit.classList.add('hidden');
-    }
+        }
 
     /**
      * Renders the list of events in the admin panel with edit and delete buttons.
@@ -232,8 +232,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>${evento.data} | ${evento.local}</p>
                 </div>
                 <div class="admin-item-actions">
-                    <button class="btn-sm btn-edit" onclick="window.editarEventoById(${evento.id})">Editar</button>
-                    <button class="btn-sm btn-delete" onclick="window.removerEventoById(${evento.id})">Eliminar</button>
+                    <button class="btn-sm btn-edit" onclick="window.editarEventoById(${evento.id})">${translations.admin_edit_btn|| 'Editar'}</button>
+                    <button class="btn-sm btn-delete" onclick="window.removerEventoById(${evento.id})">${translations.admin_delete_btn || 'Eliminar'}</button>
                 </div>
             </div>`;
         });
