@@ -213,13 +213,3 @@ Novas funcionalidades implementadas:
    const CONFIG = {
         GNEWS_API_KEY: "API_KEY_HERE"
 }
-
- Places API:
- Adição de dois campos na base de dados dos eventos: `lat`, `lng`
- Transformação do input do campo `local`:
-  Na lista de gestão do admin, ao escrevermos no campo `local`, automaticamente vai buscar locais reais, ao selecionar um deles e guardar o evento, os dados `lat` e `lng` serão
-  atualizados.
-
- - Como configurar:
-   1. Da mesma forma que ativamos a API Key do Google Maps, ir à Google Cloud Console (https://console.cloud.google.com/) e ativar a *Places API*
-   2. Adicionar na API Key do google a restrição de *Places API*

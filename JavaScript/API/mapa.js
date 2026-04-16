@@ -19,6 +19,10 @@ async function initMap() {
             if (place.geometry) {
                 document.getElementById('event-lat').value = place.geometry.location.lat();
                 document.getElementById('event-lng').value = place.geometry.location.lng();
+
+                if (typeof atualizarPrevisaoEvento === 'function') {
+                    atualizarPrevisaoEvento();
+                }
             } else {
                 console.warn("Utilizador escreveu manualmente sem selecionar da lista.");
                 return;
@@ -41,5 +45,3 @@ async function initMap() {
     script.defer = true;
     document.head.appendChild(script);
 })();
-
-

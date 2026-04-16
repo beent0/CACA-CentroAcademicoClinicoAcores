@@ -96,6 +96,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const id = idInput.value;
         const latValue = document.getElementById('event-lat').value;
         const lngValue = document.getElementById('event-lng').value;
+        const preview = document.getElementById('weather-preview');
+        let climaInfo = null;
+
+        
+        const tempoInfo = preview.querySelector('.weather-preview-temperatura');
+        if (tempoInfo) {
+            climaInfo = {
+                temp: tempoInfo.textContent,
+                desc: preview.querySelector('.weather-preview-descricao').textContent,
+                icon: preview.querySelector('.weather-preview-icon').src
+            };
+        }
         
         let isValid = true;
 
@@ -139,7 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
             local: local.value,
             imagem: imagem.value,
             latitude: latValue ? parseFloat(latValue) : null,
-            longitude: lngValue ? parseFloat(lngValue) : null
+            longitude: lngValue ? parseFloat(lngValue) : null,
+            clima: climaInfo
         };
 
         // If editing, include the original ID.
@@ -266,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const dataParts = evento.data.split('-');
             const dia = parseInt(dataParts[2], 10);
             const mes = meses[parseInt(dataParts[1], 10) - 1];
-
+            
             html += `
             <article class="card event-card">
                 <div class="card-image">
@@ -278,6 +291,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="card-content">
                     <h4>${evento.titulo}</h4>
+                    <p class="meta">
+                        ${evento.clima ? `
+                            <span>${evento.clima.temp} - ${evento.clima.desc}</span>
+                            <img class = "weather-badge"src="${evento.clima.icon}" alt="Clima">
+                        ` : ''}
+                    </p>
                     <p class="meta">🕒 <span>${evento.hora}</span></p>
                     <p class="meta">📍 <span>${evento.local}</span></p>
                 </div>
