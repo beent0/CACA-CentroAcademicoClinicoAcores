@@ -1,4 +1,5 @@
 //  i18n - Internacionalização
+
 let currentLang = 'pt';
 let translations = {};
 
