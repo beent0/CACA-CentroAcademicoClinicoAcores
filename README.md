@@ -85,6 +85,13 @@ Acessibilidade Motora:
 Outras Acessibilidades (Preferencias):
     media queries (reduced motion)
         Verifica se o utilizador tem reduced motion ativado e "desativa" as transições
+#----------------------------------------------------------------------------------------------------------------------------------------#
+PEI 3
+
+João Bento 2023110753
+Tomás Couto 2024111781
+Newton Pereira 2022122784
+
 
 Updates- Newton  PEI3
  Internacionalização (i18n) – Suporte a 5 idiomas
@@ -151,4 +158,80 @@ Foi implementado um sistema completo de internacionalização no site do **Centr
 - `graficos.js` – recriação de gráficos ao mudar idioma.
 - `lang/pt.json`, `lang/en.json`, `lang/es.json`, `lang/fr.json`, `lang/de.json` – ficheiros de tradução.
 
+---
 
+#### feature-eventos-crud (João Bento)
+**Como Criar, Editar ou Remover Eventos**
+- **Criar**: Ir ao footer -> Clicar em "Admin" -> Preencher o formulário com os dados do Evento -> Clicar em "Guardar Evento"
+- **Editar**: Ir ao footer -> Clicar em "Admin" -> Clicar em "Editar" no Evento pretendido -> Realizar as mudanças -> Clicar em "Guardar Evento"
+- **Remover**: Ir ao footer -> Clicar em "Admin" -> Clicar em "Eliminar" no Evento pretendido -> Confirmar em "OK"
+
+**Gestão de Eventos (CRUD e IndexedDB)**
+- **Adicionar/Editar**: Formulário único que altera entre criação e edição (baseado no ID do evento). Validação com mensagens de erro.
+- **Visualizar**: Exibição dos eventos na IndexedDB no carrossel dos eventos na lista de gestão do admin.
+- **Remover**: Remoção de eventos com confirmação ao utilizador.
+- **Persistência**: Base de dados `EventosDB` com ObjectStore `eventos` (autoIncrement) e diferentes Index's (título, descrição, data, hora, local).
+
+**Experiência do Utilizador e Acessibilidade**
+- **Acessibilidade**: Imagens com `alt` descritivo baseado no título, `aria-label` no acesso admin e auto-focus ao abrir o painel de admin.
+- **Dark Mode**: Integração com o Dark Mode do site.
+- **Feedback**: Sistema de Toasts para confirmar operações.
+- **Interface**: Secção do admin oculta por padrão, acessível através do link no footer do site.
+
+**Estrutura de Dados (IndexedDB)**
+- **Store**: `eventos`
+- **Campos**: `id` (KeyPath), `titulo`, `descricao`, `data`, `hora`, `local`, `imagem`.
+- **Índices**: Criados para todos os campos principais.
+
+---
+
+Updates Tomás Couto PEI3
+
+Novas funcionalidades implementadas:
+
+ Google Maps:
+  Foi adicionado um mapa interativo que aponta para a Universidade dos Açores. O carregamento é feito de forma assíncrona para garantir a performance do site.
+  
+  - Como configurar:
+    1. Conseguir a sua API Key: Ir à Google Cloud Console (https://console.cloud.google.com/) e ativar a *Maps JavaScript API*
+    2. Criar o ficheiro de configuração:
+       -Na pasta "API", que está dentro da pasta "JavaScript", existe um ficheiro com o nome de "config.example.js".
+       -Fazer uma cópia desse mesmo ficheiro e mudar o nome para apenas "config.js".
+    3. Colocar a API Key no ficheiro
+       - Abrir o novo ficheiro "config.js" e substituir o texto "API_KEY_HERE" pela API Key gerada:
+         const CONFIG = {
+             GOOGLE_MAPS_API_KEY: "API_KEY_HERE"
+         };
+   Em caso de dúvida para conseguir a sua chave API, ver o vídeo *How to generate and restrict API key for Google Maps Platform* (https://www.youtube.com/watch?v=2_HZObVbe-g)
+
+   Para além disso foi implementado a Places API, ao criar um evento e selecionar o local, ele automaticamente tenta associar a locais reais, ao selecionar o local ele atualiza na base de dados
+   com os valores de "latitude" e "longitude"
+
+ Noticias:
+ Foi adicionado 3 cartões de notícias interativas. O carregamento é feito de forma assíncrona de forma a garantir a performance do site.
+
+ - Como configurar:
+   1. Conseguir a sua API Key: Ir à Gnews (https://gnews.io) e conseguir uma API Key.
+   2. Na mesma pasta "API", no ficheiro com o novo nome "config.js", substituir o texto "API_KEY_HERE" pela API Key gerada:
+   const CONFIG = {
+        GNEWS_API_KEY: "API_KEY_HERE"
+}
+
+ Meteorologia:
+ Atributo adicionado na base de dados: clima
+  este atributo contém as 3 informações:
+   - "temp" > Temperatura
+   - "desc" > descrição (ex: "Nublado")
+   - "icon" > Icon da descrição
+     
+ Foi implementado através da OpenWeatherMap API a previsão do tempo para a criação de um evento:
+  Selecionando a data, hora e local automaticamente aparece uma mensagem de previsão do tempo
+ 
+ Caso o evento tenha o atributo clima, irá aparecer nos cartões de eventos a respetiva previsão
+
+ - Como configurar:
+   1. Conseguir a sua API Key: Ir à OpenWeatherMaps (https://openweathermap.org) e conseguir uma API Key.
+   2. Na mesma pasta "API", no ficheiro com o novo nome "config.js", substituir o texto "API_KEY_HERE" pela API Key gerada:
+   const CONFIG = {
+        WEATHER_API_KEY: "API_KEY_HERE"
+}
