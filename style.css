@@ -994,6 +994,7 @@ html[data-theme="dark"] .lang-dropdown-options {
 .dropdown-selected {
     padding: 12px;
     padding-right: 35px;
+    margin-bottom: 8px;
     color: var(--white);
     white-space: nowrap;
     overflow: hidden;
