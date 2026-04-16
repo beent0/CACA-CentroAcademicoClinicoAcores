@@ -47,7 +47,7 @@ function updateLanguageDropdownUI(lang) {
     const container = document.querySelector('.lang-dropdown-container');
     if (!container) return;
     const selectedDiv = container.querySelector('.lang-dropdown-selected');
-    const options = container.querySelectorAll('.lang-dropdown-options li');
+This branch is not ahead of the upstrea    const options = container.querySelectorAll('.lang-dropdown-options li');
     options.forEach(opt => {
         if (opt.getAttribute('data-lang') === lang) {
             const newFlag = opt.querySelector('.fi').cloneNode(true);
