@@ -293,8 +293,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h4>${evento.titulo}</h4>
                     <p class="meta">
                         ${evento.clima ? `
-                            <span>${evento.clima.temp} - ${evento.clima.desc}</span>
                             <img class = "weather-badge"src="${evento.clima.icon}" alt="Clima">
+                            <span>${evento.clima.temp} - ${evento.clima.desc}</span>
+
                         ` : ''}
                     </p>
                     <p class="meta">🕒 <span>${evento.hora}</span></p>
