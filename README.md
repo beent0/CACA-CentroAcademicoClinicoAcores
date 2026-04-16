@@ -191,7 +191,7 @@ Novas funcionalidades implementadas:
 
  Google Maps:
   Foi adicionado um mapa interativo que aponta para a Universidade dos Açores. O carregamento é feito de forma assíncrona para garantir a performance do site.
-
+  
   - Como configurar:
     1. Conseguir a sua API Key: Ir à Google Cloud Console (https://console.cloud.google.com/) e ativar a *Maps JavaScript API*
     2. Criar o ficheiro de configuração:
@@ -204,6 +204,9 @@ Novas funcionalidades implementadas:
          };
    Em caso de dúvida para conseguir a sua chave API, ver o vídeo *How to generate and restrict API key for Google Maps Platform* (https://www.youtube.com/watch?v=2_HZObVbe-g)
 
+   Para além disso foi implementado a Places API, ao criar um evento e selecionar o local, ele automaticamente tenta associar a locais reais, ao selecionar o local ele atualiza na base de dados
+   com os valores de "latitude" e "longitude"
+
  Noticias:
  Foi adicionado 3 cartões de notícias interativas. O carregamento é feito de forma assíncrona de forma a garantir a performance do site.
 
@@ -212,4 +215,23 @@ Novas funcionalidades implementadas:
    2. Na mesma pasta "API", no ficheiro com o novo nome "config.js", substituir o texto "API_KEY_HERE" pela API Key gerada:
    const CONFIG = {
         GNEWS_API_KEY: "API_KEY_HERE"
+}
+
+ Meteorologia:
+ Atributo adicionado na base de dados: clima
+  este atributo contém as 3 informações:
+   - "temp" > Temperatura
+   - "desc" > descrição (ex: "Nublado")
+   - "icon" > Icon da descrição
+     
+ Foi implementado através da OpenWeatherMap API a previsão do tempo para a criação de um evento:
+  Selecionando a data, hora e local automaticamente aparece uma mensagem de previsão do tempo
+ 
+ Caso o evento tenha o atributo clima, irá aparecer nos cartões de eventos a respetiva previsão
+
+ - Como configurar:
+   1. Conseguir a sua API Key: Ir à OpenWeatherMaps (https://openweathermap.org) e conseguir uma API Key.
+   2. Na mesma pasta "API", no ficheiro com o novo nome "config.js", substituir o texto "API_KEY_HERE" pela API Key gerada:
+   const CONFIG = {
+        WEATHER_API_KEY: "API_KEY_HERE"
 }
