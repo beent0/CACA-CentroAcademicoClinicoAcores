@@ -894,13 +894,6 @@ html[data-theme="dark"] .lang-dropdown-options {
     width: 35px;
     height: auto;
 }
-
-.weather-badge {
-    width: 25px; 
-    height: auto; 
-    display: inline-block; 
-    vertical-align: middle;
-}
 /*
     FOOTER
 */
