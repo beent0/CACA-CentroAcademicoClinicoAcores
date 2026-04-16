@@ -169,8 +169,8 @@
             <div class="container">
                 <div class="section-header">
                     <div>
-                        <span class="subtitle">NOTÍCIAS</span>
-                        <h2>Novidades e Artigos</h2>
+                        <span class="subtitle" data-i18n="noticias_subtitle">NOTÍCIAS</span>
+                        <h2 data-i18n="noticias_title">Novidades e Artigos</h2>
                     </div>
                 </div>
                 <div id="apinoticias-container" class="cards-flex">
@@ -181,8 +181,8 @@
         <section id = "Localizacao" class="section">
             <div class="container">
                 <div class="section-header">
-                    <span class="subtitle">LOCALIZAÇÃO</span>
-                    <h2>Onde estamos?</h2>
+                    <span class="subtitle" data-i18n="localizacao_subtitle">LOCALIZAÇÃO</span>
+                    <h2 data-i18n="localizacao_title">Onde estamos?</h2>
                 </div>
                 <div class="map-container">
                     <div id="googlemap" class ="map"></div>
@@ -194,44 +194,44 @@
     <section id="admin-section" class="section admin-only">
         <div class="container">
             <div class="section-header">
-                <span class="subtitle">ADMINISTRAÇÃO</span>
-                <h2 id="admin-title-h2">Gestão de Eventos</h2>
+                <span class="subtitle" data-i18n="admin_subtitle">ADMINISTRAÇÃO</span>
+                <h2 id="admin-title-h2" data-i18n="admin_title">Gestão de Eventos</h2>
             </div>
             
             <div class="admin-grid">
                 <div class="admin-form-container">
-                    <h3 id="admin-form-title">Adicionar Evento</h3>
+                    <h3 id="admin-form-title" data-i18n="admin_form_title">Adicionar Evento</h3>
                     <form id="event-form" novalidate>
                         <input type="hidden" id="event-id">
                         <div class="form-group">
-                            <label for="event-titulo">Título</label>
+                            <label for="event-titulo" data-i18n="admin_titulo_label">Título</label>
                             <input type="text" id="event-titulo" required>
                         </div>
                         <div class="form-group">
-                            <label for="event-desc">Descrição</label>
+                            <label for="event-desc" data-i18n="admin_desc_label">Descrição</label>
                             <textarea id="event-desc" rows="3" required></textarea>
                         </div>
                         <div class="admin-form-row">
                             <div class="form-group">
-                                <label for="event-data">Data</label>
+                                <label for="event-data" data-i18n="admin_data_label">Data</label>
                                 <input type="date" id="event-data" required>
                             </div>
                             <div class="form-group">
-                                <label for="event-hora">Hora</label>
+                                <label for="event-hora" data-i18n="admin_hora_label">Hora</label>
                                 <input type="text" id="event-hora" placeholder="14:00 - 16:00" required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="event-local">Local</label>
+                            <label for="event-local" data-i18n="admin_local_label">Local</label>
                             <input type="text" id="event-local" required>
                         </div>
                         <div class="form-group">
-                            <label for="event-imagem">URL da Imagem</label>
+                            <label for="event-imagem" data-i18n="admin_imagem_label">URL da Imagem</label>
                             <input type="text" id="event-imagem" placeholder="media/evento1.png" required>
                         </div>
                         <div class="admin-actions">
-                            <button type="submit" class="btn btn-primary" id="btn-save-event">Guardar Evento</button>
-                            <button type="button" class="btn btn-secondary hidden" id="btn-cancel-edit">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" id="btn-save-event" data-i18n="admin_save_btn">Guardar Evento</button>
+                            <button type="button" class="btn btn-secondary hidden" id="btn-cancel-edit" data-i18n="admin_cancel_btn">Cancelar</button>
                         </div>
                     </form>
                 </div>
@@ -328,7 +328,7 @@
         </div>
     </div>
     <div class="container footer-bottom">
-        <p>&copy; 2026 Centro Académico Clínico dos Açores. Todos os direitos reservados. | <a href="javascript:void(0)" id="toggle-admin" aria-label="Alternar para painel de administração de eventos">Admin</a></p>
+        <p>&copy; 2026 Centro Académico Clínico dos Açores. Todos os direitos reservados. | <a href="javascript:void(0)" id="toggle-admin"  data-i18n="footer_admin_link " aria-label="Alternar para painel de administração de eventos">Admin</a></p>
     </div>
 </footer>
 <button id="to-top" class="btn btn-primary" title="Voltar ao Topo" data-i18n="to_top_title">Voltar ao Topo</button>
