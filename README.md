@@ -235,3 +235,45 @@ Novas funcionalidades implementadas:
    const CONFIG = {
         WEATHER_API_KEY: "API_KEY_HERE"
 }
+
+#----------------------------------------------------------------------------------------------------------------------------------------#
+
+## Projeto de Época Especial (PE / TE) - Refatorização e API de Gestão de Utilizadores
+
+Esta fase final do projeto consiste em consolidar, refatorar e expandir todo o trabalho desenvolvido nas fases anteriores (PEI1, PEI2, PEI3), migrando o frontend para uma framework moderna e construindo uma API de backend robusta para a gestão de utilizadores com base de dados persistente.
+
+### Resumo das Tarefas Necessárias:
+1. **Refatorização do Frontend**: Transição de todas as páginas, estilos, interações e componentes estáticos/dinâmicos (PEI1 e PEI2) e funcionalidades de CRUD/APIs (PEI3) para uma framework moderna (como React, Vue ou Angular).
+2. **Desenvolvimento do Backend**: Criação de uma API robusta utilizando Node.js com Express para autenticação e gestão de perfis com permissões diferenciadas (Admin vs. Regular).
+3. **Persistência de Dados**: Integração com uma base de dados adequada (MongoDB, PostgreSQL, MySQL) para armazenamento seguro dos utilizadores.
+4. **Segurança e Boas Práticas**: Implementação de hashing de senhas, validações de input, segurança contra CSRF/XSS e otimização de performance (lazy loading).
+5. **Integração e Testes**: Ligação entre o frontend e backend com testes de unidade e integração.
+6. **Acessibilidade e Responsividade**: Preservar os padrões WCAG AAA estabelecidos nas fases anteriores.
+7. **Documentação**: Atualizar o README.md detalhando a arquitetura, justificando as escolhas tecnológicas, decisões de design, segurança e explicando como correr as aplicações.
+
+### Checklist / Lista de Tarefas Necessárias 📋
+- [ ] **Análise e Design de Arquitetura**
+  - [ ] Escolha e definição da estrutura com a framework frontend (React/Vue/Angular)
+  - [ ] Modelagem da API de Gestão de Utilizadores (endpoints, rotas, base de dados)
+  - [ ] Planeamento da integração e manutenção da identidade visual original
+- [ ] **Desenvolvimento Frontend (Refatorização)**
+  - [ ] Migração do layout, componentes e estilos para a framework escolhida
+  - [ ] Implementação de interações, animações e suporte a Dark Mode (PEI2)
+  - [ ] Integração da internacionalização (i18n), seletor de idiomas e gráficos D3.js (PEI3)
+  - [ ] Migração de eventos, notícias e meteorologia para a nova estrutura de dados (IndexedDB/API)
+  - [ ] Desenvolvimento de interfaces de utilizador (Registo, Login, Perfil de utilizador)
+- [ ] **Desenvolvimento Backend (API de Gestão de Utilizadores)**
+  - [ ] Configuração do servidor Node.js com Express
+  - [ ] Modelos de dados e ligação a base de dados (MongoDB/PostgreSQL/MySQL)
+  - [ ] Endpoint de Registo de novos utilizadores com validação de input
+  - [ ] Endpoint de Login/Autenticação segura (ex: tokens JWT) com hashing de password (bcrypt)
+  - [ ] Endpoints de Edição e Visualização de perfis
+  - [ ] Implementação de permissões diferenciadas (Administrador vs. Utilizador Regular)
+- [ ] **Integração, Segurança e Testes**
+  - [ ] Integração assíncrona (fetch/axios) entre o frontend e backend
+  - [ ] Mecanismos de segurança da API (validação, proteção CSRF/XSS)
+  - [ ] Otimizações de desempenho no frontend (lazy loading, compressão de imagens) e backend
+  - [ ] Escrita de testes unitários e de integração para front e backend
+- [ ] **Documentação & Apresentação (Prazos: 28 de maio de 2026)**
+  - [ ] Atualização final do `README.md` (identificação do grupo, diagramas de arquitetura, manuais de execução, justificação de tecnologias e decisões de design/acessibilidade)
+  - [ ] Preparação da apresentação e demonstração funcional do sistema
