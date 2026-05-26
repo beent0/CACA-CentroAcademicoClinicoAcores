@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 // Componente Footer - Rodapé com informações de contacto, morada e formulário da Newsletter
 function Footer() {
   const [showScrollBtn, setShowScrollBtn] = useState(false);
+  const [isOverFooter, setIsOverFooter] = useState(false);
 
   // Lógica de deteção de scroll para mostrar/esconder o botão de voltar ao topo
   useEffect(() => {
@@ -13,9 +14,22 @@ function Footer() {
       
       // Mostra o botão se o scroll passar dos 10%
       setShowScrollBtn(percentagemScroll > 10);
+
+      // Verifica se o botão ultrapassou o topo do rodapé
+      const footer = document.getElementById('contactos');
+      if (footer) {
+        const footerRect = footer.getBoundingClientRect();
+        // O botão fica a 20px do fundo do ecrã e tem cerca de 50px de altura.
+        // Se o topo do footer estiver acima dessa posição (altura total da janela - ~70px),
+        // significa que o botão entrou na área visual do footer.
+        const limiteBotao = window.innerHeight - 70;
+        setIsOverFooter(footerRect.top < limiteBotao);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
+    // Executa uma vez inicialmente
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -159,7 +173,7 @@ function Footer() {
       {/* Botão de Voltar ao Topo reativo */}
       <button 
         id="to-top" 
-        className="btn btn-primary" 
+        className={`btn btn-primary ${isOverFooter ? 'over-footer' : ''}`}
         title="Voltar ao Topo" 
         data-i18n="to_top_title"
         style={{ display: showScrollBtn ? 'block' : 'none', color: 'white' }}

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 // Componente Header - Barra de navegação com tema dinâmico e menu hambúrguer interativo
 function Header({ theme, toggleTheme }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLangOpen, setIsLangOpen] = useState(false);
 
   // Texto circular - lógica de rotação de caracteres pura em React!
   const circularText = "Centro Académico Clínico dos Açores";
@@ -68,15 +69,18 @@ function Header({ theme, toggleTheme }) {
             
             {/* Seletor de idiomas - Dropdown (Fase 4: Dinâmico) */}
             <li className="lang-dropdown-container">
-              <div className="lang-dropdown-selected">
+              <div 
+                className="lang-dropdown-selected"
+                onClick={() => setIsLangOpen(!isLangOpen)}
+              >
                 <span className="fi fi-pt"></span> <span className="lang-code">PT</span>
               </div>
-              <ul className="lang-dropdown-options" style={{ display: 'none' }}>
-                <li data-lang="pt"><span className="fi fi-pt"></span> PT</li>
-                <li data-lang="en"><span className="fi fi-gb"></span> EN</li>
-                <li data-lang="es"><span className="fi fi-es"></span> ES</li>
-                <li data-lang="fr"><span className="fi fi-fr"></span> FR</li>
-                <li data-lang="de"><span className="fi fi-de"></span> DE</li>
+              <ul className={`lang-dropdown-options ${isLangOpen ? 'show' : ''}`}>
+                <li data-lang="pt" onClick={() => { setIsLangOpen(false); }}><span className="fi fi-pt"></span> PT</li>
+                <li data-lang="en" onClick={() => { setIsLangOpen(false); }}><span className="fi fi-gb"></span> EN</li>
+                <li data-lang="es" onClick={() => { setIsLangOpen(false); }}><span className="fi fi-es"></span> ES</li>
+                <li data-lang="fr" onClick={() => { setIsLangOpen(false); }}><span className="fi fi-fr"></span> FR</li>
+                <li data-lang="de" onClick={() => { setIsLangOpen(false); }}><span className="fi fi-de"></span> DE</li>
               </ul>
             </li>
             
