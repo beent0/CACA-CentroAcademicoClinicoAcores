@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 // Componente Header - Barra de navegação com tema dinâmico e menu hambúrguer interativo
-function Header({ theme, toggleTheme }) {
+function Header({ theme, toggleTheme, lang, setLang }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
 
@@ -73,14 +73,14 @@ function Header({ theme, toggleTheme }) {
                 className="lang-dropdown-selected"
                 onClick={() => setIsLangOpen(!isLangOpen)}
               >
-                <span className="fi fi-pt"></span> <span className="lang-code">PT</span>
+                <span className={`fi fi-${(lang === 'en' ? 'gb' : lang) || 'pt'}`}></span> <span className="lang-code">{(lang || 'pt').toUpperCase()}</span>
               </div>
               <ul className={`lang-dropdown-options ${isLangOpen ? 'show' : ''}`}>
-                <li data-lang="pt" onClick={() => { setIsLangOpen(false); }}><span className="fi fi-pt"></span> PT</li>
-                <li data-lang="en" onClick={() => { setIsLangOpen(false); }}><span className="fi fi-gb"></span> EN</li>
-                <li data-lang="es" onClick={() => { setIsLangOpen(false); }}><span className="fi fi-es"></span> ES</li>
-                <li data-lang="fr" onClick={() => { setIsLangOpen(false); }}><span className="fi fi-fr"></span> FR</li>
-                <li data-lang="de" onClick={() => { setIsLangOpen(false); }}><span className="fi fi-de"></span> DE</li>
+                <li data-lang="pt" onClick={() => { setLang('pt'); setIsLangOpen(false); }}><span className="fi fi-pt"></span> PT</li>
+                <li data-lang="en" onClick={() => { setLang('en'); setIsLangOpen(false); }}><span className="fi fi-gb"></span> EN</li>
+                <li data-lang="es" onClick={() => { setLang('es'); setIsLangOpen(false); }}><span className="fi fi-es"></span> ES</li>
+                <li data-lang="fr" onClick={() => { setLang('fr'); setIsLangOpen(false); }}><span className="fi fi-fr"></span> FR</li>
+                <li data-lang="de" onClick={() => { setLang('de'); setIsLangOpen(false); }}><span className="fi fi-de"></span> DE</li>
               </ul>
             </li>
             

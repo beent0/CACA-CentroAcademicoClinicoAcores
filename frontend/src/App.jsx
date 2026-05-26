@@ -22,6 +22,59 @@ function App() {
     return prefersDark ? 'dark' : 'light';
   });
 
+  // Inicialização do idioma a partir do localStorage ou preferências do browser
+  const [lang, setLang] = useState(() => {
+    const saved = localStorage.getItem('preferredLang');
+    if (saved && ['pt', 'en', 'es', 'fr', 'de'].includes(saved)) return saved;
+    const browserLang = navigator.language.slice(0, 2);
+    if (['en', 'es', 'fr', 'de'].includes(browserLang)) return browserLang;
+    return 'pt';
+  });
+
+  const [translations, setTranslations] = useState({});
+
+  // Carrega o ficheiro JSON do idioma escolhido
+  useEffect(() => {
+    const loadTranslations = async () => {
+      try {
+        const response = await fetch(`/lang/${lang}.json`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        setTranslations(data);
+        localStorage.setItem('preferredLang', lang);
+        
+        // Dispara evento para scripts externos (ex: gráficos D3)
+        window.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang } }));
+      } catch (error) {
+        console.warn('Erro ao carregar i18n:', error);
+      }
+    };
+    loadTranslations();
+  }, [lang]);
+
+  // Efeito para traduzir a página (Fase 4 - Internacionalização Simples)
+  useEffect(() => {
+    if (!translations || Object.keys(translations).length === 0) return;
+
+    // Traduz os textos com data-i18n
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      const key = el.getAttribute('data-i18n');
+      if (translations[key]) {
+        el.innerHTML = translations[key];
+      }
+    });
+
+    // Traduz os atributos com data-i18n-attr (ex: placeholders)
+    document.querySelectorAll('[data-i18n-attr]').forEach((el) => {
+      const attrDef = el.getAttribute('data-i18n-attr');
+      if (!attrDef) return;
+      const [attrName, key] = attrDef.split(':');
+      if (translations[key]) {
+        el.setAttribute(attrName, translations[key]);
+      }
+    });
+  }, [translations]);
+
   // Efeito para aplicar o tema no elemento raiz (<html>) e guardar a preferência
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -48,7 +101,7 @@ function App() {
 
   return (
     <>
-      <Header theme={theme} toggleTheme={toggleTheme} />
+      <Header theme={theme} toggleTheme={toggleTheme} lang={lang} setLang={setLang} />
       <main>
         <Hero />
         <About />
