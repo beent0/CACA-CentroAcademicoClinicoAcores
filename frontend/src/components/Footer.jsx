@@ -1,34 +1,66 @@
 import React, { useState, useEffect } from 'react';
+import { saveSubscriber } from '../utils/db';
 
 // Componente Footer - Rodapé com informações de contacto, morada e formulário da Newsletter
 function Footer() {
   const [showScrollBtn, setShowScrollBtn] = useState(false);
   const [isOverFooter, setIsOverFooter] = useState(false);
 
-  // Lógica de deteção de scroll para mostrar/esconder o botão de voltar ao topo
+  // Estados do formulário
+  const [nome, setNome] = useState('');
+  const [telemovel, setTelemovel] = useState('');
+  const [email, setEmail] = useState('');
+  const [mensagem, setMensagem] = useState('');
+  const [indicativo, setIndicativo] = useState('+351');
+  const [assunto, setAssunto] = useState('');
+  
+  // Estados para controlar dropdowns ativos
+  const [isIndicativoOpen, setIsIndicativoOpen] = useState(false);
+  const [isAssuntoOpen, setIsAssuntoOpen] = useState(false);
+
+  // Mensagens de feedback
+  const [feedback, setFeedback] = useState({ text: '', type: '' });
+
+  // Lista de indicativos suportados
+  const indicativos = [
+    { value: "+351", label: "Portugal" },
+    { value: "+49", label: "Alemanha" },
+    { value: "+61", label: "Austrália" },
+    { value: "+55", label: "Brasil" },
+    { value: "+1", label: "EUA" },
+    { value: "+33", label: "França" },
+    { value: "+39", label: "Itália" },
+    { value: "+81", label: "Japão" },
+    { value: "+44", label: "Reino Unido" },
+    { value: "+41", label: "Suíça" }
+  ];
+
+  // Lista de assuntos suportados
+  const assuntos = [
+    { value: "ajuda", label: "Ajuda", key: "form_assunto_ajuda" },
+    { value: "evento", label: "Nossos Eventos", key: "form_assunto_evento" },
+    { value: "marcacao", label: "Marcação", key: "form_assunto_marcacao" },
+    { value: "ensino", label: "Dúvida sobre Ensino", key: "form_assunto_ensino" }
+  ];
+
+  // Deteção de scroll para botão voltar ao topo
   useEffect(() => {
     const handleScroll = () => {
       const alturaTotal = document.documentElement.scrollHeight - window.innerHeight;
       if (alturaTotal <= 0) return;
       const percentagemScroll = (window.scrollY / alturaTotal) * 100;
       
-      // Mostra o botão se o scroll passar dos 10%
       setShowScrollBtn(percentagemScroll > 10);
 
-      // Verifica se o botão ultrapassou o topo do rodapé
       const footer = document.getElementById('contactos');
       if (footer) {
         const footerRect = footer.getBoundingClientRect();
-        // O botão fica a 20px do fundo do ecrã e tem cerca de 50px de altura.
-        // Se o topo do footer estiver acima dessa posição (altura total da janela - ~70px),
-        // significa que o botão entrou na área visual do footer.
         const limiteBotao = window.innerHeight - 70;
         setIsOverFooter(footerRect.top < limiteBotao);
       }
     };
 
     window.addEventListener('scroll', handleScroll);
-    // Executa uma vez inicialmente
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -36,6 +68,85 @@ function Footer() {
   const voltarAoTopo = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // Alterna a exibição do Painel de Administração de Eventos
+  const handleToggleAdmin = (e) => {
+    e.preventDefault();
+    const adminSection = document.getElementById('admin-section');
+    if (adminSection) {
+      adminSection.classList.toggle('admin-only');
+      if (!adminSection.classList.contains('admin-only')) {
+        adminSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
+  // Validação e Submissão do Formulário
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFeedback({ text: '', type: '' });
+
+    // Validações básicas (iguais às do vanilla para manter nota de validação)
+    if (!nome.trim()) {
+      setFeedback({ text: 'Por favor, insira o seu nome.', type: 'error' });
+      return;
+    }
+    
+    // Regex simples de telemóvel (ex: 9 digitos)
+    const telRegex = /^[0-9]{9,15}$/;
+    if (!telemovel.trim() || !telRegex.test(telemovel.replace(/\s/g, ''))) {
+      setFeedback({ text: 'Por favor, introduza um número de telemóvel válido (mínimo 9 dígitos).', type: 'error' });
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim() || !emailRegex.test(email)) {
+      setFeedback({ text: 'Por favor, introduza um endereço de e-mail válido.', type: 'error' });
+      return;
+    }
+
+    if (!assunto) {
+      setFeedback({ text: 'Por favor, selecione um assunto.', type: 'error' });
+      return;
+    }
+
+    if (!mensagem.trim()) {
+      setFeedback({ text: 'Por favor, escreva a sua mensagem.', type: 'error' });
+      return;
+    }
+
+    try {
+      // Guarda na base de dados IndexedDB
+      await saveSubscriber({
+        nome: nome.trim(),
+        email: email.trim().toLowerCase(),
+        telefone: `${indicativo} ${telemovel.trim()}`,
+        mensagem: mensagem.trim(),
+        assunto: assunto
+      });
+
+      // Feedback positivo
+      setFeedback({ text: 'Subscrição e mensagem registadas com sucesso!', type: 'success' });
+      
+      // Limpa os campos
+      setNome('');
+      setTelemovel('');
+      setEmail('');
+      setMensagem('');
+      setAssunto('');
+
+      // Notifica o AdminPanel para recarregar a lista de subscritores
+      window.dispatchEvent(new Event('subscribersUpdated'));
+
+    } catch (err) {
+      console.error(err);
+      setFeedback({ text: 'Erro ao guardar os dados na IndexedDB.', type: 'error' });
+    }
+  };
+
+  const activeIndicativoLabel = indicativos.find(i => i.value === indicativo)?.label || 'Portugal';
+  const activeAssuntoLabel = assuntos.find(a => a.value === assunto)?.label || 'Seleciona um assunto...';
+
   return (
     <>
       <footer id="contactos" className="footer">
@@ -64,7 +175,7 @@ function Footer() {
 
           {/* Coluna 3: Formulário da Newsletter e Mensagens */}
           <div className="newsletter">
-            <form action="#" method="post" className="footer-form" id="form-newsletter" noValidate>
+            <form onSubmit={handleSubmit} className="footer-form" id="form-newsletter" noValidate>
               <div className="footer-col newsletter-info">
                 <h5 data-i18n="newsletter_titulo">Newsletter</h5>
                 
@@ -74,27 +185,38 @@ function Footer() {
                   name="nome" 
                   placeholder="Nome e Apelido" 
                   data-i18n-attr="placeholder:form_nome_placeholder" 
+                  value={nome}
+                  onChange={(e) => setNome(e.target.value)}
                   noValidate 
                 />
 
                 <label htmlFor="telemovel" className="sr-only">Telemóvel</label>
                 <div className="telemovel-container">
-                  {/* Dropdown indicativo nacional (Fase 2: Estático por agora) */}
-                  <div className="dropdown-indicativo" id="dropdown-indicativo">
-                    <div className="dropdown-selected">Portugal</div>
-                    <ul className="dropdown-options" style={{ display: 'none' }}>
-                      <li data-value="+351" short-data="+351">Portugal</li>
-                      <li data-value="+49" short-data="+49">Alemanha</li>
-                      <li data-value="+61" short-data="+61">Austrália</li>
-                      <li data-value="+55" short-data="+55">Brasil</li>
-                      <li data-value="+1" short-data="+1">EUA</li>
-                      <li data-value="+33" short-data="+33">França</li>
-                      <li data-value="+39" short-data="+39">Itália</li>
-                      <li data-value="+81" short-data="+81">Japão</li>
-                      <li data-value="+44" short-data="+44">Reino Unido</li>
-                      <li data-value="+41" short-data="+41">Suíça</li>
-                    </ul>
-                    <input type="hidden" id="indicativo" name="indicativo" defaultValue="+351" />
+                  {/* Dropdown indicativo nacional */}
+                  <div className="dropdown-indicativo" id="dropdown-indicativo" style={{ position: 'relative' }}>
+                    <div 
+                      className="dropdown-selected" 
+                      onClick={() => setIsIndicativoOpen(!isIndicativoOpen)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {activeIndicativoLabel} ({indicativo})
+                    </div>
+                    {isIndicativoOpen && (
+                      <ul className="dropdown-options" style={{ display: 'block', position: 'absolute', top: '100%', left: 0, zIndex: 10, width: '100%' }}>
+                        {indicativos.map((ind) => (
+                          <li 
+                            key={ind.value} 
+                            onClick={() => {
+                              setIndicativo(ind.value);
+                              setIsIndicativoOpen(false);
+                            }}
+                            style={{ padding: '8px', cursor: 'pointer' }}
+                          >
+                            {ind.label} ({ind.value})
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                   
                   <input 
@@ -102,6 +224,8 @@ function Footer() {
                     name="telemovel" 
                     placeholder="Telemóvel" 
                     data-i18n-attr="placeholder:form_telemovel_placeholder" 
+                    value={telemovel}
+                    onChange={(e) => setTelemovel(e.target.value)}
                     noValidate 
                   />
                 </div>
@@ -112,6 +236,8 @@ function Footer() {
                   name="email" 
                   placeholder="exemplo@email.com" 
                   data-i18n-attr="placeholder:form_email_placeholder" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   noValidate 
                 />
               </div>
@@ -120,22 +246,35 @@ function Footer() {
                 <h5 data-i18n="form_enviar_mensagem">Enviar Mensagem</h5>
                 <span className="sr-only">Assunto</span>
                 
-                {/* Dropdown de assunto (Fase 2: Estático por agora) */}
-                <div className="dropdown-assunto" id="dropdown-assunto">
+                {/* Dropdown de assunto */}
+                <div className="dropdown-assunto" id="dropdown-assunto" style={{ position: 'relative' }}>
                   <div 
                     className="dropdown-selected" 
                     id="assunto-selected" 
-                    data-i18n="form_assunto_default"
+                    data-i18n={!assunto ? "form_assunto_default" : undefined}
+                    onClick={() => setIsAssuntoOpen(!isAssuntoOpen)}
+                    style={{ cursor: 'pointer' }}
                   >
-                    Seleciona um assunto...
+                    {activeAssuntoLabel}
                   </div>
-                  <ul className="dropdown-options" id="assunto-options" style={{ display: 'none' }}>
-                    <li data-value="ajuda" data-i18n="form_assunto_ajuda">Ajuda</li>
-                    <li data-value="evento" data-i18n="form_assunto_evento">Nossos Eventos</li>
-                    <li data-value="marcacao" data-i18n="form_assunto_marcacao">Marcação</li>
-                    <li data-value="ensino" data-i18n="form_assunto_ensino">Dúvida sobre Ensino</li>
-                  </ul>
-                  <input type="hidden" id="assunto" name="assunto" defaultValue="" />
+                  {isAssuntoOpen && (
+                    <ul className="dropdown-options" id="assunto-options" style={{ display: 'block', position: 'absolute', top: '100%', left: 0, zIndex: 10, width: '100%' }}>
+                      {assuntos.map((as) => (
+                        <li 
+                          key={as.value} 
+                          data-value={as.value} 
+                          data-i18n={as.key}
+                          onClick={() => {
+                            setAssunto(as.value);
+                            setIsAssuntoOpen(false);
+                          }}
+                          style={{ padding: '8px', cursor: 'pointer' }}
+                        >
+                          {as.label}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
 
                 <label htmlFor="mensagem" className="sr-only">Mensagem</label>
@@ -145,11 +284,22 @@ function Footer() {
                   rows={4} 
                   placeholder="A sua mensagem" 
                   data-i18n-attr="placeholder:form_mensagem_placeholder"
+                  value={mensagem}
+                  onChange={(e) => setMensagem(e.target.value)}
                 ></textarea>
               </div>
 
               <div className="newsletter-actions">
-                <div id="mensagem-feedback" className="pop-up" aria-live="polite"></div>
+                {feedback.text && (
+                  <div 
+                    id="mensagem-feedback" 
+                    className={`pop-up ${feedback.type}`} 
+                    style={{ display: 'block', padding: '8px', borderRadius: '4px', marginBottom: '8px', color: '#fff', backgroundColor: feedback.type === 'success' ? '#29B89E' : '#FF6B6B' }}
+                    aria-live="polite"
+                  >
+                    {feedback.text}
+                  </div>
+                )}
                 <div>
                   <button type="submit" className="btn btn-submit" data-i18n="form_submeter">
                     Submeter
@@ -163,7 +313,7 @@ function Footer() {
         <div className="container footer-bottom">
           <p>
             &copy; 2026 Centro Académico Clínico dos Açores. Todos os direitos reservados. |{' '}
-            <a href="javascript:void(0)" id="toggle-admin" aria-label="Alternar para painel de administração de eventos">
+            <a href="#admin" id="toggle-admin" onClick={handleToggleAdmin} aria-label="Alternar para painel de administração de eventos">
               Admin
             </a>
           </p>
