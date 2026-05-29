@@ -3,8 +3,8 @@ const User = require('../models/User');
 
 /**
  * protect — verifica se o pedido tem um JWT válido.
- * Se válido, anexa o utilizador a req.user e passa para a rota.
- * Se inválido, devolve 401.
+ * Se for válido, anexa o utilizador a req.user e passa para a route.
+ * Se for inválido, devolve 401.
  */
 async function protect(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -28,8 +28,8 @@ async function protect(req, res, next) {
 }
 
 /**
- * adminOnly — garante que apenas admins acedem à rota.
- * Usado sempre depois do middleware protect.
+ * admin-Only — apenas os admins acedem à route.
+ * Usado depois do middleware protect.
  */
 function adminOnly(req, res, next) {
   if (req.user?.role !== 'admin') {

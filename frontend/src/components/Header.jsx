@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
-// Componente Header - Barra de navegação com tema dinâmico e menu hambúrguer interativo
-function Header({ theme, toggleTheme, lang, setLang }) {
+// Componente Header
+function Header({ theme, toggleTheme, lang, setLang, user, logout }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  // Texto circular - lógica de rotação de caracteres pura em React!
+  // Texto circular do logo
   const circularText = "Centro Académico Clínico dos Açores";
   const angle = 360 / circularText.length;
 
@@ -17,27 +20,36 @@ function Header({ theme, toggleTheme, lang, setLang }) {
     setIsMenuOpen(false);
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
+  const isHomePage = location.pathname === '/';
+
   return (
     <header className="header">
       <div className="header-flex">
         {/* Logotipo com texto circular reativo */}
-        <div className="circle">
-          <div className="logo"></div>
-          <div className="text">
-            <p>
-              {circularText.split('').map((char, i) => (
-                <span
-                  key={i}
-                  style={{
-                    transform: `translate(-50%, -50%) rotate(${i * angle}deg) translateY(-52px)`,
-                  }}
-                >
-                  {char}
-                </span>
-              ))}
-            </p>
+        <Link to="/" className="circle-link">
+          <div className="circle">
+            <div className="logo"></div>
+            <div className="text">
+              <p>
+                {circularText.split('').map((char, i) => (
+                  <span
+                    key={i}
+                    style={{
+                      transform: `translate(-50%, -50%) rotate(${i * angle}deg) translateY(-52px)`,
+                    }}
+                  >
+                    {char}
+                  </span>
+                ))}
+              </p>
+            </div>
           </div>
-        </div>
+        </Link>
         
         <span className="header-text">
           <strong data-i18n="header_title">Centro Académico Clínico dos Açores</strong>
@@ -47,27 +59,53 @@ function Header({ theme, toggleTheme, lang, setLang }) {
         <nav className={`nav-links ${isMenuOpen ? 'active' : ''}`} id="nav-links">
           <ul>
             <li>
-              <a href="#sobre" data-i18n="nav_sobre" onClick={closeMenu}>Sobre nós</a>
+              {isHomePage ? (
+                <a href="#sobre" data-i18n="nav_sobre" onClick={closeMenu}>Sobre nós</a>
+              ) : (
+                <Link to="/#sobre" data-i18n="nav_sobre" onClick={closeMenu}>Sobre nós</Link>
+              )}
             </li>
             <li>
-              <a href="#servicos" data-i18n="nav_servicos" onClick={closeMenu}>Serviços</a>
+              {isHomePage ? (
+                <a href="#servicos" data-i18n="nav_servicos" onClick={closeMenu}>Serviços</a>
+              ) : (
+                <Link to="/#servicos" data-i18n="nav_servicos" onClick={closeMenu}>Serviços</Link>
+              )}
             </li>
             <li>
-              <a href="#eventos" data-i18n="nav_eventos" onClick={closeMenu}>Eventos</a>
-            </li>
-            <li>
-              <a href="#noticias" data-i18n="nav_noticias" onClick={closeMenu}>Notícias</a>
-            </li>
-            <li>
-              <a href="#Localizacao" data-i18n="nav_localizacao" onClick={closeMenu}>Localização</a>
-            </li>
-            <li>
-              <a className="contacts" href="#contactos" onClick={closeMenu}>
-                <strong data-i18n="nav_contactos">Contacte-nos</strong>
-              </a>
+              {isHomePage ? (
+                <a href="#eventos" data-i18n="nav_eventos" onClick={closeMenu}>Eventos</a>
+              ) : (
+                <Link to="/#eventos" data-i18n="nav_eventos" onClick={closeMenu}>Eventos</Link>
+              )}
             </li>
             
-            {/* Seletor de idiomas - Dropdown (Fase 4: Dinâmico) */}
+            {user && user.role === 'admin' && (
+              <li>
+                <Link to="/admin" onClick={closeMenu} style={{ color: '#29B89E', fontWeight: 'bold' }}>Admin</Link>
+              </li>
+            )}
+
+            {user ? (
+              <>
+                <li className="user-info-nav">
+                  <Link to="/perfil" onClick={closeMenu} style={{ fontSize: '0.9rem', marginRight: '10px', color: 'inherit' }}>
+                    Olá, {user.nome.split(' ')[0]}
+                  </Link>
+                </li>
+                <li>
+                  <button onClick={handleLogout} className="btn-sm btn-delete" style={{ border: 'none', cursor: 'pointer' }}>Sair</button>
+                </li>
+              </>
+            ) : (
+              <li>
+                <Link to="/login" className="contacts" onClick={closeMenu}>
+                  <strong data-i18n="nav_login">Entrar</strong>
+                </Link>
+              </li>
+            )}
+            
+            {/* Seletor de idiomas */}
             <li className="lang-dropdown-container">
               <div 
                 className="lang-dropdown-selected"
@@ -84,7 +122,6 @@ function Header({ theme, toggleTheme, lang, setLang }) {
               </ul>
             </li>
             
-            {/* Botão de alternar tema (Fase 3: Funcional via props do App.jsx) */}
             <li>
               <button 
                 id="theme-toggle" 

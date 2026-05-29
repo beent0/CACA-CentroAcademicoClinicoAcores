@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-// Componente News - Secção de notícias assíncronas (Fase 5: API GNews)
+// Componente News
 function News() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -8,82 +8,101 @@ function News() {
 
   useEffect(() => {
     const fetchNews = async () => {
-      // Tenta obter a chave do objeto global CONFIG
-      const config = window.CONFIG || {};
-      const apiKey = config.GNEWS_API_KEY;
-
-      // Se a chave não estiver configurada ou for o placeholder, usa dados mockados realistas
-      if (!apiKey || apiKey === 'API_KEY_HERE') {
-        console.log('API GNews não configurada. A carregar notícias de demonstração local.');
-        const mockArticles = [
-          {
-            title: 'Avanços na Medicina Preventiva nos Açores',
-            image: 'media/noticia1.jpg',
-            source: { name: 'Saúde Açores' },
-            url: '#'
-          },
-          {
-            title: 'Parceria Universitária Reforça Investigação Regional',
-            image: 'media/noticia2.jpg',
-            source: { name: 'UAc News' },
-            url: '#'
-          },
-          {
-            title: 'Novo Equipamento Clínico Melhora Diagnósticos',
-            image: 'media/noticia3.jpg',
-            source: { name: 'Portal Clínico' },
-            url: '#'
-          }
-        ];
-        // Pequeno atraso para simular carregamento de rede real
-        setTimeout(() => {
-          setArticles(mockArticles);
+      // Verifica a Cache Primeiro
+      const CACHE_KEY = 'news_cache_v3';
+      const CACHE_TIME = 6 * 60 * 60 * 1000; // 6 Horas
+      
+      const cachedData = localStorage.getItem(CACHE_KEY);
+      if (cachedData) {
+        const { articles, timestamp } = JSON.parse(cachedData);
+        if (Date.now() - timestamp < CACHE_TIME) {
+          setArticles(articles);
           setLoading(false);
-        }, 600);
+          return;
+        }
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      const config = window.CONFIG || {};
+      const apiKey = config.CURRENTS_API_KEY;
+
+      if (!apiKey || apiKey === 'API_KEY_HERE') {
+        useMockData();
         return;
       }
 
-      const query = 'Health';
-      const url = `https://gnews.io/api/v4/search?q=${encodeURIComponent(query)}&lang=pt&country=pt&max=6&token=${apiKey}`;
+      // Tenta Açores Primeiro
+      let query = 'açores saúde';
+      let url = `https://api.currentsapi.services/v1/search?keywords=${encodeURIComponent(query)}&language=pt&apiKey=${apiKey}`;
 
       try {
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`Erro HTTP: ${response.status} ${response.statusText}`);
+        let response = await fetch(url);
+        let data = await response.json();
+
+        // Se não houver Açores, tenta Portugal
+        if (!data.news || data.news.length === 0) {
+          console.log('DEBUG NEWS: Sem notícias dos Açores, a tentar Portugal...');
+          query = 'saúde portugal';
+          url = `https://api.currentsapi.services/v1/search?keywords=${encodeURIComponent(query)}&language=pt&country=PT&apiKey=${apiKey}`;
+          response = await fetch(url);
+          data = await response.json();
         }
-        const data = await response.json();
-        if (data.articles) {
-          setArticles(data.articles);
+
+        // Se ainda assim não houver, tenta Saúde geral
+        if (!data.news || data.news.length === 0) {
+          console.log('DEBUG NEWS: Sem notícias de PT, a tentar Saúde geral...');
+          url = `https://api.currentsapi.services/v1/search?category=health&language=pt&apiKey=${apiKey}`;
+          response = await fetch(url);
+          data = await response.json();
+        }
+
+        if (data.status === 'ok' && data.news && data.news.length > 0) {
+          const formattedArticles = data.news.slice(0, 6).map(item => ({
+            title: item.title,
+            image: item.image !== 'None' ? item.image : 'media/sobre_nos.png',
+            source: { name: item.author || 'Notícias' },
+            url: item.url
+          }));
+
+          localStorage.setItem(CACHE_KEY, JSON.stringify({
+            articles: formattedArticles,
+            timestamp: Date.now()
+          }));
+          
+          setArticles(formattedArticles);
+          setLoading(false);
         } else {
-          throw new Error('Nenhum artigo retornado');
+          useMockData();
         }
       } catch (err) {
-        console.warn('Erro ao obter notícias da GNews, usando fallback local:', err);
-        setError(err.message);
-        // Fallback local se a API falhar (ex: limite de pedidos atingido)
-        setArticles([
-          {
-            title: 'Avanços na Medicina Preventiva nos Açores',
-            image: 'media/noticia1.jpg',
-            source: { name: 'Saúde Açores' },
-            url: '#'
-          },
-          {
-            title: 'Parceria Universitária Reforça Investigação Regional',
-            image: 'media/noticia2.jpg',
-            source: { name: 'UAc News' },
-            url: '#'
-          },
-          {
-            title: 'Novo Equipamento Clínico Melhora Diagnósticos',
-            image: 'media/noticia3.jpg',
-            source: { name: 'Portal Clínico' },
-            url: '#'
-          }
-        ]);
-      } finally {
-        setLoading(false);
+        console.error('DEBUG NEWS: Erro na Currents API:', err.message);
+        useMockData();
       }
+    };
+
+    const useMockData = () => {
+      const mockArticles = [
+        {
+          title: 'Avanços na Medicina Preventiva nos Açores',
+          image: 'media/noticia1.jpg',
+          source: { name: 'Saúde Açores' },
+          url: '#'
+        },
+        {
+          title: 'Parceria Universitária Reforça Investigação Regional',
+          image: 'media/noticia2.jpg',
+          source: { name: 'UAc News' },
+          url: '#'
+        },
+        {
+          title: 'Novo Equipamento Clínico Melhora Diagnósticos',
+          image: 'media/noticia3.jpg',
+          source: { name: 'Portal Clínico' },
+          url: '#'
+        }
+      ];
+      setArticles(mockArticles);
+      setLoading(false);
     };
 
     fetchNews();

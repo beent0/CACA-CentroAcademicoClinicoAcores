@@ -19,7 +19,7 @@ export function initDB() {
     request.onsuccess = (event) => {
       const db = event.target.result;
       
-      // Sementeira automática de dados se a ObjectStore estiver vazia
+      // Sementeia automaticamente os dados se a ObjectStore estiver vazia
       const transaction = db.transaction(STORE_NAME, "readwrite");
       const store = transaction.objectStore(STORE_NAME);
       const countRequest = store.count();
@@ -98,7 +98,7 @@ export function getAllEvents() {
 }
 
 /**
- * Salva (adiciona ou atualiza) um evento no IndexedDB.
+ * Salva um evento no IndexedDB.
  */
 export function saveEvent(evento) {
   return initDB().then((db) => {

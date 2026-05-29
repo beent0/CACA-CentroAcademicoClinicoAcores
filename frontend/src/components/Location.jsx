@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Componente Location - Secção de Localização oficial usando OpenStreetMap (Livre de chaves de API!)
+// Componente Location
 function Location() {
   return (
     <section id="Localizacao" className="section">
@@ -10,7 +10,7 @@ function Location() {
           <h2 data-i18n="localizacao_title">Onde estamos?</h2>
         </div>
         
-        {/* Container do Mapa Interativo Gratuito e Oficial (OpenStreetMap) */}
+        {/* Container do mapa do OpenStreetMap */}
         <div className="map-container" style={{ width: '100%', height: '400px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', border: '1px solid rgba(0,0,0,0.1)' }}>
           <iframe
             title="Universidade dos Açores - OpenStreetMap"

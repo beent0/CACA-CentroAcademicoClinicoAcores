@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { saveSubscriber } from '../utils/db';
+import axios from 'axios';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-// Componente Footer - Rodapé com informações de contacto, morada e formulário da Newsletter
+// Componente Footer
 function Footer() {
   const [showScrollBtn, setShowScrollBtn] = useState(false);
   const [isOverFooter, setIsOverFooter] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const userStr = localStorage.getItem('user');
+  const user = userStr ? JSON.parse(userStr) : null;
 
   // Estados do formulário
   const [nome, setNome] = useState('');
@@ -72,12 +78,11 @@ function Footer() {
   // Alterna a exibição do Painel de Administração de Eventos
   const handleToggleAdmin = (e) => {
     e.preventDefault();
-    const adminSection = document.getElementById('admin-section');
-    if (adminSection) {
-      adminSection.classList.toggle('admin-only');
-      if (!adminSection.classList.contains('admin-only')) {
-        adminSection.scrollIntoView({ behavior: 'smooth' });
-      }
+    if (user && user.role === 'admin') {
+      navigate('/admin');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      navigate('/login');
     }
   };
 
@@ -86,16 +91,15 @@ function Footer() {
     e.preventDefault();
     setFeedback({ text: '', type: '' });
 
-    // Validações básicas (iguais às do vanilla para manter nota de validação)
+    // Validações básicas
     if (!nome.trim()) {
       setFeedback({ text: 'Por favor, insira o seu nome.', type: 'error' });
       return;
     }
     
-    // Regex simples de telemóvel (ex: 9 digitos)
     const telRegex = /^[0-9]{9,15}$/;
     if (!telemovel.trim() || !telRegex.test(telemovel.replace(/\s/g, ''))) {
-      setFeedback({ text: 'Por favor, introduza um número de telemóvel válido (mínimo 9 dígitos).', type: 'error' });
+      setFeedback({ text: 'Por favor, introduza um número de telemóvel válido.', type: 'error' });
       return;
     }
 
@@ -116,8 +120,8 @@ function Footer() {
     }
 
     try {
-      // Guarda na base de dados IndexedDB
-      await saveSubscriber({
+      // Envia para a API do Backend
+      await axios.post('http://localhost:5000/api/subscribers', {
         nome: nome.trim(),
         email: email.trim().toLowerCase(),
         telefone: `${indicativo} ${telemovel.trim()}`,
@@ -125,8 +129,7 @@ function Footer() {
         assunto: assunto
       });
 
-      // Feedback positivo
-      setFeedback({ text: 'Subscrição e mensagem registadas com sucesso!', type: 'success' });
+      setFeedback({ text: 'Subscrição e mensagem enviadas com sucesso!', type: 'success' });
       
       // Limpa os campos
       setNome('');
@@ -135,12 +138,12 @@ function Footer() {
       setMensagem('');
       setAssunto('');
 
-      // Notifica o AdminPanel para recarregar a lista de subscritores
-      window.dispatchEvent(new Event('subscribersUpdated'));
-
     } catch (err) {
       console.error(err);
-      setFeedback({ text: 'Erro ao guardar os dados na IndexedDB.', type: 'error' });
+      setFeedback({ 
+        text: err.response?.data?.message || 'Erro ao enviar subscrição.', 
+        type: 'error' 
+      });
     }
   };
 
@@ -151,7 +154,6 @@ function Footer() {
     <>
       <footer id="contactos" className="footer">
         <div className="container footer-flex">
-          {/* Coluna 1: Contactos */}
           <div className="footer-col">
             <h5 data-i18n="footer_contactos">Contactos</h5>
             <p><strong data-i18n="footer_email_label">E-mail:</strong> cac-a@uac.pt</p>
@@ -164,7 +166,6 @@ function Footer() {
             </div>
           </div>
 
-          {/* Coluna 2: Morada */}
           <div className="footer-col">
             <h5 data-i18n="footer_morada">Morada</h5>
             <p data-i18n="footer_universidade">Universidade dos Açores</p>
@@ -173,27 +174,20 @@ function Footer() {
             <p data-i18n="footer_cidade">9500-321 Ponta Delgada</p>
           </div>
 
-          {/* Coluna 3: Formulário da Newsletter e Mensagens */}
           <div className="newsletter">
             <form onSubmit={handleSubmit} className="footer-form" id="form-newsletter" noValidate>
               <div className="footer-col newsletter-info">
                 <h5 data-i18n="newsletter_titulo">Newsletter</h5>
                 
-                <label htmlFor="nome" className="sr-only">Nome</label>
                 <input 
-                  id="nome" 
-                  name="nome" 
                   placeholder="Nome e Apelido" 
                   data-i18n-attr="placeholder:form_nome_placeholder" 
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
-                  noValidate 
                 />
 
-                <label htmlFor="telemovel" className="sr-only">Telemóvel</label>
                 <div className="telemovel-container">
-                  {/* Dropdown indicativo nacional */}
-                  <div className="dropdown-indicativo" id="dropdown-indicativo" style={{ position: 'relative' }}>
+                  <div className="dropdown-indicativo" style={{ position: 'relative' }}>
                     <div 
                       className="dropdown-selected" 
                       onClick={() => setIsIndicativoOpen(!isIndicativoOpen)}
@@ -220,50 +214,37 @@ function Footer() {
                   </div>
                   
                   <input 
-                    id="telemovel" 
-                    name="telemovel" 
                     placeholder="Telemóvel" 
                     data-i18n-attr="placeholder:form_telemovel_placeholder" 
                     value={telemovel}
                     onChange={(e) => setTelemovel(e.target.value)}
-                    noValidate 
                   />
                 </div>
 
-                <label htmlFor="email" className="sr-only">Email</label>
                 <input 
-                  id="email" 
-                  name="email" 
                   placeholder="exemplo@email.com" 
                   data-i18n-attr="placeholder:form_email_placeholder" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  noValidate 
                 />
               </div>
 
               <div className="footer-col newsletter-msg">
                 <h5 data-i18n="form_enviar_mensagem">Enviar Mensagem</h5>
-                <span className="sr-only">Assunto</span>
                 
-                {/* Dropdown de assunto */}
-                <div className="dropdown-assunto" id="dropdown-assunto" style={{ position: 'relative' }}>
+                <div className="dropdown-assunto" style={{ position: 'relative' }}>
                   <div 
                     className="dropdown-selected" 
-                    id="assunto-selected" 
-                    data-i18n={!assunto ? "form_assunto_default" : undefined}
                     onClick={() => setIsAssuntoOpen(!isAssuntoOpen)}
                     style={{ cursor: 'pointer' }}
                   >
                     {activeAssuntoLabel}
                   </div>
                   {isAssuntoOpen && (
-                    <ul className="dropdown-options" id="assunto-options" style={{ display: 'block', position: 'absolute', top: '100%', left: 0, zIndex: 10, width: '100%' }}>
+                    <ul className="dropdown-options" style={{ display: 'block', position: 'absolute', top: '100%', left: 0, zIndex: 10, width: '100%' }}>
                       {assuntos.map((as) => (
                         <li 
                           key={as.value} 
-                          data-value={as.value} 
-                          data-i18n={as.key}
                           onClick={() => {
                             setAssunto(as.value);
                             setIsAssuntoOpen(false);
@@ -277,10 +258,7 @@ function Footer() {
                   )}
                 </div>
 
-                <label htmlFor="mensagem" className="sr-only">Mensagem</label>
                 <textarea 
-                  id="mensagem" 
-                  name="mensagem" 
                   rows={4} 
                   placeholder="A sua mensagem" 
                   data-i18n-attr="placeholder:form_mensagem_placeholder"
@@ -292,19 +270,15 @@ function Footer() {
               <div className="newsletter-actions">
                 {feedback.text && (
                   <div 
-                    id="mensagem-feedback" 
                     className={`pop-up ${feedback.type}`} 
                     style={{ display: 'block', padding: '8px', borderRadius: '4px', marginBottom: '8px', color: '#fff', backgroundColor: feedback.type === 'success' ? '#29B89E' : '#FF6B6B' }}
-                    aria-live="polite"
                   >
                     {feedback.text}
                   </div>
                 )}
-                <div>
-                  <button type="submit" className="btn btn-submit" data-i18n="form_submeter">
-                    Submeter
-                  </button>
-                </div>
+                <button type="submit" className="btn btn-submit" data-i18n="form_submeter">
+                  Submeter
+                </button>
               </div>
             </form>
           </div>
@@ -312,24 +286,21 @@ function Footer() {
 
         <div className="container footer-bottom">
           <p>
-            &copy; 2026 Centro Académico Clínico dos Açores. Todos os direitos reservados. |{' '}
-            <a href="#admin" id="toggle-admin" onClick={handleToggleAdmin} aria-label="Alternar para painel de administração de eventos">
+            &copy; 2026 Centro Académico Clínico dos Açores. |{' '}
+            <a href="#admin" onClick={handleToggleAdmin}>
               Admin
             </a>
           </p>
         </div>
       </footer>
 
-      {/* Botão de Voltar ao Topo reativo */}
       <button 
-        id="to-top" 
+        id="to-top"
         className={`btn btn-primary ${isOverFooter ? 'over-footer' : ''}`}
-        title="Voltar ao Topo" 
-        data-i18n="to_top_title"
-        style={{ display: showScrollBtn ? 'block' : 'none', color: 'white' }}
+        style={{ display: showScrollBtn ? 'flex' : 'none', color: 'white' }}
         onClick={voltarAoTopo}
       >
-        Voltar ao Topo
+        ↑
       </button>
     </>
   );

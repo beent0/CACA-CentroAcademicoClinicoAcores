@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Componente Services - Secção com os cartões dos serviços da clínica
+// Componente Services
 function Services() {
   return (
     <section id="servicos" className="section">

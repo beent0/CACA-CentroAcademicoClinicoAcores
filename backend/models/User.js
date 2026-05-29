@@ -2,9 +2,8 @@ const mongoose = require('mongoose');
 const bcrypt   = require('bcryptjs');
 
 /**
- * User — esquema de utilizador
- * Campos: nome, email, telemovel, password (hash), role, bio
- * role: 'regular' (default) | 'admin'
+ * User — esquema de dados do utilizador
+ * role - 'regular' por default ou então 'admin'
  */
 const userSchema = new mongoose.Schema({
   nome: {
@@ -28,7 +27,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A palavra-passe é obrigatória'],
     minlength: [6, 'Mínimo 6 caracteres'],
-    select: false, // nunca devolvida nas queries
+    select: false,
   },
   role: {
     type: String,
@@ -41,14 +40,14 @@ const userSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
-// Hash da password antes de guardar (só se foi alterada)
+// Hash da password
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
-// Método para comparar password no login
+// Método para comparar a password no login
 userSchema.methods.comparePassword = function (candidata) {
   return bcrypt.compare(candidata, this.password);
 };

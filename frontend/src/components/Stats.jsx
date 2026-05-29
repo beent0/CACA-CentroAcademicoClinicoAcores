@@ -26,9 +26,9 @@ function Stats() {
     return () => window.removeEventListener('languageChanged', handleLangChange);
   }, []);
 
-  // Escuta alteração de tema (Dark Mode) para redesenhar com novas cores de fonte
+  // Escuta alteração de tema para redesenhar com novas cores de fonte
   useEffect(() => {
-    // Usamos um MutationObserver no documentElement para detectar alteração de tema (data-theme)
+    // Usamos um MutationObserver no documentElement para detectar alteração de tema
     const observer = new MutationObserver(() => {
       desenharGraficos();
     });
@@ -58,7 +58,7 @@ function Stats() {
     desenharDonutChart(tituloDonut);
   };
 
-  // Efeito principal de desenho usando IntersectionObserver (desenha quando visível, igual ao vanilla original)
+  // Efeito principal de desenho usando IntersectionObserver
   useEffect(() => {
     const elementoAlvo = document.getElementById('graficos-holder');
     if (!elementoAlvo) return;
@@ -227,7 +227,7 @@ function Stats() {
 
     const valorTotal = d3.sum(DADOS_ESTATISTICAS, d => d.total);
 
-    // Texto no Centro (Valor Total)
+    // Texto no Centro do Donut (Valor Total)
     svg.append("text")
       .attr("text-anchor", "middle")
       .attr("y", -5)
@@ -241,7 +241,7 @@ function Stats() {
       .duration(800)
       .style("opacity", 1);
 
-    // Texto no Centro (Legenda "Total")
+    // Texto no Centro
     svg.append("text")
       .attr("text-anchor", "middle")
       .attr("y", 20)

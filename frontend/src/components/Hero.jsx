@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Componente Hero - Secção inicial com carrossel de imagens e texto de boas-vindas
+// Componente Hero
 function Hero() {
   return (
     <section id="hero" className="hero">

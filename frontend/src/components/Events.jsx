@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getAllEvents } from '../utils/db';
+import axios from 'axios';
 
 function Events() {
   const [events, setEvents] = useState([]);
@@ -9,32 +9,26 @@ function Events() {
 
   const meses = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
 
-  // Função para carregar os eventos da BD
+  // Função para carregar os eventos da API do Backend
   const loadEventsList = async () => {
     try {
-      const data = await getAllEvents();
-      // Ordena por data (opcional, para fazer sentido académico)
+      const res = await axios.get('http://localhost:5000/api/events');
+      const data = res.data.data;
+      // Ordena por data
       const sorted = data.sort((a, b) => new Date(a.data) - new Date(b.data));
       setEvents(sorted);
     } catch (err) {
-      console.warn("Erro ao obter eventos do IndexedDB:", err);
+      console.warn("Erro ao obter eventos do Backend:", err);
     }
   };
 
   useEffect(() => {
     loadEventsList();
 
-    // Escuta evento personalizado de atualização (disparado pelo AdminPanel)
-    const handleEventsUpdate = () => {
-      loadEventsList();
-      setEventIndex(0); // Faz reset à posição do carrossel
-    };
-
-    window.addEventListener('eventsUpdated', handleEventsUpdate);
+    // Listener para redimensionamento
     window.addEventListener('resize', resetCarouselPosition);
 
     return () => {
-      window.removeEventListener('eventsUpdated', handleEventsUpdate);
       window.removeEventListener('resize', resetCarouselPosition);
     };
   }, []);
@@ -116,7 +110,7 @@ function Events() {
                   }
 
                   return (
-                    <article key={evento.id} className="card event-card" style={{ flex: '0 0 300px' }}>
+                    <article key={evento._id} className="card event-card" style={{ flex: '0 0 300px' }}>
                       <div className="card-image">
                         <img src={evento.imagem || 'media/evento1.jpg'} alt={`Cartaz do evento: ${evento.titulo}`} />
                         {dia && mes && (

@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Componente Partners - Logos dos parceiros da clínica
+// Componente Partners
 function Partners() {
   return (
     <section className="section partners-section">
