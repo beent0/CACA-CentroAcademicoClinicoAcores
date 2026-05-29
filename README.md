@@ -8,7 +8,7 @@ Este projeto foi desenvolvido no âmbito da unidade curricular de **Tecnologias 
 *   **João Bento** - 2023110753
 *   **Manuel Santos** - 2023110848
 *   **Yuri Moreira** - 2023118908
-    **Newton Pereira** - 2022112784
+*   **Newton Pereira** - 2022112784
 
 ----------------------------------------------------------------------------------------------------------------------
 
